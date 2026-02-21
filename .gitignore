@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AIT (AI project state)
+00_project_state.md
+01_project_brain.md
+02_future_features.md
