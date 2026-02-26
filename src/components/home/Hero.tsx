@@ -75,47 +75,79 @@ export function Hero() {
       y: 0,
       duration: .5,
       ease: "power4.inOut",
-    })
-    // We group the horizontal movement and the two skew phases into one exact timeframe
-    const horizontalStartTime = tl.duration(); // The exact time right after the first tween finishes
+    });
 
-    // 2b. Simulate momentum: DEFORMATION starts FIRST due to static friction
-    // Phase 1 (Tension): pull back, happens exactly at horizontal start
-    tl.to(heyRef.current, {
-      skewX: 15,
-      duration: 0.35,
-      ease: "sine.in",
-    }, horizontalStartTime)
+    // --- Velocity-driven horizontal slide with natural skew ---
+    const RESTING_SKEW = -15;
+    const SKEW_SENSITIVITY = 0.4;
+    const hey = heyRef.current;
+    let prevX: number | null = null;
 
-    // 2. "Hey" breaks friction and starts moving slightly AFTER deformation begins
-    tl.to(heyRef.current, {
+    const slideLabel = "slide";
+    tl.addLabel(slideLabel);
+
+    // Phase 1: Slide left with velocity-driven lean < (momentum)
+    tl.to(hey, {
       x: 0,
-      duration: .5,
-      ease: "power1.inOut",
-    }, horizontalStartTime + 0.1) // 0.1s delay for tension build-up
-    
-    // Phase 2: shift to final lean during movement (Total end time: 0.15 + 0.45 = 0.6s, matches 0.1 + 0.5 = 0.6s)
-    tl.to(heyRef.current, {
-      skewX: -15,
-      duration: 0.45, // Extended slightly to finish exactly when the horizontal movement finishes
-      ease: "sine.out",
-    }, horizontalStartTime + 0.15)
+      duration: 0.6,
+      ease: "power3.out",
+      onStart: function () {
+        prevX = gsap.getProperty(hey, "x") as number;
+      },
+      onUpdate: function () {
+        const currentX = gsap.getProperty(hey, "x") as number;
+        if (prevX === null) { prevX = currentX; return; }
+
+        const dx = currentX - prevX;
+        prevX = currentX;
+
+        const progress = this.progress();
+        // Velocity lean: moving left → lean backward <
+        const velocitySkew = -dx * SKEW_SENSITIVITY;
+        // Only blend toward neutral (0), not resting angle — phases 2-5 handle the rest
+        const skew = velocitySkew * (1 - progress);
+
+        gsap.set(hey, { skewX: skew });
+      },
+    }, slideLabel);
+
+    // Phase 2: Decelerated → straightens up |  (already ~0 from onUpdate fading out)
+    // Phase 3: Inertia overshoot → leans right > (top swings past vertical)
+    tl.to(hey, {
+      skewX: RESTING_SKEW,
+      duration: 0.25,
+      ease: "power2.in",
+    }, `${slideLabel}+=0.50`);
+
+    // Phase 4: "y" corner hits the wall → rebound to halfway between wall lean and upright
+    tl.to(hey, {
+      skewX: RESTING_SKEW * 0.5,
+      duration: 0.2,
+      ease: "power2.out",
+    }, `${slideLabel}+=0.75`);
+
+    // Phase 5: Settles back onto the wall → final italic >
+    tl.to(hey, {
+      skewX: RESTING_SKEW,
+      duration: 0.25,
+      ease: "power2.in",
+    }, `${slideLabel}+=0.95`);
 
     // 3. Chars slide up one by one (staggered) EXCEPT the last 'a'
-    .to(allCharsButLast, {
+    tl.to(allCharsButLast, {
       yPercent: 0,
       opacity: 1,
       duration: 0.6,
       stagger: 0.04,
       ease: "expo.out",
-    }, "-=0.2") // Start slightly before "Hey" finishes its journey
-    // 3. Last character 'a' slides up slower
+    }, `${slideLabel}+=0.4`)
+    // Last character 'a' slides up slower
     .to(lastChar, {
       yPercent: 0,
       opacity: 1,
-      duration: 1.5, // much slower
+      duration: 1.5,
       ease: "expo.out",
-    }, "<0.5"); // Starts 0.5s after the PREVIOUS animation starts (so it trails behind nicely)
+    }, "<0.5");
 
     // Cleanup split on unmount
     return () => {
