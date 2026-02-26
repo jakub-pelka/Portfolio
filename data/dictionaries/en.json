@@ -1,0 +1,28 @@
+{
+  "nav": {
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hey",
+    "intro": "It's",
+    "name_first": "Jakub",
+    "name_last": "Pełka",
+    "cta_projects": "[ PROJECTS ]",
+    "cta_contact": "[ CONTACT → ]"
+  },
+  "projects": {
+    "title": "Projects",
+    "view_facts": "Facts",
+    "view_process": "Process",
+    "read_more": "[ READ MORE ]"
+  },
+  "theme": {
+    "toggle_dark": "Dark",
+    "toggle_light": "Light"
+  },
+  "lang": {
+    "switch": "PL"
+  }
+}

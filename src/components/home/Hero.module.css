@@ -1,0 +1,171 @@
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: var(--space-4);
+  background-color: var(--color-bg);
+  /* The reference image shows a border or a card-like effect */
+  /* Let's keep it clean as per design system but maybe add a subtle border if it's the global container */
+}
+
+/* 
+  Hierarchia w Hero:
+  1. VT323 → "Hey"
+  2. IBM Plex Mono Italic → "It's"
+  3. IBM Plex Mono Bold → "Jakub"
+  4. IBM Plex Mono Regular → "Pełka"
+*/
+
+.star {
+  position: absolute;
+  left: clamp(2rem, 15vw, 20vw);
+  top: clamp(8rem, 30vh, 40vh);
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: 700;
+  font-size: var(--text-title); /* Wg designu moze byc ciut wieksze w rzczywistosci, ale niech bedzie title */
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Adjusting centering slightly off to match the optical center of the block */
+  transform: translateX(-2vw);
+  z-index: var(--z-content);
+}
+
+.hey {
+  font-family: var(--font-vt323);
+  font-size: var(--text-title); /* Nie text-hero, to jest mikro nagiowek wg design system: "Mikro nagłówki (np. "Hey")" */
+  line-height: 1;
+  margin-bottom: var(--space-1);
+  /* POSITIONING:
+     'margin-left' is the target offset over "Jakub". 
+  */
+  margin-left: clamp(2rem, 4vw, 5vw);
+  
+  /* Initial state for GSAP */
+  opacity: 0;
+}
+
+
+.nameContainer {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-15); /* wiekszy odstep miedzy It's a Jakub */
+  /* Prevent flashing before JS takes over */
+  opacity: 0;
+}
+
+.its {
+  font-family: var(--font-ibm-plex-mono);
+  font-style: italic;
+  font-size: var(--text-title);
+  line-height: 1;
+  /* 'It's' seems to be aligned somewhere around the vertical middle of 'Jakub' butbaseline alignment is standard */
+}
+
+/* Tego overflow: hidden potrzebujemy na każdym elemencie-rodzicu lini lub znaku dla efektu text-maskingu */
+.maskWrapper {
+  overflow: hidden;
+  display: inline-flex;
+  vertical-align: top;
+  /* Adjust bounds to prevent clipping on some bold/italic glyphs like 'b' at the edge */
+  padding-right: 0.15em;
+  margin-right: -0.15em;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+.nameGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.firstName {
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: 700;
+  font-size: var(--text-hero);
+  line-height: 0.85; /* Tight line height */
+  letter-spacing: -0.06em; /* -8% per spec for IBM Plex Mono large sizes */
+  margin: 0;
+}
+
+.lastName {
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: 400;
+  font-size: calc(var(--text-hero) * 0.75);
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  margin: 0;
+  margin-top: var(--space-05);
+  align-self: flex-end; /* Pełka is right-aligned to Jakub in the reference */
+  /* In the reference image, it seems a bit smaller or just thinner */
+}
+
+.bottomTokens {
+  position: absolute;
+  bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  z-index: var(--z-content);
+}
+
+.portfolio {
+  font-family: var(--font-vt323);
+  font-size: var(--text-label);
+  text-transform: none; /* keep original capitalization */
+  letter-spacing: 0.05em;
+}
+
+.arrowDown {
+  color: var(--color-text);
+  /* A nice sharp pixel-art looking arrow or just crisp svg */
+  animation: bounce 2s infinite ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .star {
+    left: var(--space-2);
+    top: 25vh;
+  }
+  
+  .content {
+    transform: none;
+    align-items: center; /* Wg spec na mobile wszystko sie stackuje/wyrownuje do srodka lub krawedzi */
+  }
+
+  .hey {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+
+  .nameContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-05);
+  }
+  
+  .lastName {
+    align-self: flex-start; /* lub right zaleznie od estetyki na mobile */
+  }
+}

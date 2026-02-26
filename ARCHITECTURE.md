@@ -35,66 +35,144 @@ src/app/
 
 ---
 
-## 2. Schemat danych projektu
+## 2. Schemat danych projektu `[USTALONE]`
 
-Pojedynczy plik MDX na projekt z frontmatter:
+System oparty na plikach MDX. Każdy projekt to **własny folder** w `content/projects/`. Brak centralnej bazy danych ani CMS.
+
+### Struktura folderu projektu
+
+```
+content/projects/
+└── nazwa-projektu/
+    ├── meta.json       # wspólne metadane, niezależne od języka
+    ├── config.ts       # wizualia i animacje specyficzne dla projektu
+    ├── pl.mdx          # polska treść (tytuł, opis, fakty, proces)
+    ├── en.mdx          # angielska treść
+    └── assets/
+        ├── thumbnail.jpg
+        ├── gallery/
+        └── models/     # modele 3D, jeśli projekt wymaga
+```
+
+### `meta.json` — wspólne metadane
+
+Trzyma wszystko co **niezależne od języka**. Nigdy nie duplikujemy tych danych w plikach MDX.
+
+```json
+{
+  "slug": "nazwa-projektu",
+  "status": "completed | in-progress | archived",
+  "featured": true,
+  "date": "2024-01-15",
+  "thumbnail": "./assets/thumbnail.jpg",
+  "tags": ["React", "TypeScript"],
+  "links": {
+    "github": "https://...",
+    "live": "https://...",
+    "docs": "https://..."
+  }
+}
+```
+
+### `config.ts` — wizualia i animacje projektu
+
+Trzyma **wszystko co wizualne i specyficzne** dla danego projektu. TypeScript (nie JSON) — może importować komponenty i funkcje animacyjne.
+
+```ts
+export const projectConfig = {
+  theme: {
+    background: "#1a1a2e",
+    accent: "#e94560",
+  },
+  hero: {
+    animation: "float", // typ animacji przy tytule
+    parallax: true,
+    image: "./assets/hero.jpg",
+  },
+  gallery: {
+    layout: "masonry | grid | carousel",
+  },
+};
+```
+
+> ⚠️ **Ważna zasada**: Decyzje wizualne i animacyjne per projekt żyją **wyłącznie** w `config.ts`. Nigdy nie przenoszą się do `meta.json` ani do MDX. Zmiany w `config.ts` nie mają wpływu na globalny design system aplikacji.
+
+### `pl.mdx` / `en.mdx` — treść językowa
+
+Frontmatter z **tłumaczalnymi danymi** (tytuł, opis, fakty, wpisy procesu) + swobodna narracja Markdown.
+
+```mdx
+---
+title: "Nazwa projektu"
+description: "Krótki opis projektu."
+
+facts:
+  - label: "Rola"
+    value: "Full-stack developer"
+  - label: "Czas trwania"
+    value: "6 miesięcy"
+
+process:
+  - title: "Dlaczego wybrałem to rozwiązanie"
+    type: "decision"
+    content: "Treść wpisu..."
+    date: "2024-02-01"
+  - title: "Problem z wydajnością"
+    type: "problem"
+    content: "Treść wpisu..."
+---
+
+Tutaj swobodna narracja w Markdown.
+Można osadzać komponenty React.
+```
+
+`process[].type` przyjmuje: `"decision"` | `"problem"` | `"insight"` | `"milestone"`.
+
+### TypeScript — typy (src/lib/types.ts)
 
 ```typescript
-// Typy (src/lib/types.ts)
-interface Project {
-  // === Identyfikacja ===
-  slug: string; // URL-friendly ID
-  title: string; // Nazwa projektu
-  description: {
-    // Krótki opis
-    pl: string;
-    en: string;
-  };
-
-  // === Metadata ===
-  tags: string[]; // Technologie
+interface ProjectMeta {
+  slug: string;
   status: "in-progress" | "completed" | "archived";
-  featured: boolean; // Wyróżniony na stronie głównej
-  date: string; // Data rozpoczęcia (YYYY-MM-DD)
-  thumbnail: string; // Ścieżka do obrazka
-
-  // === Linki ===
+  featured: boolean;
+  date: string;
+  thumbnail: string;
+  tags: string[];
   links?: {
     github?: string;
     live?: string;
     docs?: string;
   };
+}
 
-  // === Widok "Fakty" ===
-  facts: {
-    pl: FactItem[];
-    en: FactItem[];
-  };
-
-  // === Widok "Proces" (narracja) ===
-  process: {
-    pl: ProcessEntry[];
-    en: ProcessEntry[];
-  };
+interface ProjectContent {
+  title: string;
+  description: string;
+  facts: FactItem[];
+  process: ProcessEntry[];
+  body: string; // skompilowana treść MDX
 }
 
 interface FactItem {
-  label: string; // np. "Rola", "Czas trwania"
-  value: string; // np. "Full-stack developer", "6 miesięcy"
+  label: string; // np. "Rola"
+  value: string; // np. "Full-stack developer"
 }
 
 interface ProcessEntry {
-  title: string; // np. "Dlaczego Tauri?"
+  title: string;
   type: "decision" | "problem" | "insight" | "milestone";
-  content: string; // Treść (markdown)
-  date?: string; // Opcjonalna data
+  content: string;
+  date?: string;
 }
 ```
 
-### Pytania:
+### Zasady architektoniczne
 
-- Czy `ProcessEntry.type` ma sens? Pomaga filtrować: "pokaż tylko decyzje projektowe" vs "pokaż rozwiązane problemy".
-- Czy chcesz galerie zdjęć/screenshotów per projekt?
+1. **Nowy projekt = nowy folder** — zero modyfikacji globalnych plików konfiguracyjnych.
+2. **`config.ts` = jedyne miejsce** na wizualia i animacje per projekt.
+3. **`meta.json` nie zawiera tłumaczeń** — tylko dane wspólne dla obu języków.
+4. **Pliki MDX nie zawierają metadanych** z `meta.json` (slug, tagi, linki, daty).
+5. **Assety żyją w `assets/`** wewnątrz folderu projektu — nie w globalnym `public/`.
 
 ---
 
@@ -256,16 +334,3 @@ src/components/
     ├── StaggerChildren.tsx     ← Kaskadowe pojawianie
     └── PageTransition.tsx
 ```
-
----
-
-## 7. Fazy realizacji (propozycja)
-
-| Faza        | Zakres                                                                   | Zależności |
-| ----------- | ------------------------------------------------------------------------ | ---------- |
-| **Phase 0** | Design system (tokeny CSS, fonty, dark/light)                            | Żadne      |
-| **Phase 1** | Layout (Header, Footer, Container) + i18n routing + strona główna (Hero) | Phase 0    |
-| **Phase 2** | Dane projektów (schemat, ładowanie) + ProjectCard + lista projektów      | Phase 1    |
-| **Phase 3** | Strona projektu (Fakty/Proces toggle) + animacje P1                      | Phase 2    |
-| **Phase 4** | Admin UI (dodawanie/edycja projektów, tłumaczenia)                       | Phase 2    |
-| **Phase 5** | Polish: animacje P2, SEO, performance, deploy                            | Phase 3    |

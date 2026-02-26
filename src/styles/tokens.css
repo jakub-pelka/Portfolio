@@ -1,0 +1,63 @@
+/* src/styles/tokens.css */
+
+:root {
+  /* === Colors (Light Mode by default) === */
+  --color-bg: #F6F5F0;
+  --color-text: #1C1C1C;
+  --color-accent: #55AAAA;
+  
+  /* === Typography === */
+  --font-vt323: 'VT323', monospace;
+  --font-ibm-plex-mono: 'IBM Plex Mono', monospace;
+
+  /* === Spacing Scale === */
+  --space-05: 0.5rem;   /* drobne paddingi, micro spacing między tagami, mikro marginesy */
+  --space-1: 1rem;      /* odstęp między drobnymi sekcjami / elementami listy */
+  --space-15: 1.5rem;   /* większe marginesy w kartach, między nagłówkiem a contentem */
+  --space-2: 2rem;      /* padding w Base Card, odstęp między komorami layoutu */
+  --space-3: 3rem;      /* duży spacing w Hero / sekcje główne */
+  --space-4: 4rem;      /* bardzo duże odstępy między głównymi sekcjami / full-screen spacing */
+
+  /* === Fluid Typography (clamp) === */
+  --text-hero: clamp(2.5rem, 6vw, 5rem);
+  --text-title: clamp(1.5rem, 4vw, 2.5rem);
+  --text-body: clamp(1rem, 2vw, 1.125rem);
+  --text-label: clamp(0.75rem, 1.5vw, 0.875rem);
+  --text-micro: clamp(0.625rem, 1vw, 0.75rem);
+
+  /* === UI Rules === */
+  --border-radius: 4px; /* 2-4px per spec */
+  --border-width: 1px;
+  --divider-opacity: 0.2;
+
+  /* === Layout === */
+  --max-width: 1200px;
+  --page-margin: 2rem;
+
+  /* === Z-Index === */
+  --z-background: 0;
+  --z-card: 1;
+  --z-content: 2;
+  --z-interactive: 3;
+  --z-overlay: 4;
+
+  /* === Animations === */
+  --transition-duration: 200ms;
+  --transition-fast: 100ms;
+  --transition-timing: linear;
+  --transition-steps: steps(4, end);
+}
+
+/* Dark mode override */
+[data-theme='dark'] {
+  --color-bg: #1C1C1C;
+  --color-text: #F6F5F0;
+  /* --color-accent remains #55AAAA */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-bg: #1C1C1C;
+    --color-text: #F6F5F0;
+  }
+}
