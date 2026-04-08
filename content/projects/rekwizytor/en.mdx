@@ -1,0 +1,108 @@
+---
+title: "Rekwizytor"
+description: "Theater props inventory system with AI-assisted cataloging, show notepad, and hierarchical space organization."
+
+facts:
+  - label: "Role"
+    value: "Full-stack Developer (solo)"
+  - label: "Context"
+    value: "Self-initiated, from internship observation"
+  - label: "Frontend"
+    value: "Next.js 16, TypeScript, Tailwind CSS 4, Framer Motion, Tiptap, dnd-kit"
+  - label: "Backend"
+    value: "Supabase (PostgreSQL + Row Level Security), React Hook Form + Zod"
+  - label: "AI"
+    value: "Google Gemini (embeddings + description generation)"
+  - label: "Extras"
+    value: "QR labels (PDF), Excel export, SonarCloud CI, next-intl (PL/EN)"
+  - label: "Commits"
+    value: "106"
+  - label: "Status"
+    value: "Completed — adapted for portfolio presentation"
+---
+
+import { ProcessBlock, AboutSection, TakeawaysSection } from "./components";
+
+<AboutSection>
+During my theater internship I saw first-hand what prop management looks like in practice —
+and how far it is from any kind of system. Before writing a single line of code,
+I checked what the market offered. Warehouse systems exist, but they assume things
+that simply don't hold in theater.
+</AboutSection>
+
+<ProcessBlock type="problem" title="Inventory chaos in a theater" index={1}>
+Theater props have no inventory system beyond the memory of the people who work with them.
+
+- Multiple rooms, multiple piles — no labeled shelves
+- Props disappeared even from labeled boxes designated for specific shows
+- The only record: memory and phone photos
+
+The need was real — but the solution had to fit the people and the place, not the other way around.
+</ProcessBlock>
+
+<ProcessBlock type="decision" title="Market analysis: ready-made tools don't fit" index={2}>
+Before writing a line of code, I checked what was available.
+
+- WMS systems require scanners, licenses, and labeled shelf locations
+- In a theater there are no shelves — there are piles in the corners of rooms
+- Prop managers are not technical users; learning WMS software is a barrier, not a convenience
+
+The problem wasn't price or availability — it was false assumptions about what the work actually looks like.
+</ProcessBlock>
+
+<ProcessBlock type="decision" title="Hierarchy instead of location" index={3}>
+Instead of precise location (shelf B3, row 2) I built a grouping system: room → group → item.
+
+- Prop managers only need to know something "is somewhere in the main props room"
+- Groups became more important than individual items — they organize the "warehouse"
+- Adding an item to a group is enough; everything else follows from the hierarchy
+
+Precision isn't always a value — sometimes orientation is enough.
+</ProcessBlock>
+
+<ProcessBlock type="insight" title="Show notepad: feature came from the users" index={4}>
+Prop managers needed a place to write what to prepare before a show.
+
+- What to pull out and from where
+- Who to tell something or hand something off to
+- What to add, fix, or check before going onstage
+
+The notepad with interactive checklists (Tiptap) didn't come from analysis — it came from a conversation.
+</ProcessBlock>
+
+<ProcessBlock type="decision" title="AI-assisted cataloging: human-in-the-loop" index={5}>
+Prop managers walk around photographing items — Gemini generates a name and description, a human approves.
+
+- No description enters the database without a human review
+- Initial cataloging of dozens of items: from hours to minutes
+- AI as an accelerator, not a decision-maker
+
+One photo and a few seconds instead of manually typing every record.
+</ProcessBlock>
+
+<ProcessBlock type="problem" title="Three features that sounded great" index={6}>
+Live checklist, room mapping, and vector search — I cut all three.
+
+- Live checklist interrupted the workflow instead of helping; prop managers went back to paper
+- Room mapping was redundant — rooms are fixed and everyone knows them
+- Vector search sounds impressive, but prop managers search for specific things, not "similar" ones
+
+A painful decision — but the right one.
+</ProcessBlock>
+
+<ProcessBlock type="milestone" title="Outcome: working product, not adopted" index={7}>
+The app works and was tested in a theater environment — but it never entered daily use.
+
+- The theater lacked resources for rollout and habit change
+- Project rebuilt for portfolio presentation
+
+Not every project makes it to production. This one taught me more than many that did.
+</ProcessBlock>
+
+<TakeawaysSection>
+I came away convinced that a well-chosen feature does more than ten impressive ones.
+The checklist notepad came out of a conversation, not analysis — and it turned out
+more important than vector search that looked great on paper.
+
+This project didn't come from a market gap. It came from watching specific people do specific work.
+</TakeawaysSection>

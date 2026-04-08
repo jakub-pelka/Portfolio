@@ -1,0 +1,12 @@
+{
+  "slug": "rekwizytor",
+  "status": "completed",
+  "featured": true,
+  "date": "2025-11-24",
+  "thumbnail": "./assets/thumbnail.jpg",
+  "tags": ["Next.js", "TypeScript", "Supabase", "Google Gemini", "Framer Motion", "React Hook Form", "Tiptap", "Zod"],
+  "links": {
+    "github": "https://github.com/jakub-pelka/rekwizytor",
+    "live": "https://rekwizytor.vercel.app"
+  }
+}

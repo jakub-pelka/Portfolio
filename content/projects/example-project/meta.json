@@ -1,0 +1,12 @@
+{
+  "slug": "example-project",
+  "status": "completed",
+  "featured": true,
+  "date": "2024-01-15",
+  "thumbnail": "./assets/thumbnail.jpg",
+  "tags": ["React", "TypeScript", "Next.js"],
+  "links": {
+    "github": "https://github.com/example/project",
+    "live": "https://example-project.vercel.app"
+  }
+}

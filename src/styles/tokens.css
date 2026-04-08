@@ -3,17 +3,22 @@
 :root {
   /* === Colors (Light Mode by default) === */
   --color-bg: #F6F5F0;
+  --color-bg-card: #F6F5F0;
+  --color-bg-secondary: rgba(28, 28, 28, 0.03);
   --color-text: #1C1C1C;
   --color-accent: #55AAAA;
+  --color-border: rgba(28, 28, 28, 0.15);
   
   /* === Typography === */
   --font-vt323: 'VT323', monospace;
   --font-ibm-plex-mono: 'IBM Plex Mono', monospace;
 
   /* === Spacing Scale === */
-  --space-05: 0.5rem;   /* drobne paddingi, micro spacing między tagami, mikro marginesy */
+  --space-0_5: 0.5rem;  /* drobne paddingi, micro spacing między tagami, mikro marginesy */
+  --space-05: 0.5rem;   /* alias dla kompatybilności */
   --space-1: 1rem;      /* odstęp między drobnymi sekcjami / elementami listy */
-  --space-15: 1.5rem;   /* większe marginesy w kartach, między nagłówkiem a contentem */
+  --space-1_5: 1.5rem;  /* większe marginesy w kartach, między nagłówkiem a contentem */
+  --space-15: 1.5rem;   /* alias dla kompatybilności */
   --space-2: 2rem;      /* padding w Base Card, odstęp między komorami layoutu */
   --space-3: 3rem;      /* duży spacing w Hero / sekcje główne */
   --space-4: 4rem;      /* bardzo duże odstępy między głównymi sekcjami / full-screen spacing */
@@ -51,13 +56,19 @@
 /* Dark mode override */
 [data-theme='dark'] {
   --color-bg: #1C1C1C;
+  --color-bg-card: #1C1C1C;
+  --color-bg-secondary: rgba(246, 245, 240, 0.05);
   --color-text: #F6F5F0;
+  --color-border: rgba(246, 245, 240, 0.15);
   /* --color-accent remains #55AAAA */
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --color-bg: #1C1C1C;
+    --color-bg-card: #1C1C1C;
+    --color-bg-secondary: rgba(246, 245, 240, 0.05);
     --color-text: #F6F5F0;
+    --color-border: rgba(246, 245, 240, 0.15);
   }
 }

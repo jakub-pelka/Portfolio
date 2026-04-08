@@ -19,7 +19,10 @@ Współczesny, czysty layout z kontrolowanym technicznym akcentem.
 - **Base Card:**
   - `border-radius`: 2–4px (ostry, techniczny charakter).
   - Tło: `#F6F5F0` (komorowe, papierowe/neutralne).
-  - Cienie: Brak.
+  - Cienie: **HalftoneShadow** — komiksowy cień z dyskretnych SVG kół na schodkowej siatce.
+    - Technika: `<svg>` z indywidualnymi `<circle>`, promień zmniejsza się wg `(row+col)` schodkowo.
+    - Parametry: `direction` (6 kierunków), `grid`, `maxRadius`, `minRadius`, `levels`, `offset`, `color`.
+    - Plik: `src/components/ui/HalftoneShadow.tsx`.
 - **Linie podziału (Dividers):**
   - 1px w kolorze `#1C1C1C` z niskim `opacity`.
   - Opcjonalnie: wersja techniczna z krzyżykiem `+` na końcach.
@@ -72,8 +75,10 @@ Charakter: zwarte, konstrukcyjne, techniczne.
 - **Przyciski (Buttons):**
   - Styl: Obrys 1px (ghost button).
   - Zawartość: zamek w nawiasach kwadratowych, np. `[ VIEW PROJECT ]`, `[ CONTACT -> ]`.
-  - Hover: Wyostrzenie (zmiana state/wagi). Wymaga użycia `font-variation-settings` lub `letter-spacing` trick, aby uniknąć braku wsparcia dla płynnego animowania `font-weight`. Brak standardowych `ease-in-out` – zmiany mają być ostre.
-- **Linki tekstowe:** Ostre podkreślenie pojawiające się na hover, bez miękkich animacji.
+  - Hover: Wyostrzenie (zmiana state/wagi) via dual-layer text (`btn-label` + `btn-label-bold`) eliminujący layout-shift. Brak standardowych `ease-in-out`.
+  - Warianty zaimplementowane: `default` (prostokąt), `v2` (z podkreśleniem), `v3` (zwarty z nawiasami), `v4` (inwersja kolorów).
+  - Plik: `src/components/ui/Button.tsx`.
+- **Linki tekstowe:** Font VT323, stałe grube podkreślenie (`text-decoration`), pogrubienie `text-stroke` na hover. Klasa `.link-system`.
 
 ---
 

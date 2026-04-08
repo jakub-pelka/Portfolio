@@ -12,9 +12,12 @@ export function Hero() {
   const itsRef = useRef<HTMLSpanElement>(null);
   const firstNameRef = useRef<HTMLHeadingElement>(null);
   const lastNameRef = useRef<HTMLHeadingElement>(null);
+  const starRef = useRef<HTMLDivElement>(null);
+  const portfolioRef = useRef<HTMLSpanElement>(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!heyRef.current || !nameContainerRef.current || !itsRef.current || !firstNameRef.current || !lastNameRef.current) return;
+    if (!heyRef.current || !nameContainerRef.current || !itsRef.current || !firstNameRef.current || !lastNameRef.current || !starRef.current || !portfolioRef.current || !arrowRef.current) return;
 
     // Split text into characters for "Jakub", "Pełka", and "It's"
     // Using split-type. SplitType creates wrapper divs, and we'll animate the characters.
@@ -67,6 +70,9 @@ export function Hero() {
 
     // Set all chars initially shifted down a bit more to clear paddings
     gsap.set(allChars, { yPercent: 120, opacity: 0 });
+
+    // Set initial state for star, portfolio, and arrow (invisible)
+    gsap.set([starRef.current, portfolioRef.current, arrowRef.current], { opacity: 0 });
 
     const tl = gsap.timeline({ delay: 1 }); // Wait 1 second at the absolute center
 
@@ -147,7 +153,14 @@ export function Hero() {
       opacity: 1,
       duration: 1.5,
       ease: "expo.out",
-    }, "<0.5");
+    }, "<0.5")
+    // 4. Fade in star, portfolio, and arrow after main animation completes
+    .to([starRef.current, portfolioRef.current, arrowRef.current], {
+      opacity: 1,
+      duration: 0.8,
+      ease: "power2.out",
+      stagger: 0.1,
+    }, `${slideLabel}+=2.0`); // Start after last 'a' finishes (~2s from slideLabel)
 
     // Cleanup split on unmount
     return () => {
@@ -159,7 +172,7 @@ export function Hero() {
 
   return (
     <section className={styles.hero}>
-      <div className={styles.star}>*</div>
+      <div className={styles.star} ref={starRef}>*</div>
       <div className={styles.content}>
         <div className={styles.hey} ref={heyRef}>Hey</div>
         <div className={styles.nameContainer} ref={nameContainerRef}>
@@ -177,8 +190,8 @@ export function Hero() {
         </div>
       </div>
       <div className={styles.bottomTokens}>
-        <span className={styles.portfolio}>Portfolio</span>
-        <div className={styles.arrowDown}>
+        <span className={styles.portfolio} ref={portfolioRef}>Portfolio</span>
+        <div className={styles.arrowDown} ref={arrowRef}>
           <svg width="21" height="12" viewBox="0 0 21 12" fill="currentColor">
             <rect x="0" y="0" width="3" height="3" />
             <rect x="3" y="3" width="3" height="3" />
