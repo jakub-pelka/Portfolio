@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './Editorial.module.css';
 
 interface OutcomeBannerProps {
   statusTag?: string;
@@ -7,35 +8,23 @@ interface OutcomeBannerProps {
 
 export function OutcomeBanner({ statusTag, children }: OutcomeBannerProps) {
   return (
-    <div 
-      className="relative p-12 overflow-hidden bg-[var(--color-bg-secondary)] my-32" 
-      style={{ borderLeft: '12px solid var(--project-highlight)' }}
-    >
-      {/* Halftone backdrop */}
-      <div 
-        className="absolute inset-0 pointer-events-none" 
-        style={{ 
-          backgroundImage: 'radial-gradient(currentColor 1px, transparent 0)', 
-          backgroundSize: '8px 8px', 
-          opacity: 0.05 
-        }} 
-      />
+    <div className={styles.outcomeBanner}>
+      <div className={styles.halftoneBg} />
       
-      <div className="relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div className="max-w-3xl">
-            <h2 className="font-ibm font-bold text-4xl mb-6 uppercase">Outcome</h2>
-            <div className="text-2xl font-ibm leading-tight text-[var(--project-text)] opacity-90">
+      <div className={styles.outcomeContent}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div style={{ maxWidth: '48rem' }}>
+            <h2 className={styles.outcomeTitle}>Outcome</h2>
+            <div className={styles.outcomeText}>
               {children}
             </div>
           </div>
-          {/* Tu można wstrzykiwać metryki przez props, albo zostawić do obsługi przez dzieci */}
         </div>
 
         {statusTag && (
-          <div className="mt-12 flex justify-start">
-            <div className="inline-flex items-center gap-4 bg-[var(--project-text)] text-[var(--color-bg-light)] px-6 py-4 font-ibm font-bold text-sm uppercase">
-              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>verified</span>
+          <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'flex-start' }}>
+            <div className={styles.outcomeTag}>
+              <span aria-hidden="true">✓</span>
               {statusTag}
             </div>
           </div>

@@ -17,10 +17,8 @@ process: []
 
 <SectionHeader num="01" title="EXECUTIVE_SUMMARY" />
 
-<div className="grid grid-cols-1 md:grid-cols-12 border border-[var(--color-border)] mb-32">
-  {/* Left Content */}
-  <div className="md:col-span-8 p-8 border-b md:border-b-0 md:border-r border-[var(--color-border)]">
-    
+<SplitLayout>
+  <ContentLeft>
     <MetricGrid>
       <Metric value="70%" label="Faster Cataloging" />
       <Metric value="99.4%" label="Accuracy Rating" />
@@ -38,78 +36,62 @@ process: []
         A vision-first web terminal that identifies, tags, and categorizes objects from a single photograph.
       </ProcessBox>
     </BoxGrid>
+  </ContentLeft>
 
-  </div>
-
-  {/* Right Content */}
-  <div className="md:col-span-4 h-full">
+  <ContentRight>
     <TerminalCard title="PROJECT_PULSE" status="active">
-      <div>
-        <span className="font-vt text-[10px] opacity-60 block uppercase">ROLE_ID</span>
-        <span className="font-ibm text-sm uppercase font-bold">ARCHITECT_01</span>
+      <div style={{ marginBottom: '1rem' }}>
+        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>ROLA</span>
+        <span style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Full-stack Developer (solo)</span>
       </div>
-      <div>
-        <span className="font-vt text-[10px] opacity-60 block uppercase">VELOCITY</span>
-        <div className="w-full bg-[var(--color-border)] h-1 mt-2">
-          <div className="bg-[var(--project-text)] h-full w-[85%]"></div>
+      <div style={{ marginBottom: '1rem' }}>
+        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>STACK</span>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
+          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Next.js 16</span>
+          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Supabase</span>
+          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Gemini</span>
         </div>
       </div>
-      <div>
-        <span className="font-vt text-[10px] opacity-60 block mb-2 uppercase">TECH_CORE</span>
-        <div className="flex flex-wrap gap-2">
-          <span className="font-ibm text-[10px] border border-[var(--color-border)] px-2 py-0.5 uppercase font-bold">GEMINI_1.5</span>
-          <span className="font-ibm text-[10px] border border-[var(--color-border)] px-2 py-0.5 uppercase font-bold">VECTARA</span>
-          <span className="font-ibm text-[10px] border border-[var(--color-border)] px-2 py-0.5 uppercase font-bold">REDIS</span>
-        </div>
-      </div>
-      <div className="pt-6">
-        <img 
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSoe8S52NcAj4dOLC8juP9jwbHc-A79m_7YMaYJHhIGZMHjjBWJkJNN1JCcivS5Ng9Gu1WBb14vDBdPz8MX23T46WouF9lh5ysbdBHgI6DRC7ZcaD5HC5sCoxjH-IT-UKle-mBKcOSGax0bzSeSVcJP2YP-40b8KCDz0CmWn5XRroFiNwzmmvUBPIlrdgxwCSRGdXAVY2Vr0653TKsrcEvV4tP1COOGZmnbBcUD_tLBK0rEProZnkkYyh1mPfA3kAWlA4j5-KrUBs"
-          alt="System Architecture"
-          className="w-full h-32 object-cover grayscale opacity-80 border border-[var(--color-border)]"
-        />
+      <div style={{ marginBottom: '1rem' }}>
+        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>COMMITY</span>
+        <span style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', fontWeight: 'bold', textTransform: 'uppercase' }}>106</span>
       </div>
     </TerminalCard>
-  </div>
-</div>
+  </ContentRight>
+</SplitLayout>
 
 <SectionHeader num="03" title="PROCESS" />
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-32">
-  <ProcessCard type="INSIGHT" title="THE NOTEPAD HOOK">
-    <div className="bg-[var(--color-bg-light)] dark:bg-[var(--color-bg-dark)] p-6 border border-[var(--color-border)] mb-6">
-      <p className="font-ibm text-sm leading-relaxed text-[var(--project-text)]">
-        "User testing revealed that prop masters don't want complex forms. They want the speed of a scribble. We needed to bridge the gap between 'rough notes' and 'structured data' without friction."
-      </p>
-    </div>
-    <p>
-      The solution was a 'Loose-Input' parser. Users can paste messy notes from a WhatsApp group or a physical notepad photo, and the system uses LLMs to extract entity relationships automatically.
-    </p>
-  </ProcessCard>
-
-  <ProcessCard type="DECISION" title="AI CATALOGING">
-    <p className="mb-6">
-      We integrated Gemini Vision for its superior spatial reasoning. Traditional CV struggled with identifying 'vintage aesthetic' or 'period-appropriate' tags. Gemini allowed us to use descriptive prompting to generate metadata that actually matters to a production designer.
-    </p>
-    <ImageGrid 
-      columns={3} 
-      images={[
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuC1fnxgU0X5ShUaM11vt4jbgztxbBGzXL-Ko29PbfF4Nmh67n1oLadjjy1W5gB_PCEmtfkED-hKF_vq_N800XxDF3i_FDKozSHJd57SMeVDfKP-ZltoF-i52ACfrsdpV8e6r7gOJ-W06qtD0EryAfxidvJLjj1KFxjQgaAkHes01l-nWdliTwNVAhy1yBDBqzqKViecloI3wDNOlsyQ3Kn53kWCY5tHITVMU7fyI33m3kvlGdDYvW4j2Prv3_lFiVm5mrckVI3Ucng",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAQvBu8Q_p45qd0hPp2Gkr4hKf3mEM8JX6vZsZ8okOj8G2KwhNnCbMfh8M4k2e_N4_syb8E3rmf5hvdNy48hXalfyVFO52ulYmzIceHHfyodmpDaFKGHXJpaYYHGd7fzpD4SYvEHajFJzM9kDYD7lcRSUBXxAVl56Y0Wrz-BHcBZrB6fe0aZ7THAAg_CnJCmF2yZCiHvjDcoF6ifDlPOYuNr-Nj_2-mXatIuPaZb7aEmpLHnvlc3hMycIrLzdPF-_8eJf_gHHrdP-M",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBPMsezTM6PJblX2nhQWFRCDlG2fxxaidVgmSuatDk1A2N0eWAY4g76vzKPMfUOmJc8uf0GYDUpQHznlpWgYrcB8EgUKZ08hB5jCBpV64J0JEPWe9rb5RTdQcJBXRtaZX6lctS1Vlpk9xdRuM0yW2RnkiuiVcK38FLFbB80sTku8XpO6La-pw7brd5idQjTytPq9tc2W4O0SJEdyZyASZ7AjKmqxxbyTpHD3tIPzRFuU26ARXSTCVRDWuoSYB_jhXTla0ye7IIJPso"
-      ]}
-    />
-  </ProcessCard>
-</div>
+<SplitLayout>
+  <ContentLeft>
+    <ProcessCard type="INSIGHT" title="THE NOTEPAD HOOK">
+      <div style={{ backgroundColor: 'var(--color-bg-secondary)', padding: '1.5rem', border: '1px solid var(--color-border)', marginBottom: '1.5rem' }}>
+        <div style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--color-text)' }}>
+          "User testing revealed that prop masters don't want complex forms. They want the speed of a scribble. We needed to bridge the gap between 'rough notes' and 'structured data' without friction."
+        </div>
+      </div>
+      <div>
+        The solution was a 'Loose-Input' parser. Users can paste messy notes from a WhatsApp group or a physical notepad photo, and the system uses LLMs to extract entity relationships automatically.
+      </div>
+    </ProcessCard>
+  </ContentLeft>
+  <ContentRight>
+    <ProcessCard type="DECISION" title="AI CATALOGING">
+      <div style={{ marginBottom: '1.5rem' }}>
+        We integrated Gemini Vision for its superior spatial reasoning. Traditional CV struggled with identifying 'vintage aesthetic' or 'period-appropriate' tags. Gemini allowed us to use descriptive prompting to generate metadata that actually matters to a production designer.
+      </div>
+      <ImageGrid 
+        columns={3} 
+        images={[
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuC1fnxgU0X5ShUaM11vt4jbgztxbBGzXL-Ko29PbfF4Nmh67n1oLadjjy1W5gB_PCEmtfkED-hKF_vq_N800XxDF3i_FDKozSHJd57SMeVDfKP-ZltoF-i52ACfrsdpV8e6r7gOJ-W06qtD0EryAfxidvJLjj1KFxjQgaAkHes01l-nWdliTwNVAhy1yBDBqzqKViecloI3wDNOlsyQ3Kn53kWCY5tHITVMU7fyI33m3kvlGdDYvW4j2Prv3_lFiVm5mrckVI3Ucng",
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuAQvBu8Q_p45qd0hPp2Gkr4hKf3mEM8JX6vZsZ8okOj8G2KwhNnCbMfh8M4k2e_N4_syb8E3rmf5hvdNy48hXalfyVFO52ulYmzIceHHfyodmpDaFKGHXJpaYYHGd7fzpD4SYvEHajFJzM9kDYD7lcRSUBXxAVl56Y0Wrz-BHcBZrB6fe0aZ7THAAg_CnJCmF2yZCiHvjDcoF6ifDlPOYuNr-Nj_2-mXatIuPaZb7aEmpLHnvlc3hMycIrLzdPF-_8eJf_gHHrdP-M",
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuBPMsezTM6PJblX2nhQWFRCDlG2fxxaidVgmSuatDk1A2N0eWAY4g76vzKPMfUOmJc8uf0GYDUpQHznlpWgYrcB8EgUKZ08hB5jCBpV64J0JEPWe9rb5RTdQcJBXRtaZX6lctS1Vlpk9xdRuM0yW2RnkiuiVcK38FLFbB80sTku8XpO6La-pw7brd5idQjTytPq9tc2W4O0SJEdyZyASZ7AjKmqxxbyTpHD3tIPzRFuU26ARXSTCVRDWuoSYB_jhXTla0ye7IIJPso"
+        ]}
+      />
+    </ProcessCard>
+  </ContentRight>
+</SplitLayout>
 
 <OutcomeBanner statusTag="DEPLOYMENT_STABLE_VER_1.2.0">
   Rekwizytor is currently the primary inventory hub for three major European production houses, managing over 50,000 unique items with zero database downtime since launch.
 </OutcomeBanner>
-
-<section className="border-t border-[var(--color-border)] pt-20 flex flex-col items-center mb-16">
-  <span className="font-vt text-sm opacity-50 mb-4 uppercase tracking-widest">CONTINUE_READING</span>
-  <h3 className="text-5xl md:text-7xl font-ibm font-bold text-[var(--project-text)] opacity-40 hover:opacity-100 transition-opacity cursor-pointer uppercase">
-    _MONOLITH_OS
-  </h3>
-  <span className="mt-8 font-ibm text-xs opacity-60 uppercase">[ CLICK TO NAVIGATE ]</span>
-</section>

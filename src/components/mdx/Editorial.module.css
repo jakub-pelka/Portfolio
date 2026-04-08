@@ -1,0 +1,379 @@
+.splitLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 4rem;
+  border: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
+  .splitLayout {
+    grid-template-columns: 8fr 4fr;
+    border: none;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+}
+
+.mainColumn {
+  padding: 2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+@media (min-width: 768px) {
+  .mainColumn {
+    border-bottom: none;
+    border-right: 1px solid var(--color-border);
+  }
+}
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+/* ================== COMPONENTS ================== */
+
+.sectionHeader {
+  margin-bottom: 2rem;
+}
+.sectionHeader h2 {
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  font-size: 1.125rem;
+}
+
+.metricGrid {
+  display: flex;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+.metricValue {
+  font-size: 4rem;
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  color: var(--project-highlight);
+  display: block;
+}
+.metricLabel {
+  font-family: var(--font-vt323);
+  font-size: 1rem;
+  text-transform: uppercase;
+  opacity: 0.8;
+  letter-spacing: 0.1em;
+}
+
+.quoteBlock {
+  border-left: 4px solid var(--color-text);
+  padding-left: 1.5rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  margin-bottom: 3rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.boxGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+@media (min-width: 768px) {
+  .boxGrid { grid-template-columns: 1fr 1fr; }
+}
+.processBox {
+  background-color: var(--color-bg-secondary);
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+}
+.processBox h4 {
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+.processBox p,
+.processBoxContent p {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.terminalCard {
+  padding: 2rem;
+  background-color: var(--color-bg-secondary);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+.halftoneBg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(currentColor 1px, transparent 0);
+  background-size: 8px 8px;
+  opacity: 0.05;
+}
+.terminalCardContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.terminalTitle {
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.terminalStatus {
+  width: 8px;
+  height: 8px;
+  background-color: var(--project-highlight);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+.processCard {
+  padding-left: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+.processCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.processCardType {
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  text-transform: uppercase;
+}
+.processCardTitle {
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.processCardBody {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.imageGrid {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.imageGrid[data-cols="2"] { grid-template-columns: repeat(2, 1fr); }
+.imageGrid[data-cols="3"] { grid-template-columns: repeat(3, 1fr); }
+.imageItem {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 300ms ease;
+  border: 1px solid var(--color-border);
+  width: 100%;
+}
+.imageItem:hover { filter: grayscale(0%); }
+
+.outcomeBanner {
+  position: relative;
+  padding: 3rem;
+  background-color: var(--color-bg-secondary);
+  border-left: 12px solid var(--project-highlight);
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  overflow: hidden;
+}
+.outcomeContent {
+  position: relative;
+  z-index: 10;
+}
+.outcomeTitle {
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+.outcomeText {
+  font-size: 1.5rem;
+  font-family: var(--font-ibm-plex-mono);
+  line-height: 1.4;
+  color: var(--color-text);
+  margin-bottom: 3rem;
+}
+.outcomeTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  padding: 1rem 1.5rem;
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.readingFooter {
+  border-top: 1px solid var(--color-border);
+  padding-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+.readingFooterLabel {
+  font-family: var(--font-vt323);
+  font-size: 1rem;
+  opacity: 0.5;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+}
+.readingFooterTitle {
+  font-size: 4rem;
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  color: var(--color-text);
+  opacity: 0.4;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: opacity 200ms ease;
+  text-decoration: none;
+}
+.readingFooterTitle:hover { opacity: 1; }
+.readingFooterHint {
+  margin-top: 2rem;
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.75rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+.mainContainer {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-4) var(--page-margin);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 4rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 4rem;
+}
+@media (min-width: 768px) {
+  .hero { grid-template-columns: 2fr 1fr; gap: 0; }
+}
+.heroLeft {
+  padding-right: 2rem;
+}
+.heroRight {
+  border-left: 1px solid var(--color-border);
+  border-top: none;
+  padding-left: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 767px) {
+  .heroRight {
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+    padding-left: 0;
+    padding-top: 2rem;
+  }
+}
+.heroTitle {
+  font-size: 4.5rem;
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  letter-spacing: -0.05em;
+  color: var(--color-text);
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  line-height: 1;
+}
+@media (min-width: 768px) {
+  .heroTitle { font-size: 7rem; }
+}
+.heroDesc {
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.6;
+  max-width: 40rem;
+  margin-bottom: 3rem;
+  opacity: 0.8;
+}
+.launchBtn {
+  display: inline-block;
+  font-family: var(--font-ibm-plex-mono);
+  font-weight: bold;
+  border: 1px solid var(--color-text);
+  padding: 0.75rem 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.875rem;
+  background: transparent;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color 200ms ease;
+  cursor: pointer;
+}
+.launchBtn:hover {
+  background-color: color-mix(in srgb, var(--project-highlight) 20%, transparent);
+}
+.metaBlock { margin-bottom: 1.5rem; }
+.metaLabel {
+  font-family: var(--font-vt323);
+  font-size: 1rem;
+  display: block;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+.metaValue {
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.tagItem {
+  padding: 0.125rem 0.5rem;
+  background-color: var(--color-bg-secondary);
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.625rem;
+  border: 1px solid var(--color-border);
+  text-transform: uppercase;
+}
+
+/* Base resets for typography inside MDX bounds */
+.projectBody p {
+  margin-bottom: 1.5rem;
+}

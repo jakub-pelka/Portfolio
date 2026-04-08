@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './Editorial.module.css';
 
 interface ProcessCardProps {
   title: string;
@@ -7,24 +8,24 @@ interface ProcessCardProps {
 }
 
 export function ProcessCard({ title, type, children }: ProcessCardProps) {
-  // Oparty na nowym designie, "INSIGHT" ma mocną ramkę (np. highlight/primary), DECISION np. szarą/surface-variant
+  // Border is tied to primary highlight or plain border based on type.
   const isInsight = type === 'INSIGHT';
   const borderColorValue = isInsight ? 'var(--project-highlight)' : 'var(--color-border)';
   const labelBgValue = isInsight ? 'var(--project-highlight)' : 'var(--color-bg-secondary)';
 
   return (
-    <div className="pl-8 py-4 mb-4" style={{ borderLeft: `4px solid ${borderColorValue}` }}>
-      <div className="flex items-center gap-3 mb-6">
+    <div className={styles.processCard} style={{ borderLeft: `4px solid ${borderColorValue}` }}>
+      <div className={styles.processCardHeader}>
         <span 
-          className="font-ibm font-bold text-xs px-2 py-1 uppercase"
+          className={styles.processCardType}
           style={{ backgroundColor: `color-mix(in srgb, ${labelBgValue} 20%, transparent)` }}
         >
-          [ {type.toUpperCase()} ]
+          [ {type} ]
         </span>
-        <span className="font-ibm font-bold text-sm tracking-widest uppercase">{title}</span>
+        <span className={styles.processCardTitle}>{title}</span>
       </div>
       
-      <div className="text-sm opacity-90 leading-relaxed font-body">
+      <div className={styles.processCardBody}>
         {children}
       </div>
     </div>

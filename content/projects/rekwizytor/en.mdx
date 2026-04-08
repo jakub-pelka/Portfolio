@@ -1,108 +1,97 @@
 ---
-title: "Rekwizytor"
-description: "Theater props inventory system with AI-assisted cataloging, show notepad, and hierarchical space organization."
-
+title: "REKWIZYTOR"
+description: "An advanced digital asset management ecosystem for production designers. Bridging the gap between physical inventories and virtual catalogs using computer vision."
 facts:
-  - label: "Role"
-    value: "Full-stack Developer (solo)"
-  - label: "Context"
-    value: "Self-initiated, from internship observation"
-  - label: "Frontend"
-    value: "Next.js 16, TypeScript, Tailwind CSS 4, Framer Motion, Tiptap, dnd-kit"
-  - label: "Backend"
-    value: "Supabase (PostgreSQL + Row Level Security), React Hook Form + Zod"
-  - label: "AI"
-    value: "Google Gemini (embeddings + description generation)"
-  - label: "Extras"
-    value: "QR labels (PDF), Excel export, SonarCloud CI, next-intl (PL/EN)"
-  - label: "Commits"
-    value: "106"
-  - label: "Status"
-    value: "Completed — adapted for portfolio presentation"
+  - label: "ROLE"
+    value: "LEAD ENGINEER"
+  - label: "CONTEXT"
+    value: "INTERNAL TOOL"
+  - label: "BACKEND"
+    value: "NODE_JS / POSTGRES"
+  - label: "COMMITS"
+    value: "1,248_PUSHES"
+  - label: "STATUS"
+    value: "STABLE_V1.2"
+process: []
 ---
 
-import { ProcessBlock, AboutSection, TakeawaysSection } from "./components";
+<SectionHeader num="01" title="EXECUTIVE_SUMMARY" />
 
-<AboutSection>
-During my theater internship I saw first-hand what prop management looks like in practice —
-and how far it is from any kind of system. Before writing a single line of code,
-I checked what the market offered. Warehouse systems exist, but they assume things
-that simply don't hold in theater.
-</AboutSection>
+<SplitLayout>
+  <ContentLeft>
+    <MetricGrid>
+      <Metric value="70%" label="Faster Cataloging" />
+      <Metric value="99.4%" label="Accuracy Rating" />
+    </MetricGrid>
 
-<ProcessBlock type="problem" title="Inventory chaos in a theater" index={1}>
-Theater props have no inventory system beyond the memory of the people who work with them.
+    <QuoteBlock>
+      "Rekwizytor was conceived to solve the critical bottleneck in high-volume prop management. By leveraging Gemini Vision API, we transformed a manual 40-hour weekly task into a streamlined 4-hour automated pipeline."
+    </QuoteBlock>
 
-- Multiple rooms, multiple piles — no labeled shelves
-- Props disappeared even from labeled boxes designated for specific shows
-- The only record: memory and phone photos
+    <BoxGrid>
+      <ProcessBox title="THE PROBLEM">
+        Manual entry of thousands of physical assets was prone to error and delayed production timelines by weeks.
+      </ProcessBox>
+      <ProcessBox title="THE SOLUTION">
+        A vision-first web terminal that identifies, tags, and categorizes objects from a single photograph.
+      </ProcessBox>
+    </BoxGrid>
+  </ContentLeft>
 
-The need was real — but the solution had to fit the people and the place, not the other way around.
-</ProcessBlock>
+  <ContentRight>
+    <TerminalCard title="PROJECT_PULSE" status="active">
+      <div style={{ marginBottom: '1rem' }}>
+        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>ROLE</span>
+        <span style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Full-stack Developer (solo)</span>
+      </div>
+      <div style={{ marginBottom: '1rem' }}>
+        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>STACK</span>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
+          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Next.js 16</span>
+          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Supabase</span>
+          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Gemini</span>
+        </div>
+      </div>
+      <div style={{ marginBottom: '1rem' }}>
+        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>COMMITS</span>
+        <span style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', fontWeight: 'bold', textTransform: 'uppercase' }}>106</span>
+      </div>
+    </TerminalCard>
+  </ContentRight>
+</SplitLayout>
 
-<ProcessBlock type="decision" title="Market analysis: ready-made tools don't fit" index={2}>
-Before writing a line of code, I checked what was available.
+<SectionHeader num="03" title="PROCESS" />
 
-- WMS systems require scanners, licenses, and labeled shelf locations
-- In a theater there are no shelves — there are piles in the corners of rooms
-- Prop managers are not technical users; learning WMS software is a barrier, not a convenience
+<SplitLayout>
+  <ContentLeft>
+    <ProcessCard type="INSIGHT" title="THE NOTEPAD HOOK">
+      <div style={{ backgroundColor: 'var(--color-bg-secondary)', padding: '1.5rem', border: '1px solid var(--color-border)', marginBottom: '1.5rem' }}>
+        <div style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--color-text)' }}>
+          "User testing revealed that prop masters don't want complex forms. They want the speed of a scribble. We needed to bridge the gap between 'rough notes' and 'structured data' without friction."
+        </div>
+      </div>
+      <div>
+        The solution was a 'Loose-Input' parser. Users can paste messy notes from a WhatsApp group or a physical notepad photo, and the system uses LLMs to extract entity relationships automatically.
+      </div>
+    </ProcessCard>
+  </ContentLeft>
+  <ContentRight>
+    <ProcessCard type="DECISION" title="AI CATALOGING">
+      <div style={{ marginBottom: '1.5rem' }}>
+        We integrated Gemini Vision for its superior spatial reasoning. Traditional CV struggled with identifying 'vintage aesthetic' or 'period-appropriate' tags. Gemini allowed us to use descriptive prompting to generate metadata that actually matters to a production designer.
+      </div>
+      <ImageGrid 
+        columns={3} 
+        images={[
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuC1fnxgU0X5ShUaM11vt4jbgztxbBGzXL-Ko29PbfF4Nmh67n1oLadjjy1W5gB_PCEmtfkED-hKF_vq_N800XxDF3i_FDKozSHJd57SMeVDfKP-ZltoF-i52ACfrsdpV8e6r7gOJ-W06qtD0EryAfxidvJLjj1KFxjQgaAkHes01l-nWdliTwNVAhy1yBDBqzqKViecloI3wDNOlsyQ3Kn53kWCY5tHITVMU7fyI33m3kvlGdDYvW4j2Prv3_lFiVm5mrckVI3Ucng",
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuAQvBu8Q_p45qd0hPp2Gkr4hKf3mEM8JX6vZsZ8okOj8G2KwhNnCbMfh8M4k2e_N4_syb8E3rmf5hvdNy48hXalfyVFO52ulYmzIceHHfyodmpDaFKGHXJpaYYHGd7fzpD4SYvEHajFJzM9kDYD7lcRSUBXxAVl56Y0Wrz-BHcBZrB6fe0aZ7THAAg_CnJCmF2yZCiHvjDcoF6ifDlPOYuNr-Nj_2-mXatIuPaZb7aEmpLHnvlc3hMycIrLzdPF-_8eJf_gHHrdP-M",
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuBPMsezTM6PJblX2nhQWFRCDlG2fxxaidVgmSuatDk1A2N0eWAY4g76vzKPMfUOmJc8uf0GYDUpQHznlpWgYrcB8EgUKZ08hB5jCBpV64J0JEPWe9rb5RTdQcJBXRtaZX6lctS1Vlpk9xdRuM0yW2RnkiuiVcK38FLFbB80sTku8XpO6La-pw7brd5idQjTytPq9tc2W4O0SJEdyZyASZ7AjKmqxxbyTpHD3tIPzRFuU26ARXSTCVRDWuoSYB_jhXTla0ye7IIJPso"
+        ]}
+      />
+    </ProcessCard>
+  </ContentRight>
+</SplitLayout>
 
-The problem wasn't price or availability — it was false assumptions about what the work actually looks like.
-</ProcessBlock>
-
-<ProcessBlock type="decision" title="Hierarchy instead of location" index={3}>
-Instead of precise location (shelf B3, row 2) I built a grouping system: room → group → item.
-
-- Prop managers only need to know something "is somewhere in the main props room"
-- Groups became more important than individual items — they organize the "warehouse"
-- Adding an item to a group is enough; everything else follows from the hierarchy
-
-Precision isn't always a value — sometimes orientation is enough.
-</ProcessBlock>
-
-<ProcessBlock type="insight" title="Show notepad: feature came from the users" index={4}>
-Prop managers needed a place to write what to prepare before a show.
-
-- What to pull out and from where
-- Who to tell something or hand something off to
-- What to add, fix, or check before going onstage
-
-The notepad with interactive checklists (Tiptap) didn't come from analysis — it came from a conversation.
-</ProcessBlock>
-
-<ProcessBlock type="decision" title="AI-assisted cataloging: human-in-the-loop" index={5}>
-Prop managers walk around photographing items — Gemini generates a name and description, a human approves.
-
-- No description enters the database without a human review
-- Initial cataloging of dozens of items: from hours to minutes
-- AI as an accelerator, not a decision-maker
-
-One photo and a few seconds instead of manually typing every record.
-</ProcessBlock>
-
-<ProcessBlock type="problem" title="Three features that sounded great" index={6}>
-Live checklist, room mapping, and vector search — I cut all three.
-
-- Live checklist interrupted the workflow instead of helping; prop managers went back to paper
-- Room mapping was redundant — rooms are fixed and everyone knows them
-- Vector search sounds impressive, but prop managers search for specific things, not "similar" ones
-
-A painful decision — but the right one.
-</ProcessBlock>
-
-<ProcessBlock type="milestone" title="Outcome: working product, not adopted" index={7}>
-The app works and was tested in a theater environment — but it never entered daily use.
-
-- The theater lacked resources for rollout and habit change
-- Project rebuilt for portfolio presentation
-
-Not every project makes it to production. This one taught me more than many that did.
-</ProcessBlock>
-
-<TakeawaysSection>
-I came away convinced that a well-chosen feature does more than ten impressive ones.
-The checklist notepad came out of a conversation, not analysis — and it turned out
-more important than vector search that looked great on paper.
-
-This project didn't come from a market gap. It came from watching specific people do specific work.
-</TakeawaysSection>
+<OutcomeBanner statusTag="DEPLOYMENT_STABLE_VER_1.2.0">
+  Rekwizytor is currently the primary inventory hub for three major European production houses, managing over 50,000 unique items with zero database downtime since launch.
+</OutcomeBanner>

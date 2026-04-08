@@ -8,6 +8,7 @@ import { TerminalCard } from './TerminalCard';
 import { ProcessCard } from './ProcessCard';
 import { ImageGrid } from './ImageGrid';
 import { OutcomeBanner } from './OutcomeBanner';
+import { SplitLayout, ContentLeft, ContentRight, ReadingFooter } from './LayoutBlocks';
 
 export const globalMdxComponents: MDXComponents = {
   SectionHeader,
@@ -20,5 +21,8 @@ export const globalMdxComponents: MDXComponents = {
   ProcessCard,
   ImageGrid,
   OutcomeBanner,
-  // Oznaczamy też standardowe tagi, jeśli chcesz im nadać specyficzny styl
+  SplitLayout,
+  ContentLeft,
+  ContentRight,
+  ReadingFooter
 };

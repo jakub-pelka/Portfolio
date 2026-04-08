@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './Editorial.module.css';
 
 interface TerminalCardProps {
   title: string;
@@ -8,16 +9,16 @@ interface TerminalCardProps {
 
 export function TerminalCard({ title, status, children }: TerminalCardProps) {
   return (
-    <div className="p-8 bg-[var(--color-bg-secondary)] relative overflow-hidden h-full">
-      {/* Halftone background effect via global class or SVG */}
-      <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(currentColor 1px, transparent 0)', backgroundSize: '8px 8px', opacity: 0.05 }} />
+    <div className={styles.terminalCard}>
+      <div className={styles.halftoneBg} />
       
-      <div className="relative z-10">
-        <h3 className="font-ibm font-bold text-sm mb-6 flex items-center gap-2 uppercase">
-          {status === 'active' && <span className="w-2 h-2 bg-[#55AAAA] animate-pulse" />}
+      <div className={styles.terminalCardContent}>
+        <div className={styles.terminalTitle}>
+          {status === 'active' && <span className={styles.terminalStatus}></span>}
           {title}
-        </h3>
-        <div className="space-y-6">
+        </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {children}
         </div>
       </div>

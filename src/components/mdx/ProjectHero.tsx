@@ -1,6 +1,5 @@
-import React, { ReactNode } from 'react';
 import { ProjectWithLocale } from '@/lib/types/project';
-import Link from 'next/link';
+import styles from './Editorial.module.css';
 
 interface ProjectHeroProps {
   project: ProjectWithLocale;
@@ -9,45 +8,50 @@ interface ProjectHeroProps {
 
 export function ProjectHero({ project, lang }: ProjectHeroProps) {
   return (
-    <section className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-32">
-      <div className="md:col-span-8">
-        <h1 className="text-7xl md:text-9xl font-ibm font-bold tracking-tighter text-[var(--project-text)] mb-8 uppercase">
+    <section className={styles.hero}>
+      <div className={styles.heroLeft}>
+        <h1 className={styles.heroTitle}>
           {project.content.title}
         </h1>
-        <p className="text-xl md:text-2xl font-light leading-relaxed max-w-2xl opacity-80 mb-12">
+        <p className={styles.heroDesc}>
           {project.content.description}
         </p>
 
-        <div className="flex gap-4">
-          <button className="font-ibm font-bold border border-[var(--project-text)] px-6 py-3 hover:bg-[var(--project-highlight)] hover:bg-opacity-20 transition-all uppercase tracking-widest text-sm">
-            [ LAUNCH_PROJECT ]
-          </button>
-        </div>
+        {project.meta.links?.live && (
+          <a
+            href={project.meta.links.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.launchBtn}
+          >
+            [ LAUNCH_PROJECT → ]
+          </a>
+        )}
       </div>
 
       {/* Metadata Grid */}
-      <div className="md:col-span-4 border-l border-[var(--color-border)] pl-8 flex flex-col justify-between py-2">
-        <div className="space-y-6">
-          <div>
-            <span className="font-vt text-xs block opacity-60 mb-1">RELEASE_DATE</span>
-            <span className="font-ibm text-sm font-bold uppercase">
+      <div className={styles.heroRight}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className={styles.metaBlock}>
+            <span className={styles.metaLabel}>RELEASE_DATE</span>
+            <span className={styles.metaValue}>
               [ {project.meta.status} ] {new Date(project.meta.date).toLocaleDateString(lang, { year: 'numeric', month: 'short' })}
             </span>
           </div>
           
           {/* Dynamiczne Facts przekazane z frontmatter */}
           {project.content.facts.map((fact, idx) => (
-            <div key={idx}>
-              <span className="font-vt text-xs block opacity-60 mb-1 uppercase">{fact.label}</span>
-              <span className="font-ibm text-sm font-bold uppercase">{fact.value}</span>
+            <div key={idx} className={styles.metaBlock}>
+              <span className={styles.metaLabel}>{fact.label}</span>
+              <span className={styles.metaValue}>{fact.value}</span>
             </div>
           ))}
 
-          <div>
-            <span className="font-vt text-xs block opacity-60 mb-1">TECH_STACK</span>
-            <div className="flex flex-wrap gap-2 mt-2">
+          <div className={styles.metaBlock}>
+            <span className={styles.metaLabel}>TECH_STACK</span>
+            <div className={styles.tagList}>
               {project.meta.tags.map((tag) => (
-                <span key={tag} className="px-2 py-0.5 bg-[var(--color-bg-secondary)] text-[10px] font-ibm border border-[var(--color-border)] uppercase">
+                <span key={tag} className={styles.tagItem}>
                   {tag}
                 </span>
               ))}

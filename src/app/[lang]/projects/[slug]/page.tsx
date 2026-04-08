@@ -6,6 +6,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 // import styles from './page.module.css'; // Przestajemy używać starych CSS Modules jeśli nie są potrzebne na tym etapie, choć możemy użyć "page-container" 
 import { ProjectHero } from '@/components/mdx/ProjectHero';
 import { globalMdxComponents } from '@/components/mdx';
+import editorStyles from '@/components/mdx/Editorial.module.css';
 
 export async function generateStaticParams() {
   const slugs = await getAllProjectSlugs();
@@ -30,43 +31,36 @@ export default async function ProjectPage({
     // 1. Zaciągnij projekt (z nowym konfigiem i frontmatterem)
     const project = await getProject(slug, lang);
 
-    // 2. Pobierz ewentualne komponenty per projekt (jak istniały to tak zostawmy)
-    let projectComponents: Record<string, React.ComponentType | any> = {};
+    // 2. Pobierz ewentualne komponenty per projekt
+    let projectComponents: Record<string, unknown> = {};
     try {
-      const mod = await import(`@/../content/projects/${slug}/components/index.ts`);
-      projectComponents = mod;
+      projectComponents = await import(`@/../content/projects/${slug}/components/index.ts`);
     } catch {
-      // Ignoruj, brak customowych
+      // Brak per-projekt komponentów — ok
     }
 
-    // Łączymy bazowe z customowymi
     const mergedComponents = { ...globalMdxComponents, ...projectComponents };
 
     // Set theme variables na main kontener
+    // --project-text NIE wstrzykujemy z config — jest zależny od motywu (dark/light)
+    // używamy --color-text który jest theme-aware przez tokens.css
     const styleVariables = {
-      '--project-bg': project.config.theme?.background || 'var(--color-bg-light)',
       '--project-highlight': project.config.theme?.highlight || '#55AAAA',
-      '--project-text': project.config.theme?.primaryText || 'var(--color-bg-dark)',
     } as React.CSSProperties;
 
     return (
-      <main className="pt-24 pb-20 px-6 max-w-7xl mx-auto" style={styleVariables}>
-        {/* Wstecz */}
-        <div className="mb-12">
-          <a href={`/${lang}/projects`} className="font-ibm text-xs font-bold hover:opacity-70 transition-colors flex items-center gap-2 uppercase">
-            ← PROJECTS
-          </a>
-        </div>
+      <div style={styleVariables}>
+        <main className={editorStyles.mainContainer}>
+          {/* Hero */}
+          <ProjectHero project={project} lang={lang} />
 
-        {/* Hero */}
-        <ProjectHero project={project as any} lang={lang} />
-
-        {/* MDX Body - Tu dzieje się magia komponentowa */}
-        <div className="project-body-mdx">
-          <MDXRemote source={project.content.body} components={mergedComponents as any} />
-        </div>
-        
-      </main>
+          {/* MDX Body - Tu dzieje się magia komponentowa */}
+          <div className={editorStyles.projectBody}>
+            <MDXRemote source={project.content.body} components={mergedComponents as any} />
+          </div>
+          
+        </main>
+      </div>
     );
   } catch (error) {
     console.error('Error loading project:', error);

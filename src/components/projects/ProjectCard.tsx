@@ -22,7 +22,7 @@ export function ProjectCard({ project, locale }: ProjectCardProps) {
         <div className={styles.thumbnail}>
           {meta.thumbnail && (
             <Image
-              src={`/projects/${meta.slug}/${meta.thumbnail.replace('./', '')}`}
+              src={`/projects/${meta.slug}/${meta.thumbnail.replace(/^\.\//, '')}`}
               alt={content.title}
               width={600}
               height={400}
