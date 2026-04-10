@@ -8,6 +8,14 @@ gsap.registerPlugin(ScrollToPlugin);
 
 // How close (px) to a section before it snaps to it
 const SNAP_THRESHOLD = 240;
+// Breathing room when header is hidden
+const NO_HEADER_MARGIN = 24;
+
+function getHeaderHeight(): number {
+  const header = document.querySelector<HTMLElement>('[data-header-visible]');
+  if (!header) return 0;
+  return header.getBoundingClientRect().height;
+}
 
 export function SectionScroller() {
   const isAnimating = useRef(false);
@@ -24,15 +32,22 @@ export function SectionScroller() {
       if (sections.length === 0) return;
 
       const scrollY = window.scrollY;
+      const headerHeight = getHeaderHeight();
 
       for (const section of sections) {
-        const sectionTop = section.offsetTop - 96; // account for offsetY (header height)
-        const dist = sectionTop - scrollY; // signed: negative = scrolled past, positive = approaching
+        // Use header height as reference for distance calculation
+        const sectionTop = section.offsetTop - headerHeight;
+        const dist = sectionTop - scrollY; // negative = scrolled past, positive = not yet reached
 
         if (Math.abs(dist) < SNAP_THRESHOLD && Math.abs(dist) > 12) {
+          // If dist < 0 we're scrolling up — header will appear on arrival
+          // If dist > 0 we're scrolling down — header stays hidden
+          const scrollingUp = dist < 0;
+          const offsetY = scrollingUp ? headerHeight : NO_HEADER_MARGIN;
+
           isAnimating.current = true;
           gsap.to(window, {
-            scrollTo: { y: section, offsetY: 96, autoKill: true },
+            scrollTo: { y: section, offsetY, autoKill: true },
             duration: 0.6,
             ease: 'power2.out',
             onComplete: () => { isAnimating.current = false; },

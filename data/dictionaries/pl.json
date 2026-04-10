@@ -24,5 +24,11 @@
   },
   "lang": {
     "switch": "EN"
+  },
+  "footer": {
+    "projects": "INDEKS PROJEKTÓW",
+    "social": "MEDIA SPOŁECZNOŚCIOWE",
+    "contact": "KONTAKT",
+    "mail_label": "EMAIL"
   }
 }

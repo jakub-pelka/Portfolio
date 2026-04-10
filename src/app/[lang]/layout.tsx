@@ -1,6 +1,7 @@
 import { locales, type Locale } from '@/i18n/config';
 import { SiteHeader } from '@/components/ui/SiteHeader';
 import { CopyForAI } from '@/components/ui/CopyForAI';
+import { SiteFooter } from '@/components/home/SiteFooter';
 import { getAllProjects } from '@/lib/projects/loader';
 
 export async function generateStaticParams() {
@@ -22,6 +23,7 @@ export default async function LangLayout({
       <SiteHeader lang={lang} />
       <CopyForAI projects={projects} lang={lang} />
       {children}
+      <SiteFooter lang={lang} projects={projects} />
     </>
   );
 }

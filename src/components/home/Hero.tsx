@@ -16,6 +16,10 @@ export function Hero() {
   const portfolioRef = useRef<HTMLSpanElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
 
+  function scrollToTimeline() {
+    document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   useEffect(() => {
     if (!heyRef.current || !nameContainerRef.current || !itsRef.current || !firstNameRef.current || !lastNameRef.current || !starRef.current || !portfolioRef.current || !arrowRef.current) return;
 
@@ -190,8 +194,20 @@ export function Hero() {
         </div>
       </div>
       <div className={styles.bottomTokens}>
-        <span className={styles.portfolio} ref={portfolioRef}>Portfolio</span>
-        <div className={styles.arrowDown} ref={arrowRef}>
+        <span
+          className={styles.portfolio}
+          ref={portfolioRef}
+          onClick={scrollToTimeline}
+          style={{ cursor: 'pointer' }}
+        >
+          Portfolio
+        </span>
+        <div
+          className={styles.arrowDown}
+          ref={arrowRef}
+          onClick={scrollToTimeline}
+          style={{ cursor: 'pointer' }}
+        >
           <svg width="21" height="12" viewBox="0 0 21 12" fill="currentColor">
             <rect x="0" y="0" width="3" height="3" />
             <rect x="3" y="3" width="3" height="3" />

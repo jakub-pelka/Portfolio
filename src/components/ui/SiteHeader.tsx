@@ -41,7 +41,10 @@ export function SiteHeader({ lang }: SiteHeaderProps) {
   }, []);
 
   return (
-    <header className={`${styles.header} ${visible ? styles.visible : styles.hidden}`}>
+    <header
+      className={`${styles.header} ${visible ? styles.visible : styles.hidden}`}
+      data-header-visible={visible ? 'true' : 'false'}
+    >
       <div className={styles.inner}>
         {/* Back — visible outside home */}
         <div className={styles.left}>

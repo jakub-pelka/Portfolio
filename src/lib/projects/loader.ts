@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
@@ -92,10 +93,10 @@ export async function getProject(
  * Get all projects for a specific locale
  * Optionally filter by featured status
  */
-export async function getAllProjects(
+export const getAllProjects = cache(async (
   locale: Locale,
   featuredOnly = false
-): Promise<ProjectWithLocale[]> {
+): Promise<ProjectWithLocale[]> => {
   const slugs = await getAllProjectSlugs();
 
   const projects = await Promise.all(
@@ -111,7 +112,7 @@ export async function getAllProjects(
   return filteredProjects.sort((a, b) => {
     return new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime();
   });
-}
+});
 
 /**
  * Get projects by status
