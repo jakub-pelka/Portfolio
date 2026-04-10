@@ -8,7 +8,7 @@ interface ProjectHeroProps {
 
 export function ProjectHero({ project, lang }: ProjectHeroProps) {
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} data-snap-section>
       <div className={styles.heroLeft}>
         <h1 className={styles.heroTitle}>
           {project.content.title}

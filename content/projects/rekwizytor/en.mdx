@@ -1,97 +1,117 @@
 ---
 title: "REKWIZYTOR"
-description: "An advanced digital asset management ecosystem for production designers. Bridging the gap between physical inventories and virtual catalogs using computer vision."
+description: "A prop management system for theatre and film productions — from photograph to catalogued asset in seconds, powered by Gemini Vision API."
 facts:
   - label: "ROLE"
-    value: "LEAD ENGINEER"
+    value: "FULL-STACK DEVELOPER (SOLO)"
   - label: "CONTEXT"
-    value: "INTERNAL TOOL"
+    value: "INTERNAL TOOL / PROTOTYPE"
   - label: "BACKEND"
-    value: "NODE_JS / POSTGRES"
+    value: "NODE.JS / POSTGRES"
   - label: "COMMITS"
-    value: "1,248_PUSHES"
+    value: "106"
   - label: "STATUS"
-    value: "STABLE_V1.2"
-process: []
+    value: "PROTOTYPE COMPLETE"
+process:
+  - type: decision
+    title: "GEMINI_VISION"
+    content: "I chose Gemini Vision over a custom CV model — it understood 'vintage aesthetic' context better and generated metadata that actually matters to a prop master."
+    anchor: "kod"
+  - type: insight
+    title: "DEPLOYMENT"
+    content: "A working prototype isn't enough — deployment depends on organisational decisions, not code quality."
+    anchor: "outcome"
+  - type: milestone
+    title: "PIPELINE"
+    content: "Built an end-to-end pipeline: photo → Gemini Vision → Zod schema → Supabase — without manual parsing of AI responses."
+    anchor: "architektura"
 ---
 
-<SectionHeader num="01" title="EXECUTIVE_SUMMARY" />
+<SectionHeader num="01" title="PROBLEM" />
 
 <SplitLayout>
   <ContentLeft>
-    <MetricGrid>
-      <Metric value="70%" label="Faster Cataloging" />
-      <Metric value="99.4%" label="Accuracy Rating" />
-    </MetricGrid>
-
     <QuoteBlock>
-      "Rekwizytor was conceived to solve the critical bottleneck in high-volume prop management. By leveraging Gemini Vision API, we transformed a manual 40-hour weekly task into a streamlined 4-hour automated pipeline."
+      "Prop masters in theatre and film productions spend hours manually cataloguing hundreds of items — each requiring a description, condition, location, and production assignment. The work is repetitive, error-prone, and hard to search."
     </QuoteBlock>
 
     <BoxGrid>
-      <ProcessBox title="THE PROBLEM">
-        Manual entry of thousands of physical assets was prone to error and delayed production timelines by weeks.
+      <ProcessBox title="REAL ORIGIN">
+        The project grew from a concrete problem raised by prop masters working on theatre productions. The need was genuine — deployment didn't happen due to organisational reasons.
       </ProcessBox>
-      <ProcessBox title="THE SOLUTION">
-        A vision-first web terminal that identifies, tags, and categorizes objects from a single photograph.
+      <ProcessBox title="HYPOTHESIS">
+        If a photograph is enough to identify an object — it's enough to catalogue it. One image should generate a full record with no manual data entry.
       </ProcessBox>
     </BoxGrid>
   </ContentLeft>
 
   <ContentRight>
-    <TerminalCard title="PROJECT_PULSE" status="active">
-      <div style={{ marginBottom: '1rem' }}>
-        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>ROLE</span>
-        <span style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Full-stack Developer (solo)</span>
-      </div>
-      <div style={{ marginBottom: '1rem' }}>
-        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>STACK</span>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
-          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Next.js 16</span>
-          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Supabase</span>
-          <span style={{ padding: '0.125rem 0.5rem', backgroundColor: 'var(--color-bg-secondary)', fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.625rem', border: '1px solid var(--color-border)', textTransform: 'uppercase' }}>Gemini</span>
-        </div>
-      </div>
-      <div style={{ marginBottom: '1rem' }}>
-        <span style={{ fontFamily: 'var(--font-vt323)', fontSize: '1rem', opacity: 0.6, textTransform: 'uppercase', display: 'block' }}>COMMITS</span>
-        <span style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', fontWeight: 'bold', textTransform: 'uppercase' }}>106</span>
-      </div>
+    <TerminalCard title="PROJECT_INFO" status="active">
+      <MetaRow label="STACK">
+        <TagList>
+          <Tag>Next.js 16</Tag>
+          <Tag>Supabase</Tag>
+          <Tag>Gemini Vision</Tag>
+          <Tag>TypeScript</Tag>
+          <Tag>Zod</Tag>
+        </TagList>
+      </MetaRow>
+      <MetaRow label="COMMITS">106</MetaRow>
+      <MetaRow label="STAGE">Prototype — production ready</MetaRow>
     </TerminalCard>
   </ContentRight>
 </SplitLayout>
 
-<SectionHeader num="03" title="PROCESS" />
+<SectionHeader num="02" title="PRODUCT" id="produkt" />
+
+<FullwidthImage
+  src="/projects/rekwizytor/Home-page.png"
+  alt="Rekwizytor — home screen with production list"
+  caption="Home screen — list of productions with assigned props and inventory status"
+/>
 
 <SplitLayout>
   <ContentLeft>
-    <ProcessCard type="INSIGHT" title="THE NOTEPAD HOOK">
-      <div style={{ backgroundColor: 'var(--color-bg-secondary)', padding: '1.5rem', border: '1px solid var(--color-border)', marginBottom: '1.5rem' }}>
-        <div style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '0.875rem', lineHeight: 1.6, color: 'var(--color-text)' }}>
-          "User testing revealed that prop masters don't want complex forms. They want the speed of a scribble. We needed to bridge the gap between 'rough notes' and 'structured data' without friction."
-        </div>
-      </div>
-      <div>
-        The solution was a 'Loose-Input' parser. Users can paste messy notes from a WhatsApp group or a physical notepad photo, and the system uses LLMs to extract entity relationships automatically.
-      </div>
-    </ProcessCard>
+    <FullwidthImage
+      src="/projects/rekwizytor/SpektaklList-page.png"
+      alt="Production list view"
+      caption="Production list view"
+    />
   </ContentLeft>
   <ContentRight>
-    <ProcessCard type="DECISION" title="AI CATALOGING">
-      <div style={{ marginBottom: '1.5rem' }}>
-        We integrated Gemini Vision for its superior spatial reasoning. Traditional CV struggled with identifying 'vintage aesthetic' or 'period-appropriate' tags. Gemini allowed us to use descriptive prompting to generate metadata that actually matters to a production designer.
-      </div>
-      <ImageGrid 
-        columns={3} 
-        images={[
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuC1fnxgU0X5ShUaM11vt4jbgztxbBGzXL-Ko29PbfF4Nmh67n1oLadjjy1W5gB_PCEmtfkED-hKF_vq_N800XxDF3i_FDKozSHJd57SMeVDfKP-ZltoF-i52ACfrsdpV8e6r7gOJ-W06qtD0EryAfxidvJLjj1KFxjQgaAkHes01l-nWdliTwNVAhy1yBDBqzqKViecloI3wDNOlsyQ3Kn53kWCY5tHITVMU7fyI33m3kvlGdDYvW4j2Prv3_lFiVm5mrckVI3Ucng",
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuAQvBu8Q_p45qd0hPp2Gkr4hKf3mEM8JX6vZsZ8okOj8G2KwhNnCbMfh8M4k2e_N4_syb8E3rmf5hvdNy48hXalfyVFO52ulYmzIceHHfyodmpDaFKGHXJpaYYHGd7fzpD4SYvEHajFJzM9kDYD7lcRSUBXxAVl56Y0Wrz-BHcBZrB6fe0aZ7THAAg_CnJCmF2yZCiHvjDcoF6ifDlPOYuNr-Nj_2-mXatIuPaZb7aEmpLHnvlc3hMycIrLzdPF-_8eJf_gHHrdP-M",
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuBPMsezTM6PJblX2nhQWFRCDlG2fxxaidVgmSuatDk1A2N0eWAY4g76vzKPMfUOmJc8uf0GYDUpQHznlpWgYrcB8EgUKZ08hB5jCBpV64J0JEPWe9rb5RTdQcJBXRtaZX6lctS1Vlpk9xdRuM0yW2RnkiuiVcK38FLFbB80sTku8XpO6La-pw7brd5idQjTytPq9tc2W4O0SJEdyZyASZ7AjKmqxxbyTpHD3tIPzRFuU26ARXSTCVRDWuoSYB_jhXTla0ye7IIJPso"
-        ]}
-      />
-    </ProcessCard>
+    <FullwidthImage
+      src="/projects/rekwizytor/Grupy-page.png"
+      alt="Prop groups"
+      caption="Prop grouping per production"
+    />
   </ContentRight>
 </SplitLayout>
 
-<OutcomeBanner statusTag="DEPLOYMENT_STABLE_VER_1.2.0">
-  Rekwizytor is currently the primary inventory hub for three major European production houses, managing over 50,000 unique items with zero database downtime since launch.
+<SectionHeader num="03" title="ARCHITECTURE" id="architektura" />
+
+<CompareBlock beforeLabel="WITHOUT SYSTEM" afterLabel="WITH REKWIZYTOR">
+  <CompareRow label="Cataloguing" before="Manual description of every item" after="Photo → automatic record via Vision API" />
+  <CompareRow label="Search" before="Browsing Excel sheets or handwritten notes" after="Filter by production, group, status" />
+  <CompareRow label="Assignment" before="Verbal agreements, risk of mistakes" after="Prop assigned to scene with change history" />
+  <CompareRow label="PDF report" before="Manual creation before each production" after="Generated in one click" />
+</CompareBlock>
+
+<SectionHeader num="04" title="CODE" id="kod" />
+
+<CodeSnippet
+  lang="typescript"
+  title="lib/vision/classify.ts"
+  annotation="Gemini Vision API analyses the photo and returns a structured object validated against a Zod schema — no manual parsing"
+  code={"const schema = z.object({\n  name: z.string(),\n  category: z.enum(['furniture', 'clothing', 'prop', 'decoration']),\n  condition: z.enum(['new', 'good', 'worn', 'damaged']),\n  tags: z.array(z.string()),\n  notes: z.string().optional(),\n});\n\nexport async function classifyProp(imageBase64: string) {\n  const result = await model.generateContent([\n    { inlineData: { data: imageBase64, mimeType: 'image/jpeg' } },\n    CLASSIFY_PROMPT,\n  ]);\n  return schema.parse(JSON.parse(result.response.text()));\n}"}
+/>
+
+<CodeSnippet
+  lang="typescript"
+  title="app/api/props/route.ts"
+  annotation="Photo upload → Supabase Storage → Vision classification → database insert — one endpoint handles the entire pipeline"
+  code={"export async function POST(req: Request) {\n  const form = await req.formData();\n  const file = form.get('image') as File;\n\n  const { path } = await supabase.storage\n    .from('props')\n    .upload(`${Date.now()}-${file.name}`, file);\n\n  const classification = await classifyProp(\n    await fileToBase64(file)\n  );\n\n  const { data } = await supabase\n    .from('props')\n    .insert({ ...classification, image_path: path })\n    .select()\n    .single();\n\n  return Response.json(data);\n}"}
+/>
+
+<OutcomeBanner statusTag="PROTOTYPE_COMPLETE">
+  The system works end-to-end — from photo upload to a searchable catalogue. The prototype was demonstrated to interested prop masters, but deployment didn't proceed for organisational reasons. The architecture is production-ready.
 </OutcomeBanner>

@@ -2,25 +2,19 @@
   display: grid;
   grid-template-columns: 1fr;
   margin-bottom: 4rem;
-  border: 1px solid var(--color-border);
 }
 
 @media (min-width: 768px) {
   .splitLayout {
     grid-template-columns: 8fr 4fr;
-    border: none;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
   }
 }
 
 .mainColumn {
   padding: 2rem;
-  border-bottom: 1px solid var(--color-border);
 }
 @media (min-width: 768px) {
   .mainColumn {
-    border-bottom: none;
     border-right: 1px solid var(--color-border);
   }
 }
@@ -200,6 +194,7 @@
   border-left: 12px solid var(--project-highlight);
   margin-top: 4rem;
   margin-bottom: 4rem;
+  margin-left: 2rem;
   overflow: hidden;
 }
 .outcomeContent {
@@ -274,6 +269,7 @@
   max-width: var(--max-width);
   margin: 0 auto;
   padding: var(--space-4) var(--page-margin);
+  padding-top: 6rem; /* clear fixed header (~3.5rem) + breathing room */
 }
 
 .hero {
@@ -281,7 +277,6 @@
   grid-template-columns: 1fr;
   gap: 2rem;
   margin-bottom: 4rem;
-  border-bottom: 1px solid var(--color-border);
   padding-bottom: 4rem;
 }
 @media (min-width: 768px) {
@@ -358,6 +353,15 @@
   font-weight: bold;
   text-transform: uppercase;
 }
+
+/* MetaRow value — same style but as block to accept any children (TagList, text) */
+.metaRowValue {
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
 .tagList {
   display: flex;
   flex-wrap: wrap;
@@ -376,4 +380,170 @@
 /* Base resets for typography inside MDX bounds */
 .projectBody p {
   margin-bottom: 1.5rem;
+}
+
+/* ================== FULLWIDTH IMAGE ================== */
+
+.fullwidthImage {
+  margin: 4rem 0;
+}
+
+.fullwidthImageImg {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--color-border);
+  filter: grayscale(20%);
+  transition: filter 400ms ease;
+}
+
+.fullwidthImageImg:hover {
+  filter: grayscale(0%);
+}
+
+.fullwidthImageCaption {
+  display: block;
+  margin-top: 0.75rem;
+  font-family: var(--font-vt323);
+  font-size: 1rem;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ================== COMPARE BLOCK ================== */
+
+.compareBlock {
+  margin: 3rem 0;
+  border: 1px solid var(--color-border);
+}
+
+.compareHeader {
+  display: grid;
+  grid-template-columns: 2fr 3fr 3fr;
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.compareHeaderLabel {
+  padding: 0.75rem 1rem;
+  border-right: 1px solid var(--color-border);
+}
+
+.compareHeaderBefore,
+.compareHeaderAfter {
+  padding: 0.75rem 1rem;
+  font-family: var(--font-vt323);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+}
+
+.compareHeaderBefore {
+  border-right: 1px solid var(--color-border);
+}
+
+.compareRow {
+  display: grid;
+  grid-template-columns: 2fr 3fr 3fr;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.compareRow:last-child {
+  border-bottom: none;
+}
+
+.compareRowLabel {
+  padding: 1rem;
+  font-family: var(--font-vt323);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+  border-right: 1px solid var(--color-border);
+}
+
+.compareRowBefore {
+  padding: 1rem;
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.8125rem;
+  opacity: 0.6;
+  border-right: 1px solid var(--color-border);
+}
+
+.compareRowAfter {
+  padding: 1rem;
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.8125rem;
+  font-weight: bold;
+  color: var(--project-highlight);
+}
+
+/* ================== CODE SNIPPET ================== */
+
+.codeSnippet {
+  margin: 3rem 0;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+}
+
+.codeSnippetHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.codeSnippetDots {
+  display: flex;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.codeSnippetDots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-border);
+  display: block;
+}
+
+.codeSnippetDots span:first-child {
+  background-color: var(--project-highlight);
+  opacity: 0.8;
+}
+
+.codeSnippetTitle {
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.75rem;
+  opacity: 0.7;
+  flex: 1;
+}
+
+.codeSnippetLang {
+  font-family: var(--font-vt323);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.4;
+}
+
+.codeSnippetPre {
+  margin: 0;
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--color-text);
+}
+
+.codeSnippetAnnotation {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.75rem;
+  font-style: italic;
+  opacity: 0.5;
 }

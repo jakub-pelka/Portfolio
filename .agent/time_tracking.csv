@@ -2,5 +2,7 @@ project,date,start,end,topic
 portfolio,2026-03-14,15:47,18:08,System projektów + generator prompt
 portfolio,2026-03-15,17:35,18:00,Poprawki w projekcie
 portfolio,2026-03-24,14:41,17:05,Design System: Button + Linki + Empty States + Halftone Shadow
-portfolio,2026-04-08,15:10,IN_PROGRESS,"(sesja w trakcie)"
-portfolio,2026-04-08,19:49,IN_PROGRESS,"(sesja w trakcie)"
+portfolio,2026-04-08,15:10,19:49,AIT bootstrap + kontekst sesji
+portfolio,2026-04-08,19:49,20:55,MDX editorial system + code review
+portfolio,2026-04-09,10:00,12:42,Header + scroll snap + MDX komponenty
+portfolio,2026-04-10,16:59,19:29,Timeline + CopyForAI + architektura strony

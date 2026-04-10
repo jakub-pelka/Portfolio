@@ -56,6 +56,7 @@ export interface ProcessEntry {
   type: "decision" | "problem" | "insight" | "milestone";
   content: string;
   date?: string; // ISO date format
+  anchor?: string; // links to #anchor in /projects/[slug]
 }
 
 /**

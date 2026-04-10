@@ -3,8 +3,8 @@ import type { Locale } from '@/i18n/config';
 import { getProject, getAllProjectSlugs } from '@/lib/projects/loader';
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-// import styles from './page.module.css'; // Przestajemy używać starych CSS Modules jeśli nie są potrzebne na tym etapie, choć możemy użyć "page-container" 
 import { ProjectHero } from '@/components/mdx/ProjectHero';
+import { SectionScroller } from '@/components/mdx/SectionScroller';
 import { globalMdxComponents } from '@/components/mdx';
 import editorStyles from '@/components/mdx/Editorial.module.css';
 
@@ -50,6 +50,7 @@ export default async function ProjectPage({
 
     return (
       <div style={styleVariables}>
+        <SectionScroller />
         <main className={editorStyles.mainContainer}>
           {/* Hero */}
           <ProjectHero project={project} lang={lang} />

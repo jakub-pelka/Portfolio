@@ -9,6 +9,10 @@ import { ProcessCard } from './ProcessCard';
 import { ImageGrid } from './ImageGrid';
 import { OutcomeBanner } from './OutcomeBanner';
 import { SplitLayout, ContentLeft, ContentRight, ReadingFooter } from './LayoutBlocks';
+import { FullwidthImage } from './FullwidthImage';
+import { Tag, TagList, MetaRow } from './Primitives';
+import { CompareBlock, CompareRow } from './CompareBlock';
+import { CodeSnippet } from './CodeSnippet';
 
 export const globalMdxComponents: MDXComponents = {
   SectionHeader,
@@ -24,5 +28,12 @@ export const globalMdxComponents: MDXComponents = {
   SplitLayout,
   ContentLeft,
   ContentRight,
-  ReadingFooter
+  ReadingFooter,
+  FullwidthImage,
+  Tag,
+  TagList,
+  MetaRow,
+  CompareBlock,
+  CompareRow,
+  CodeSnippet,
 };

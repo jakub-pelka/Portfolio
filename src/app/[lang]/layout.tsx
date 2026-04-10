@@ -1,4 +1,7 @@
 import { locales, type Locale } from '@/i18n/config';
+import { SiteHeader } from '@/components/ui/SiteHeader';
+import { CopyForAI } from '@/components/ui/CopyForAI';
+import { getAllProjects } from '@/lib/projects/loader';
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -12,8 +15,13 @@ export default async function LangLayout({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params as { lang: Locale };
+  const projects = await getAllProjects(lang);
 
-  // This layout only exists for i18n routing
-  // Actual <html> and <body> are in root layout
-  return <>{children}</>;
+  return (
+    <>
+      <SiteHeader lang={lang} />
+      <CopyForAI projects={projects} lang={lang} />
+      {children}
+    </>
+  );
 }
