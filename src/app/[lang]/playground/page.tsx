@@ -1,10 +1,11 @@
 import type { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
-import { MiniScrollB } from '@/components/ui/MiniScrollB';
-import { MiniScrollC } from '@/components/ui/MiniScrollC';
-import { IndicatorMorph } from '@/components/ui/IndicatorMorph';
+import { MiniScrollB } from '@/components/_experiments/MiniScrollB';
+import { MiniScrollC } from '@/components/_experiments/MiniScrollC';
+import { IndicatorMorph } from '@/components/_experiments/IndicatorMorph';
 import { Button } from '@/components/ui/Button';
 import { HalftoneShadow } from '@/components/ui/HalftoneShadow';
+import { ThemeTogglePreview } from '@/components/_experiments/ThemeTogglePreview';
 
 export default async function PlaygroundPage({
   params,
@@ -16,16 +17,53 @@ export default async function PlaygroundPage({
 
   return (
     <main>
+      {/* EASTER EGG HEADER */}
+      <section style={{
+        width: '100%',
+        minHeight: '30vh',
+        padding: 'calc(var(--space-4) * 3) var(--space-4) calc(var(--space-4) * 2)',
+        borderBottom: '1px solid var(--color-border)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        gap: 'var(--space-2)',
+      }}>
+        <div style={{ fontFamily: 'var(--font-vt323)', fontSize: '4rem', lineHeight: 1 }}>
+          *
+        </div>
+        <h1 style={{
+          fontFamily: 'var(--font-ibm-plex-mono)',
+          fontSize: 'var(--text-title)',
+          fontWeight: 'bold',
+          letterSpacing: '-0.03em',
+          marginBottom: 'var(--space-1)',
+        }}>
+          GRATULACJE.
+        </h1>
+        <p style={{
+          fontFamily: 'var(--font-ibm-plex-mono)',
+          fontSize: '0.9375rem',
+          lineHeight: 1.65,
+          opacity: 0.5,
+          maxWidth: '36rem',
+        }}>
+          Odkryłeś sekretne miejsce. Tutaj testowałem pomysły — niektóre trafiły do portfolio, inne nie przeżyły pierwszego weekendu. Miłego przeglądania.
+        </p>
+        <p style={{ fontFamily: 'var(--font-vt323)', fontSize: '0.85rem', opacity: 0.3, marginTop: 'var(--space-1)' }}>
+          [ STREFA EKSPERYMENTALNA — WSTĘP NA WŁASNE RYZYKO ]
+        </p>
+      </section>
+
       {/* HEADER PLAYGROUNDU */}
-      <section style={{ 
-        width: '100%', 
-        minHeight: '20vh', 
+      <section style={{
+        width: '100%',
+        minHeight: '20vh',
         padding: 'calc(var(--space-4) * 2) var(--space-4)',
         borderBottom: '1px solid var(--color-text)',
       }}>
-        <h1 
-          style={{ 
-            fontFamily: 'var(--font-ibm-plex-mono)', 
+        <h1
+          style={{
+            fontFamily: 'var(--font-ibm-plex-mono)',
             fontSize: 'var(--text-title)',
             marginBottom: 'var(--space-2)'
           }}
@@ -542,6 +580,229 @@ export default async function PlaygroundPage({
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* STANOWISKO 7: Theme Toggle Icons */}
+      <section style={{
+        width: '100vw',
+        minHeight: '50vh',
+        borderBottom: '1px solid var(--color-text)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 'var(--space-4)',
+        position: 'relative',
+        gap: 'var(--space-4)'
+      }}>
+        <div style={{ position: 'absolute', top: 'var(--space-2)', left: 'var(--space-2)', fontFamily: 'var(--font-vt323)', opacity: 0.5 }}>
+          [07] THEME_TOGGLE_ICONS
+        </div>
+
+        <div style={{ display: 'flex', gap: '4rem', alignItems: 'center' }}>
+
+          {/* SUN — light mode icon */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.5, fontSize: '0.75rem' }}>[ SUN / LIGHT ]</div>
+            <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor" style={{ imageRendering: 'pixelated' }}>
+              {/* center body */}
+              <rect x="5" y="5" width="6" height="6" />
+              {/* top ray */}
+              <rect x="7" y="1" width="2" height="3" />
+              {/* bottom ray */}
+              <rect x="7" y="12" width="2" height="3" />
+              {/* left ray */}
+              <rect x="1" y="7" width="3" height="2" />
+              {/* right ray */}
+              <rect x="12" y="7" width="3" height="2" />
+              {/* top-left ray */}
+              <rect x="2" y="2" width="2" height="2" />
+              <rect x="3" y="3" width="1" height="1" />
+              {/* top-right ray */}
+              <rect x="12" y="2" width="2" height="2" />
+              <rect x="12" y="3" width="1" height="1" />
+              {/* bottom-left ray */}
+              <rect x="2" y="12" width="2" height="2" />
+              <rect x="3" y="12" width="1" height="1" />
+              {/* bottom-right ray */}
+              <rect x="12" y="12" width="2" height="2" />
+              <rect x="12" y="12" width="1" height="1" />
+            </svg>
+            <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor" style={{ imageRendering: 'pixelated', opacity: 0.5 }}>
+              <rect x="5" y="5" width="6" height="6" />
+              <rect x="7" y="1" width="2" height="3" />
+              <rect x="7" y="12" width="2" height="3" />
+              <rect x="1" y="7" width="3" height="2" />
+              <rect x="12" y="7" width="3" height="2" />
+              <rect x="2" y="2" width="2" height="2" />
+              <rect x="3" y="3" width="1" height="1" />
+              <rect x="12" y="2" width="2" height="2" />
+              <rect x="12" y="3" width="1" height="1" />
+              <rect x="2" y="12" width="2" height="2" />
+              <rect x="3" y="12" width="1" height="1" />
+              <rect x="12" y="12" width="2" height="2" />
+              <rect x="12" y="12" width="1" height="1" />
+            </svg>
+          </div>
+
+          {/* MOON — dark mode icon */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.5, fontSize: '0.75rem' }}>[ MOON / DARK ]</div>
+            <svg width="48" height="48" viewBox="0 0 14 14" fill="currentColor" style={{ imageRendering: 'pixelated' }}>
+              {/*
+                Solid crescent — filled pixel by pixel, row by row
+                 · · · · ■ ■ ■ · · · · · · ·
+                 · · · ■ ■ ■ ■ ■ · · · · · ·
+                 · · ■ ■ ■ ■ · · · · · · · ·
+                 · ■ ■ ■ ■ · · · · · · · · ·
+                 · ■ ■ ■ · · · · · · · · · ·
+                 ■ ■ ■ · · · · · · · · · · ·
+                 ■ ■ ■ · · · · · · · · · · ·
+                 ■ ■ ■ · · · · · · · · · · ·
+                 ■ ■ ■ · · · · · · · · · · ·
+                 · ■ ■ ■ · · · · · · · · · ·
+                 · ■ ■ ■ ■ · · · · · · · · ·
+                 · · ■ ■ ■ ■ · · · · · · · ·
+                 · · · ■ ■ ■ ■ ■ · · · · · ·
+                 · · · · ■ ■ ■ · · · · · · ·
+              */}
+              {/* row 0  */}<rect x="4" y="0" width="3" height="1" />
+              {/* row 1  */}<rect x="3" y="1" width="5" height="1" />
+              {/* row 2  */}<rect x="2" y="2" width="4" height="1" />
+              {/* row 3  */}<rect x="1" y="3" width="4" height="1" />
+              {/* row 4  */}<rect x="1" y="4" width="3" height="1" />
+              {/* row 5  */}<rect x="0" y="5" width="3" height="1" />
+              {/* row 6  */}<rect x="0" y="6" width="3" height="1" />
+              {/* row 7  */}<rect x="0" y="7" width="3" height="1" />
+              {/* row 8  */}<rect x="0" y="8" width="3" height="1" />
+              {/* row 9  */}<rect x="1" y="9" width="3" height="1" />
+              {/* row 10 */}<rect x="1" y="10" width="4" height="1" />
+              {/* row 11 */}<rect x="2" y="11" width="4" height="1" />
+              {/* row 12 */}<rect x="3" y="12" width="5" height="1" />
+              {/* row 13 */}<rect x="4" y="13" width="3" height="1" />
+              {/* star */}
+              <rect x="10" y="3" width="1" height="1" />
+            </svg>
+            <svg width="24" height="24" viewBox="0 0 14 14" fill="currentColor" style={{ imageRendering: 'pixelated', opacity: 0.5 }}>
+              <rect x="4" y="0" width="3" height="1" />
+              <rect x="3" y="1" width="5" height="1" />
+              <rect x="2" y="2" width="4" height="1" />
+              <rect x="1" y="3" width="4" height="1" />
+              <rect x="1" y="4" width="3" height="1" />
+              <rect x="0" y="5" width="3" height="1" />
+              <rect x="0" y="6" width="3" height="1" />
+              <rect x="0" y="7" width="3" height="1" />
+              <rect x="0" y="8" width="3" height="1" />
+              <rect x="1" y="9" width="3" height="1" />
+              <rect x="1" y="10" width="4" height="1" />
+              <rect x="2" y="11" width="4" height="1" />
+              <rect x="3" y="12" width="5" height="1" />
+              <rect x="4" y="13" width="3" height="1" />
+              <rect x="10" y="3" width="1" height="1" />
+            </svg>
+          </div>
+
+          {/* LUCIDE — stroke round (oryginał) */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.5, fontSize: '0.75rem' }}>[ LUCIDE ROUND ]</div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" /><path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" /><path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+            </svg>
+          </div>
+
+          {/* LUCIDE — square caps (bardziej pixel) */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.5, fontSize: '0.75rem' }}>[ LUCIDE SQUARE ]</div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" /><path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" /><path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+              <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+            </svg>
+          </div>
+
+          {/* LUCIDE — grubszy stroke square */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.5, fontSize: '0.75rem' }}>[ LUCIDE BOLD ]</div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" /><path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" /><path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
+              <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+            </svg>
+          </div>
+
+          {/* INTERAKTYWNY TOGGLE */}
+          <ThemeTogglePreview />
+
+          {/* PREVIEW: jak wyglądałoby w headerze */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.5, fontSize: '0.75rem' }}>[ PODGLĄD W HEADERZE ]</div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              border: '1px solid var(--color-border)',
+              padding: '0.5rem 1rem',
+              fontFamily: 'var(--font-ibm-plex-mono)',
+              fontSize: '0.75rem',
+            }}>
+              <span style={{ opacity: 0.5 }}>PL / EN</span>
+              <span style={{ opacity: 0.3 }}>|</span>
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'currentColor', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                {/* sun */}
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style={{ imageRendering: 'pixelated', opacity: 0.4 }}>
+                  <rect x="5" y="5" width="6" height="6" />
+                  <rect x="7" y="1" width="2" height="3" />
+                  <rect x="7" y="12" width="2" height="3" />
+                  <rect x="1" y="7" width="3" height="2" />
+                  <rect x="12" y="7" width="3" height="2" />
+                  <rect x="2" y="2" width="2" height="2" />
+                  <rect x="3" y="3" width="1" height="1" />
+                  <rect x="12" y="2" width="2" height="2" />
+                  <rect x="12" y="3" width="1" height="1" />
+                  <rect x="2" y="12" width="2" height="2" />
+                  <rect x="3" y="12" width="1" height="1" />
+                  <rect x="12" y="12" width="2" height="2" />
+                </svg>
+                {/* moon */}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" style={{ imageRendering: 'pixelated' }}>
+                  <rect x="4" y="0" width="3" height="1" />
+                  <rect x="3" y="1" width="5" height="1" />
+                  <rect x="2" y="2" width="4" height="1" />
+                  <rect x="1" y="3" width="4" height="1" />
+                  <rect x="1" y="4" width="3" height="1" />
+                  <rect x="0" y="5" width="3" height="1" />
+                  <rect x="0" y="6" width="3" height="1" />
+                  <rect x="0" y="7" width="3" height="1" />
+                  <rect x="0" y="8" width="3" height="1" />
+                  <rect x="1" y="9" width="3" height="1" />
+                  <rect x="1" y="10" width="4" height="1" />
+                  <rect x="2" y="11" width="4" height="1" />
+                  <rect x="3" y="12" width="5" height="1" />
+                  <rect x="4" y="13" width="3" height="1" />
+                  <rect x="10" y="3" width="1" height="1" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
         </div>
       </section>
     </main>

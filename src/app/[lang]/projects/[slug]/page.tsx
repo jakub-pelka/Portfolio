@@ -3,8 +3,8 @@ import type { Locale } from '@/i18n/config';
 import { getProject, getAllProjectSlugs } from '@/lib/projects/loader';
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import { ProjectHero } from '@/components/mdx/ProjectHero';
-import { SectionScroller } from '@/components/mdx/SectionScroller';
+import { ProjectHero } from '@/components/projects/ProjectHero';
+import { SectionScroller } from '@/components/projects/SectionScroller';
 import { globalMdxComponents } from '@/components/mdx';
 import editorStyles from '@/components/mdx/Editorial.module.css';
 

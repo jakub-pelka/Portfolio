@@ -185,6 +185,9 @@
   border: 1px solid var(--color-border);
   width: 100%;
 }
+.imageItem[data-frame="false"] {
+  border: none;
+}
 .imageItem:hover { filter: grayscale(0%); }
 
 .outcomeBanner {
@@ -394,6 +397,9 @@
   border: 1px solid var(--color-border);
   filter: grayscale(20%);
   transition: filter 400ms ease;
+}
+.fullwidthImageImg[data-frame="false"] {
+  border: none;
 }
 
 .fullwidthImageImg:hover {

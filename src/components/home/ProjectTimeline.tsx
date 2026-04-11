@@ -71,15 +71,17 @@ function ProjectEntry({
         <span className={styles.status} data-status={meta.status}>
           [ {meta.status.toUpperCase().replace('-', '_')} ]
         </span>
-        <h2 className={styles.projectTitle}>{content.title}</h2>
-        <p className={styles.projectDescription}>{content.description}</p>
-        {meta.tags.length > 0 && (
-          <ul className={styles.tags}>
-            {meta.tags.slice(0, 5).map((tag) => (
-              <li key={tag} className={styles.tag}>{tag}</li>
-            ))}
-          </ul>
-        )}
+        <Link href={`/${lang}/projects/${meta.slug}`} className={styles.contentLink}>
+          <h2 className={styles.projectTitle}>{content.title}</h2>
+          <p className={styles.projectDescription}>{content.description}</p>
+          {meta.tags.length > 0 && (
+            <ul className={styles.tags}>
+              {meta.tags.slice(0, 5).map((tag) => (
+                <li key={tag} className={styles.tag}>{tag}</li>
+              ))}
+            </ul>
+          )}
+        </Link>
         <Link href={`/${lang}/projects/${meta.slug}`} className={styles.moreLink}>
           [ SEE MORE → ]
         </Link>

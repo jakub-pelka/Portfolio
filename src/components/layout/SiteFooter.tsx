@@ -40,10 +40,10 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
           <span className={styles.colHeader}>{dict.footer.social}</span>
           <ul className={styles.list}>
             <li className={styles.listItem}>
-              <a href="#" className={styles.link}>GITHUB</a>
+              <a href="https://github.com/jakub-pelka" className={styles.link}>GITHUB</a>
             </li>
             <li className={styles.listItem}>
-              <a href="#" className={styles.link}>LINKEDIN</a>
+              <a href="https://www.linkedin.com/in/jakub-pe%C5%82ka-0961bb27b/" className={styles.link}>LINKEDIN</a>
             </li>
           </ul>
         </div>
@@ -54,8 +54,8 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
           <ul className={styles.list}>
             <li className={styles.contactItem}>
               <span className={styles.contactLabel}>{dict.footer.mail_label}</span>
-              <a href="mailto:hi@jakubpelka.com" className={styles.link}>
-                HI@JAKUBPELKA.COM
+              <a href="mailto:jakubpelkapraca@gmail.com" className={styles.link}>
+                jakubpelkapraca@gmail.com
               </a>
             </li>
           </ul>
@@ -72,7 +72,7 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
 
       {/* Bottom bar */}
       <div className={styles.bottom}>
-        <span className={styles.copy}>©{year} JAKUB PEŁKA</span>
+        <span className={styles.copy}>©{year} JAKUB PEŁKA - coded from scratch in NEXT.JS</span>
       </div>
     </footer>
   );

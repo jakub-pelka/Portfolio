@@ -1,5 +1,5 @@
 import { ProjectWithLocale } from '@/lib/types/project';
-import styles from './Editorial.module.css';
+import styles from '@/components/mdx/Editorial.module.css';
 
 interface ProjectHeroProps {
   project: ProjectWithLocale;

@@ -29,6 +29,13 @@
   font-size: var(--text-title); /* Wg designu moze byc ciut wieksze w rzczywistosci, ale niech bedzie title */
   color: var(--color-text);
   line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.star:hover {
+  opacity: 0.5;
 }
 
 .content {

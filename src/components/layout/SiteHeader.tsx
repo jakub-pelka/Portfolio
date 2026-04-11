@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import type { Locale } from '@/i18n/config';
 import styles from './SiteHeader.module.css';
 
@@ -64,11 +65,12 @@ export function SiteHeader({ lang }: SiteHeaderProps) {
           <span />
         )}
 
-        {/* Lang switcher */}
+        {/* Lang switcher + Theme toggle */}
         <div className={styles.right}>
           <Button variant="v3" href={switchedPath} rawText>
             {otherLang.toUpperCase()}
           </Button>
+          <ThemeToggle />
         </div>
       </div>
     </header>

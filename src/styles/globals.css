@@ -7,6 +7,17 @@
   margin: 0;
 }
 
+/* Płynne przejście kolorów przy zmianie motywu — tylko elementy tekstowe i tła, nie canvas/svg/animacje */
+body {
+  transition: background-color 400ms ease, color 400ms ease;
+}
+
+main, header, footer, section, article, nav, aside,
+h1, h2, h3, h4, h5, h6, p, span, a, li, ul, ol,
+div:not([class*="gsap"]):not([data-snap-section]) {
+  transition: background-color 400ms ease, color 400ms ease, border-color 400ms ease;
+}
+
 /* Font utility classes — VT323 scaling is handled by size-adjust: 130% in @font-face */
 .font-ibm {
   font-family: var(--font-ibm-plex-mono);

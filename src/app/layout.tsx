@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
-import { ThemeProvider } from '@/components/ui/ThemeProvider';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import '../styles/globals.css';
 
 const vt323 = localFont({

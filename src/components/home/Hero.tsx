@@ -1,18 +1,21 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import gsap from 'gsap';
 import SplitType from 'split-type';
 import styles from './Hero.module.css';
 
 
 export function Hero() {
+  const pathname = usePathname();
+  const lang = pathname.split('/')[1] || 'pl';
   const heyRef = useRef<HTMLDivElement>(null);
   const nameContainerRef = useRef<HTMLDivElement>(null);
   const itsRef = useRef<HTMLSpanElement>(null);
   const firstNameRef = useRef<HTMLHeadingElement>(null);
   const lastNameRef = useRef<HTMLHeadingElement>(null);
-  const starRef = useRef<HTMLDivElement>(null);
+  const starRef = useRef<HTMLAnchorElement>(null);
   const portfolioRef = useRef<HTMLSpanElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
 
@@ -28,6 +31,16 @@ export function Hero() {
     const splitIts = new SplitType(itsRef.current, { types: 'chars' });
     const splitFirst = new SplitType(firstNameRef.current, { types: 'chars' });
     const splitLast = new SplitType(lastNameRef.current, { types: 'chars' });
+
+    // Jeśli user wrócił na stronę i jest już poniżej Hero — pokaż końcowy stan bez animacji
+    const isScrolledPast = window.scrollY > window.innerHeight * 0.3;
+    if (isScrolledPast) {
+      gsap.set(heyRef.current, { opacity: 1, x: 0, y: 0, skewX: -15, transformOrigin: 'bottom center' });
+      gsap.set(nameContainerRef.current, { opacity: 1 });
+      gsap.set([...(splitIts.chars || []), ...(splitFirst.chars || []), ...(splitLast.chars || [])], { yPercent: 0, opacity: 1 });
+      gsap.set([starRef.current, portfolioRef.current, arrowRef.current], { opacity: 1 });
+      return () => { splitIts.revert(); splitFirst.revert(); splitLast.revert(); };
+    }
 
     // Set initial state for 'Hey'
     const heyRect = heyRef.current.getBoundingClientRect();
@@ -176,7 +189,7 @@ export function Hero() {
 
   return (
     <section className={styles.hero}>
-      <div className={styles.star} ref={starRef}>*</div>
+      <a href={`/${lang}/playground`} className={styles.star} ref={starRef} title="?">*</a>
       <div className={styles.content}>
         <div className={styles.hey} ref={heyRef}>Hey</div>
         <div className={styles.nameContainer} ref={nameContainerRef}>

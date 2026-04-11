@@ -117,6 +117,18 @@
 .status[data-status="in-progress"] { opacity: 0.85; }
 .status[data-status="archived"]    { opacity: 0.3; }
 
+.contentLink {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.contentLink:hover .projectTitle {
+  opacity: 0.7;
+}
+
 .projectTitle {
   font-family: var(--font-ibm-plex-mono);
   font-weight: bold;

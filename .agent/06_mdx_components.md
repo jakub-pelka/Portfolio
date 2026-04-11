@@ -1,25 +1,56 @@
-# 🧱 MDX Components Reference (Analog Architect)
+# 🧱 MDX Components Reference
 
-Ten dokument to źródło wiedzy dla AI na temat dostępnych "klocków" (komponentów React) zdefiniowanych dla treści w plikach `.mdx` (np. `pl.mdx`/`en.mdx`). Wszystkie komponenty wizualnie są oparte o specyfikację "Technical Editorial / Analog Architect". Zawsze stosuj je zamiast natywnych znaczników HTML czy Markdown, gdy trzeba podkreślić strukturę, metryki, cytaty lub tablice (Insights/Decisions).
+Ten dokument to źródło wiedzy dla AI na temat dostępnych komponentów React zdefiniowanych dla treści w plikach `.mdx` (`pl.mdx` / `en.mdx`). Wszystkie komponenty są oparte o estetykę "Technical Editorial / Analog Architect". Zawsze stosuj je zamiast natywnych znaczników HTML czy Markdown gdy trzeba podkreślić strukturę, metryki, cytaty lub decyzje.
 
-## Lista Komponentów do użycia w `MDXRemote`
+> **Ważne:** Komponenty są rejestrowane globalnie w `src/components/mdx/index.ts` — nie trzeba ich importować w plikach MDX.
 
-### 1. `SectionHeader`
-Zastępuje standardowe `<h2>` lub `###`. Tworzy techniczny nagłówek oddzielający logiczne sekcje dokumentu (zgodny z "The Analog Architect").
-**Props:**
-- `num` (string) - np. `"01"`, `"02"` - numer sekcji w formacie 2-cyfrowym.
-- `title` (string) - np. `"EXECUTIVE_SUMMARY"`. Zawsze uppercase, techniczne nawlekanie (np. używanie podłogi w nazwach wieloczłonowych jest mocno zalecane).
-**Przykład:** 
+---
+
+## Layout
+
+### `SplitLayout` / `ContentLeft` / `ContentRight`
+Dwukolumnowy układ strony. `ContentLeft` i `ContentRight` to dzieci `SplitLayout`. Używany do zestawienia narracji z sidebarem (np. `TerminalCard`).
+
 ```mdx
-<SectionHeader num="01" title="EXECUTIVE_SUMMARY" />
+<SplitLayout>
+  <ContentLeft>
+    Treść główna, QuoteBlock, ProcessBox itp.
+  </ContentLeft>
+  <ContentRight>
+    <TerminalCard title="PROJECT_INFO" status="active">
+      ...
+    </TerminalCard>
+  </ContentRight>
+</SplitLayout>
 ```
 
-### 2. `MetricGrid` & `Metric`
-Moduł używany do pokazywania wielkich statystyk czy danych (np. przyspieszenie, SLA, wzrost) z użyciem fontu IBM Plex Mono w asymetrycznym ułożeniu. Przestrzeń pod spodem idealna na luźny paragraf tekstu.
+---
+
+## Sekcje i nagłówki
+
+### `SectionHeader`
+Zastępuje `<h2>`. Techniczny nagłówek z numerem sekcji. Prop `id` jest wymagany gdy sekcja ma być linkowana z timeline (`process[].anchor`).
+
+**Props:**
+- `num` (string) — numer sekcji, np. `"01"`, `"02"`
+- `title` (string) — zawsze UPPERCASE, podkreślniki zamiast spacji, np. `"EXECUTIVE_SUMMARY"`
+- `id` (string, opcjonalny) — anchor id, musi odpowiadać `anchor` w `process[]` frontmatter
+
+```mdx
+<SectionHeader num="01" title="PROBLEM" id="problem" />
+```
+
+---
+
+## Dane i metryki
+
+### `MetricGrid` + `Metric`
+Duże liczby/statystyki. `Metric` zawsze wewnątrz `MetricGrid`.
+
 **Props (`Metric`):**
-- `value` (string) - Wartość liczbowa + jednostka (np. `"70%"`, `"99.4%"`).
-- `label` (string) - VT323 system label opisujący zmienną (np. `"Faster Cataloging"`).
-**Przykład:**
+- `value` (string) — wartość z jednostką, np. `"70%"`, `"106"`
+- `label` (string) — opis metryki, np. `"Faster Cataloging"`
+
 ```mdx
 <MetricGrid>
   <Metric value="70%" label="Faster Cataloging" />
@@ -27,71 +58,186 @@ Moduł używany do pokazywania wielkich statystyk czy danych (np. przyspieszenie
 </MetricGrid>
 ```
 
-### 3. `QuoteBlock`
-Blok cytatu z grubym lewym borderem (brak obwódki wokół, "No-Line Rule"). Tekst kursywą imitujący odręczną, ludzką notatkę (IBM Plex Mono Italic) stanowiąca balans z surową technicznąresztą kodu.
-**Przykład:**
+### `TerminalCard`
+Sidebar/infobox w stylu terminala. Używany w `ContentRight` wewnątrz `SplitLayout`. Zawiera `MetaRow` z danymi technicznymi projektu.
+
+**Props:**
+- `title` (string) — np. `"PROJECT_INFO"`, `"PROJECT_PULSE"`
+- `status` (string, opcjonalny) — tag statusu, np. `"active"`, `"archived"`
+
+```mdx
+<TerminalCard title="PROJECT_INFO" status="active">
+  <MetaRow label="STACK">
+    <TagList>
+      <Tag>Next.js</Tag>
+      <Tag>TypeScript</Tag>
+    </TagList>
+  </MetaRow>
+  <MetaRow label="COMMITY">106</MetaRow>
+  <MetaRow label="ETAP">Prototyp</MetaRow>
+</TerminalCard>
+```
+
+### `MetaRow`
+Wiersz etykieta + wartość. Używany wewnątrz `TerminalCard`.
+
+**Props:**
+- `label` (string) — etykieta w stylu `"STACK"`, `"COMMITY"`
+- `children` — wartość (string, `TagList`, lub inny JSX)
+
+### `Tag` + `TagList`
+Prymitywy tagów technologii. `Tag` zawsze wewnątrz `TagList`.
+
+```mdx
+<TagList>
+  <Tag>Next.js</Tag>
+  <Tag>Supabase</Tag>
+</TagList>
+```
+
+---
+
+## Narracja i decyzje
+
+### `QuoteBlock`
+Blok cytatu z grubym lewym borderem. IBM Plex Mono italic. Używany do otwierania sekcji narracyjnych lub przytaczania opinii użytkowników.
+
 ```mdx
 <QuoteBlock>
-  "Rekwizytor was conceived to solve the critical bottleneck in high-volume prop management..."
+  "Rekwizytorzy spędzają godziny na ręcznym katalogowaniu..."
 </QuoteBlock>
 ```
 
-### 4. `ProcessBox` i `BoxGrid`
-Baza do opisów problem/rozwiązanie. Lekko zacienione klocki `surface-container-low` (brak obwódek kontrastowych) oddzielające logiczne sekcje. 
+### `ProcessBox` + `BoxGrid`
+Klocki problem/rozwiązanie. `ProcessBox` zawsze wewnątrz `BoxGrid`.
+
 **Props (`ProcessBox`):**
-- `title` (string) - Tytuł klocka, np. `"THE PROBLEM"`, `"THE SOLUTION"`.
-**Przykład:**
+- `title` (string) — np. `"THE PROBLEM"`, `"HIPOTEZA"`, `"ROZWIĄZANIE"`
+
 ```mdx
 <BoxGrid>
   <ProcessBox title="THE PROBLEM">
-    Zbyt wiele czasu schodziło na ręczne katalogowanie tysięcy fizycznych obiektów...
+    Opis problemu...
+  </ProcessBox>
+  <ProcessBox title="THE SOLUTION">
+    Opis rozwiązania...
   </ProcessBox>
 </BoxGrid>
 ```
 
-### 5. `TerminalCard` / `PulseCard`
-Specyficzny komponent z "Halftone Gradient" umiejscawiany asymetrycznie obok treści głównych. Najczęściej renderowany z tłem typu "surface-container-low". Użycie dla technicznego "Heartbeat" projektu lub schematów.
-**Props:**
-- `title` (string) - np. `"PROJECT_PULSE"`.
-- `status` (string) - opcjonalne, status tag, np. `"active"`.
-**Przykład:**
-```mdx
-<TerminalCard title="PROJECT_PULSE" status="active">
-  ### ROLE_ID
-  ARCHITECT_01
-</TerminalCard>
-```
+### `ProcessCard`
+Dziennik decyzyjny lub insight. Border po lewej zmienia kolor zależnie od `type`.
 
-### 6. `ProcessCard`
-Specyficzny dziennik decyzyjny (Decision Log / Insight Log). Zbudowany tak, by border po lewej łapał kolor w zależności od kontekstu. Zawiera systemową etykietkę [ INSIGHT ] lub [ DECISION ].
 **Props:**
-- `type` (enum "INSIGHT" | "DECISION" | "PROBLEM") - determinuje kolor linii.
-- `title` (string) - opisujący tytuł procederu, np. `"THE NOTEPAD HOOK"`.
-**Przykład:**
+- `type` (string) — **lowercase**: `"insight"` | `"decision"` | `"problem"`
+- `title` (string) — opisowy tytuł, np. `"GEMINI_VS_CUSTOM_MODEL"`
+
 ```mdx
-<ProcessCard type="INSIGHT" title="THE NOTEPAD HOOK">
-  User testing revealed that prop masters don't want complex forms...
+<ProcessCard type="decision" title="GEMINI_VS_CUSTOM_MODEL">
+  Wybrałem Gemini Vision zamiast custom modelu CV — lepiej rozumiał kontekst vintage...
 </ProcessCard>
 ```
 
-### 7. `ImageGrid`
-Techniczne moduły renderujące zdjęcia. Z góry narzucony czarno-biały filtr `grayscale`, który włącza kolor (`grayscale-0`) na interakcji `hover`.
-**Props:**
-- `columns` (number) - Domyślnie `3`.
-- `images` (array) - Tablica url do zdjęć z katalogów `/public/`.
-**Przykład:**
+### `CompareBlock` + `CompareRow`
+Tabela "przed / po". `CompareRow` zawsze wewnątrz `CompareBlock`.
+
+**Props (`CompareBlock`):**
+- `beforeLabel` (string) — nagłówek lewej kolumny, np. `"BEZ SYSTEMU"`
+- `afterLabel` (string) — nagłówek prawej kolumny, np. `"Z REKWIZYTOREM"`
+
+**Props (`CompareRow`):**
+- `label` (string) — nazwa wiersza, np. `"Katalogowanie"`
+- `before` (string) — wartość przed
+- `after` (string) — wartość po
+
 ```mdx
-<ImageGrid columns={3} images={['/img/reco1.jpg', '/img/reco2.jpg']} />
+<CompareBlock beforeLabel="BEZ SYSTEMU" afterLabel="Z REKWIZYTOREM">
+  <CompareRow label="Katalogowanie" before="Ręczne opisywanie" after="Zdjęcie → auto rekord" />
+  <CompareRow label="Wyszukiwanie" before="Excel / notatki" after="Filtrowanie po spektaklu" />
+</CompareBlock>
 ```
 
-### 8. `OutcomeBanner`
-Wielka konkluzja na sam koniec strony produktu. Zawsze użyta z olbrzymim offsetem do góry, na tle z warstwą "Halftone".
+---
+
+## Media
+
+### `FullwidthImage`
+Obrazek na pełną szerokość z opcjonalnym podpisem. Domyślnie ma ramkę `1px solid var(--color-border)` — wyłącz przez `frame={false}` dla screenshotów aplikacji (ciemne UI źle wyglądają z ramką).
+
 **Props:**
-- `statusTag` (string) - Systemowy "zielony/zatwierdzony" tag, np. `DEPLOYMENT_STABLE_VER_1.2.0`.
-- Zawartość tekstu to wynik/konkluzja w Markdownie z opcjonalnymi podsumowującymi metrykami (MetricsAlpha, Beta).
-**Przykład:**
+- `src` (string) — ścieżka z `/public/`, np. `"/projects/rekwizytor/Home-page.png"`
+- `alt` (string) — opis dla accessibility
+- `caption` (string, opcjonalny) — podpis pod obrazkiem
+- `frame` (boolean, opcjonalny) — domyślnie `true`; użyj `frame={false}` dla screenshotów aplikacji
+
 ```mdx
-<OutcomeBanner statusTag="DEPLOYMENT_STABLE_VER_1.2.0">
-  Rekwizytor is currently the primary inventory hub for three major European production houses...
+<FullwidthImage
+  src="/projects/rekwizytor/Home-page.png"
+  alt="Ekran główny aplikacji"
+  caption="Lista produkcji z przypisanymi rekwizytami"
+  frame={false}
+/>
+```
+
+### `ImageGrid`
+Siatka zdjęć z filtrem grayscale (hover = kolor). Domyślnie ramka — wyłącz przez `frame={false}`.
+
+**Props:**
+- `images` (array) — tablica ścieżek z `/public/`
+- `columns` (number, opcjonalny) — domyślnie `3`; dostępne: `2`, `3`
+- `frame` (boolean, opcjonalny) — domyślnie `true`
+
+```mdx
+<ImageGrid columns={2} images={['/projects/rekwizytor/Home-page.png', '/projects/rekwizytor/Grupy-page.png']} />
+```
+
+### `CodeSnippet`
+Terminal-style blok kodu z tytułem pliku i opcjonalną annotacją.
+
+**Props:**
+- `code` (string) — kod jako string z `\n` zamiast newlines (ograniczenie MDX: nie używaj template literals)
+- `lang` (string, opcjonalny) — np. `"typescript"`, `"bash"`
+- `title` (string, opcjonalny) — nazwa pliku, np. `"lib/vision/classify.ts"`
+- `annotation` (string, opcjonalny) — komentarz pod tytułem
+
+```mdx
+<CodeSnippet
+  lang="typescript"
+  title="lib/vision/classify.ts"
+  annotation="Gemini Vision zwraca ustrukturyzowany obiekt zgodny ze schematem Zod"
+  code={"const result = await model.generateContent([...]);\nreturn schema.parse(JSON.parse(result.response.text()));"}
+/>
+```
+
+---
+
+## Podsumowanie
+
+### `OutcomeBanner`
+Wielka konkluzja na końcu strony projektu. Z lewym borderem w kolorze `--project-highlight`.
+
+**Props:**
+- `statusTag` (string) — systemowy tag wynikowy, np. `"PROTOTYP_GOTOWY"`, `"DEPLOYMENT_STABLE"`
+- `children` — treść podsumowania w Markdown / JSX
+
+```mdx
+<OutcomeBanner statusTag="PROTOTYP_GOTOWY">
+  System działa end-to-end — od uploadu zdjęcia do przeszukiwalnego katalogu.
 </OutcomeBanner>
 ```
+
+---
+
+## Czego NIE używać
+
+- `ReadingFooter` — istnieje w kodzie ale **nie wstawiamy w MDX** — będzie częścią globalnego layoutu
+- Natywnych `<h2>`, `<h3>` — zastąp `SectionHeader`
+- Inline `style={{}}` na prymitywach — używaj komponentów zamiast tego
+
+---
+
+## Ograniczenia MDX (next-mdx-remote)
+
+- **Tablice obiektów inline** jako props **nie działają**: `prop={[{key: 'val'}]}` → użyj children pattern
+- **Template literals** jako props **nie działają**: `` prop={`tekst`} `` → użyj `prop={"tekst\nnewline"}`
+- **Newlines w string props**: używaj `\n` w cudzysłowach: `code={"linia1\nlinia2"}`

@@ -1,7 +1,7 @@
 import { locales, type Locale } from '@/i18n/config';
-import { SiteHeader } from '@/components/ui/SiteHeader';
+import { SiteHeader } from '@/components/layout/SiteHeader';
 import { CopyForAI } from '@/components/ui/CopyForAI';
-import { SiteFooter } from '@/components/home/SiteFooter';
+import { SiteFooter } from '@/components/layout/SiteFooter';
 import { getAllProjects } from '@/lib/projects/loader';
 
 export async function generateStaticParams() {
