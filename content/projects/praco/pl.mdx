@@ -72,12 +72,19 @@ process:
 
 <SectionHeader num="03" title="ARCHITEKTURA" id="architektura" />
 
-<CompareBlock beforeLabel="STANDARDOWE PODEJŚCIE" afterLabel="PRACO">
-  <CompareRow label="Dane osobowe" before="Trafiają do AI razem z treścią" after="Zostają lokalnie — AI ich nigdy nie widzi" />
-  <CompareRow label="Baza danych" before="Zewnętrzny serwer / chmura" after="SQLite na urządzeniu użytkownika" />
-  <CompareRow label="CV z imieniem" before="Generowane przez API" after="Sklejane po stronie frontendu, po generowaniu" />
-  <CompareRow label="Dane wrażliwe w czacie" before="Użytkownik wysyła dane osobowe bezpośrednio do modelu" after="Anonimizowane przed wysłaniem — AI ich nigdy nie widzi" />
-</CompareBlock>
+<FullwidthImage
+  src="/projects/praco/ai_interview_pipeline.png"
+  alt="Diagram pipeline wywiadu AI"
+  caption="PIPELINE WYWIADU — jak AI prowadzi rozmowę i ekstrahuje dane do profilu"
+  frame={false}
+/>
+
+<FullwidthImage
+  src="/projects/praco/cv_generation_pipeline.png"
+  alt="Diagram generowania CV"
+  caption="PIPELINE GENEROWANIA CV — anonimizacja danych osobowych przed wysłaniem do modelu, sklejanie po stronie klienta"
+  frame={false}
+/>
 
 <SectionHeader num="04" title="WYWIAD" id="wywiad" />
 

@@ -25,6 +25,11 @@
   "lang": {
     "switch": "EN"
   },
+  "about": {
+    "heading": "O mnie",
+    "p1": "Kończę studia na kierunku gospodarka cyfrowa w Katowicach — <b>coś pomiędzy IT, biznesem i zarządzaniem projektami</b>. W wolnym czasie buduję narzędzia, które rozwiązują realne problemy — moje albo kogoś kogo znam. Dobry opis mojego podejścia to coś pokroju \"nie zatrzymuje mnie fakt, że muszę po drodze nauczyć się czegoś nowego - nawet jeśli tym czymś jest Rust\".",
+    "p2": "Szukam pierwszej pracy lub stażu na Śląsku albo zdalnie."
+  },
   "footer": {
     "projects": "INDEKS PROJEKTÓW",
     "social": "MEDIA SPOŁECZNOŚCIOWE",

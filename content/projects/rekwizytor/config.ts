@@ -5,7 +5,7 @@ export const projectConfig: ProjectConfig = {
     background: "var(--color-bg-light)", // Czysty, papierowy kolor bazy
     accent: "#55AAAA",                   // Mocny techniczny cyan (MUI/Tailwind primary)
     primaryText: "#1C1C1C",              // Wiodący atrament
-    highlight: "#FFB694",                // Specyficzny kolor highlightu (użyty m.in. w OutcomeBanner)
+    highlight: "#A0232F",
     halftoneStyle: "dark",
   },
   hero: {

@@ -21,8 +21,8 @@ export default async function LangLayout({
   return (
     <>
       <SiteHeader lang={lang} />
-      {children}
       <CopyForAI projects={projects} lang={lang} />
+      {children}
       <SiteFooter lang={lang} projects={projects} />
     </>
   );

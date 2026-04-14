@@ -3,7 +3,7 @@
   "status": "completed",
   "featured": true,
   "date": "2025-11-24",
-  "thumbnail": "./assets/Home-page.png",
+  "thumbnail": "./assets/thumbnail.png",
   "tags": ["Next.js", "TypeScript", "Supabase", "Google Gemini", "Framer Motion", "React Hook Form", "Tiptap", "Zod"],
   "links": {
     "github": "https://github.com/jakub-pelka/rekwizytor",

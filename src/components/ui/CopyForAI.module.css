@@ -1,15 +1,8 @@
-.wrap {
-  position: sticky;
-  bottom: 1.5rem;
-  z-index: 90;
-  display: flex;
-  justify-content: flex-end;
-  padding-right: var(--page-margin, 2rem);
-  pointer-events: none;
-}
-
 .btn {
-  pointer-events: all;
+  position: fixed;
+  right: var(--page-margin, 2rem);
+  z-index: 90;
+
   font-family: var(--font-ibm-plex-mono);
   font-weight: bold;
   font-size: 0.75rem;

@@ -14,7 +14,7 @@ process:
   - type: decision
     title: "GEMINI_VISION"
     content: "I chose Gemini Vision over a custom CV model — it understood 'vintage aesthetic' context better and generated metadata that actually matters to a prop master."
-    anchor: "kod"
+    anchor: "architektura"
   - type: insight
     title: "DEPLOYMENT"
     content: "A working prototype isn't enough — deployment depends on organisational decisions, not code quality."
@@ -86,21 +86,6 @@ process:
   <CompareRow label="PDF report" before="Manual creation before each production" after="Generated in one click" />
 </CompareBlock>
 
-<SectionHeader num="04" title="CODE" id="kod" />
-
-<CodeSnippet
-  lang="typescript"
-  title="lib/vision/classify.ts"
-  annotation="Gemini Vision API analyses the photo and returns a structured object validated against a Zod schema — no manual parsing"
-  code={"const schema = z.object({\n  name: z.string(),\n  category: z.enum(['furniture', 'clothing', 'prop', 'decoration']),\n  condition: z.enum(['new', 'good', 'worn', 'damaged']),\n  tags: z.array(z.string()),\n  notes: z.string().optional(),\n});\n\nexport async function classifyProp(imageBase64: string) {\n  const result = await model.generateContent([\n    { inlineData: { data: imageBase64, mimeType: 'image/jpeg' } },\n    CLASSIFY_PROMPT,\n  ]);\n  return schema.parse(JSON.parse(result.response.text()));\n}"}
-/>
-
-<CodeSnippet
-  lang="typescript"
-  title="app/api/props/route.ts"
-  annotation="Photo upload → Supabase Storage → Vision classification → database insert — one endpoint handles the entire pipeline"
-  code={"export async function POST(req: Request) {\n  const form = await req.formData();\n  const file = form.get('image') as File;\n\n  const { path } = await supabase.storage\n    .from('props')\n    .upload(`${Date.now()}-${file.name}`, file);\n\n  const classification = await classifyProp(\n    await fileToBase64(file)\n  );\n\n  const { data } = await supabase\n    .from('props')\n    .insert({ ...classification, image_path: path })\n    .select()\n    .single();\n\n  return Response.json(data);\n}"}
-/>
 
 <OutcomeBanner statusTag="PROTOTYPE_COMPLETE" githubUrl="https://github.com/jakub-pelka/rekwizytor" liveUrl="https://rekwizytor.vercel.app">
   The system works end-to-end — from photo upload to a searchable catalogue. Deployed on Vercel and demonstrated to interested prop masters. Deployment didn't proceed for organisational reasons on the theatre's side — not technical ones. Lesson: a structured brief with the stakeholder before the first commit saves more time than any refactor.

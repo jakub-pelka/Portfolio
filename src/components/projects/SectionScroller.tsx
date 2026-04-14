@@ -58,6 +58,9 @@ export function SectionScroller() {
       }
     };
 
+    // Snap disabled on mobile — interferes with natural touch scrolling
+    if (window.innerWidth < 768) return;
+
     const onScroll = () => {
       if (isAnimating.current) return;
       if (debounceTimer.current) clearTimeout(debounceTimer.current);

@@ -3,7 +3,7 @@
   "status": "in-progress",
   "featured": false,
   "date": "2026-03-01",
-  "thumbnail": "./assets/thumbnail.jpg",
+  "thumbnail": "./assets/thumbnail.png",
   "tags": ["Vue 3", "TypeScript", "Tauri", "Rust", "SQLite", "Claude API", "OpenAI", "Gemini"],
   "links": {
     "github": "https://github.com/jakub-pelka/praco"

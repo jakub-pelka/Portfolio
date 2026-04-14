@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ProjectWithLocale } from '@/lib/types/project';
 import type { Locale } from '@/i18n/config';
 import styles from './CopyForAI.module.css';
@@ -45,8 +45,36 @@ function buildMarkdown(projects: ProjectWithLocale[], lang: Locale): string {
   return lines.join('\n');
 }
 
+const BASE_BOTTOM = 32; // 2rem
+
 export function CopyForAI({ projects, lang }: CopyForAIProps) {
   const [copied, setCopied] = useState(false);
+  const [bottom, setBottom] = useState(BASE_BOTTOM);
+
+  useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    const update = () => {
+      const footerRect = footer.getBoundingClientRect();
+      const viewportH = window.innerHeight;
+      // How many px of footer are visible from the bottom of the viewport
+      const overlap = viewportH - footerRect.top;
+      if (overlap > 0) {
+        setBottom(BASE_BOTTOM + overlap);
+      } else {
+        setBottom(BASE_BOTTOM);
+      }
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
 
   const handleCopy = async () => {
     const md = buildMarkdown(projects, lang);
@@ -56,14 +84,13 @@ export function CopyForAI({ projects, lang }: CopyForAIProps) {
   };
 
   return (
-    <div className={styles.wrap}>
-      <button
-        className={styles.btn}
-        onClick={handleCopy}
-        title="Copy portfolio data for AI"
-      >
-        {copied ? '[ COPIED ✓ ]' : '[ COPY FOR AI ]'}
-      </button>
-    </div>
+    <button
+      className={styles.btn}
+      style={{ bottom }}
+      onClick={handleCopy}
+      title="Copy portfolio data for AI"
+    >
+      {copied ? '[ COPIED ✓ ]' : '[ COPY FOR AI ]'}
+    </button>
   );
 }

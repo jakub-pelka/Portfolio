@@ -14,7 +14,7 @@ process:
   - type: decision
     title: "GEMINI_VISION"
     content: "Wybrałem Gemini Vision zamiast custom modelu CV — lepiej rozumiał kontekst 'vintage aesthetic' i generował metadane które faktycznie mają znaczenie dla rekwizytora."
-    anchor: "kod"
+    anchor: "architektura"
   - type: insight
     title: "SKALA_PROBLEMU"
     content: "Chaos rośnie proporcjonalnie do liczby produkcji. System nie musi być doskonały na starcie — musi zatrzymać wzrost entropii."
@@ -86,21 +86,6 @@ process:
   <CompareRow label="Raport PDF" before="Ręczne tworzenie przed każdą produkcją" after="Generowanie jednym kliknięciem w razie potrzeby" />
 </CompareBlock>
 
-<SectionHeader num="04" title="KOD" id="kod" />
-
-<CodeSnippet
-  lang="typescript"
-  title="lib/vision/classify.ts"
-  annotation="Gemini Vision API analizuje zdjęcie i zwraca ustrukturyzowany obiekt zgodny ze schematem Zod — bez ręcznego parsowania"
-  code={"const schema = z.object({\n  name: z.string(),\n  category: z.enum(['furniture', 'clothing', 'prop', 'decoration']),\n  condition: z.enum(['new', 'good', 'worn', 'damaged']),\n  tags: z.array(z.string()),\n  notes: z.string().optional(),\n});\n\nexport async function classifyProp(imageBase64: string) {\n  const result = await model.generateContent([\n    { inlineData: { data: imageBase64, mimeType: 'image/jpeg' } },\n    CLASSIFY_PROMPT,\n  ]);\n  return schema.parse(JSON.parse(result.response.text()));\n}"}
-/>
-
-<CodeSnippet
-  lang="typescript"
-  title="app/api/props/route.ts"
-  annotation="Upload zdjęcia → Supabase Storage → klasyfikacja Vision → zapis do bazy — jeden endpoint obsługuje cały pipeline"
-  code={"export async function POST(req: Request) {\n  const form = await req.formData();\n  const file = form.get('image') as File;\n\n  const { path } = await supabase.storage\n    .from('props')\n    .upload(`${Date.now()}-${file.name}`, file);\n\n  const classification = await classifyProp(\n    await fileToBase64(file)\n  );\n\n  const { data } = await supabase\n    .from('props')\n    .insert({ ...classification, image_path: path })\n    .select()\n    .single();\n\n  return Response.json(data);\n}"}
-/>
 
 <OutcomeBanner statusTag="PROTOTYP_GOTOWY" githubUrl="https://github.com/jakub-pelka/rekwizytor" liveUrl="https://rekwizytor.vercel.app">
   System działa end-to-end — od uploadu zdjęcia do przeszukiwalnego katalogu. Wdrożony na Vercel, demonstrowany zainteresowanym rekwizytorkom. Wdrożenie nie doszło do skutku z przyczyn organizacyjnych po stronie teatru — nie technicznych. Wniosek: ustrukturyzowany brief z odbiorcą przed pierwszym commitem oszczędza więcej czasu niż jakikolwiek refactor.
