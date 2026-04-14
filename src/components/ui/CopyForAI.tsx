@@ -16,6 +16,12 @@ function buildMarkdown(projects: ProjectWithLocale[], lang: Locale): string {
     '',
     'Full-stack developer & designer. Building systems that solve real problems.',
     '',
+    '## About',
+    '',
+    "I'm finishing a degree in digital economy in Katowice — somewhere between IT, business and project management. In my spare time I build tools that solve real problems — mine or someone I know. A fair description of my approach: \"the fact that I need to learn something new along the way doesn't stop me — even if that something is Rust\".",
+    '',
+    'Looking for a first job or internship in Silesia or remotely.',
+    '',
     '---',
     '',
   ];

@@ -164,9 +164,10 @@
 .processCardType {
   font-family: var(--font-ibm-plex-mono);
   font-weight: bold;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
+  font-size: 0.625rem;
+  padding: 0.2rem 0.45rem;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 .processCardTitle {
   font-family: var(--font-ibm-plex-mono);
