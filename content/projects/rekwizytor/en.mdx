@@ -75,6 +75,10 @@ process:
 
 <SectionHeader num="03" title="ARCHITECTURE" id="architektura" />
 
+<ProcessCard type="decision" title="SUPABASE_RLS">
+  Firebase dropped out early — functionally inconsistent and outside my comfort zone. PocketBase isn't Postgres, so no Row Level Security. Supabase gave me Postgres with RLS at the database layer: even if the application has a bug, the database enforces user data isolation on its own. Security as an infrastructure property, not an application concern.
+</ProcessCard>
+
 <CompareBlock beforeLabel="WITHOUT SYSTEM" afterLabel="WITH REKWIZYTOR">
   <CompareRow label="Cataloguing" before="Manual description of every item" after="Photo → automatic record via Vision API" />
   <CompareRow label="Search" before="Browsing Excel sheets or handwritten notes" after="Filter by production, group, status" />
@@ -98,6 +102,6 @@ process:
   code={"export async function POST(req: Request) {\n  const form = await req.formData();\n  const file = form.get('image') as File;\n\n  const { path } = await supabase.storage\n    .from('props')\n    .upload(`${Date.now()}-${file.name}`, file);\n\n  const classification = await classifyProp(\n    await fileToBase64(file)\n  );\n\n  const { data } = await supabase\n    .from('props')\n    .insert({ ...classification, image_path: path })\n    .select()\n    .single();\n\n  return Response.json(data);\n}"}
 />
 
-<OutcomeBanner statusTag="PROTOTYPE_COMPLETE">
-  The system works end-to-end — from photo upload to a searchable catalogue. The prototype was demonstrated to interested prop masters, but deployment didn't proceed for organisational reasons. The architecture is production-ready.
+<OutcomeBanner statusTag="PROTOTYPE_COMPLETE" githubUrl="https://github.com/jakub-pelka/rekwizytor" liveUrl="https://rekwizytor.vercel.app">
+  The system works end-to-end — from photo upload to a searchable catalogue. Deployed on Vercel and demonstrated to interested prop masters. Deployment didn't proceed for organisational reasons on the theatre's side — not technical ones. Lesson: a structured brief with the stakeholder before the first commit saves more time than any refactor.
 </OutcomeBanner>
