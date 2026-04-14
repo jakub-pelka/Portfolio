@@ -1,0 +1,114 @@
+---
+title: "PORTFOLIO"
+description: "Strona portfolio zbudowana tak, żeby osoba która już jest zainteresowana — i przyszła z CV — mogła dotrzeć do tego co ważne bez zbędnych kliknięć."
+
+facts:
+  - label: "ROLA"
+    value: "FULL-STACK DEVELOPER (SOLO)"
+  - label: "CZAS"
+    value: "LUTY–KWIECIEŃ 2026 (~2 MIESIĄCE)"
+  - label: "COMMITY"
+    value: "9"
+  - label: "STATUS"
+    value: "IN PROGRESS"
+
+process:
+  - type: decision
+    title: "ONE_PAGER"
+    content: "Wiele portfolio ma osobną stronę z listą projektów — to dodatkowe kliknięcie, dodatkowy koszt poznawczy. Wybrałem jeden ciągły widok: Hero → Timeline → O mnie → Footer. Kto trafi na stronę, widzi wszystko od razu."
+    date: "2026-02-21"
+    anchor: "one-pager"
+  - type: decision
+    title: "MDX_FOLDER_BASED"
+    content: "JSON wymusza jednolity schemat bez możliwości dodania kodu per-projekt. CMS dodaje zewnętrzną zależność. MDX łączy strukturę z kodem — każdy projekt może mieć własne komponenty wizualne, a system jest w pełni lokalny."
+    date: "2026-02-25"
+    anchor: "mdx"
+  - type: decision
+    title: "TRZY_NARZEDZIA_ANIMACJI"
+    content: "Framer Motion do mikrointerakcji, GSAP do sekwencji scroll-triggered, Three.js do 3D. Każde narzędzie ma inny koszt i zakres — dobór do zadania zamiast jednego narzędzia do wszystkiego."
+    date: "2026-03-14"
+    anchor: "animacje"
+---
+
+<SectionHeader num="01" title="ZAŁOŻENIE" />
+
+<SplitLayout>
+  <ContentLeft>
+    <QuoteBlock>
+      "Człowiek który trafił na portfolio już podjął decyzję żeby zajrzeć. Każde dodatkowe kliknięcie to koszt który można wyeliminować."
+    </QuoteBlock>
+
+    <BoxGrid>
+      <ProcessBox title="KONTEKST">
+        Portfolio to pierwsze wrażenie u rekrutera który jest już zainteresowany — przyszedł z CV. Architektura strony powinna to uszanować — nie wymagać dodatkowych akcji żeby dotrzeć do tego co ważne.
+      </ProcessBox>
+      <ProcessBox title="PODEJŚCIE">
+        Jeden spójny widok zamiast struktury z nawigacją. Projekty, proces myślowy i kontakt — wszystko dostępne bez przechodzenia między stronami.
+      </ProcessBox>
+    </BoxGrid>
+  </ContentLeft>
+
+</SplitLayout>
+
+<SectionHeader num="02" title="ONE-PAGER" id="one-pager" />
+
+<SplitLayout>
+  <ContentLeft>
+    Wiele portfolio działa tak samo: strona główna z przyciskiem, lista projektów po kliknięciu, projekt po kolejnym kliknięciu. Każde przejście to decyzja którą użytkownik musi podjąć.
+
+    <ProcessCard type="insight" title="KOSZT POZNAWCZY">
+      Każda akcja którą użytkownik musi podjąć to moneta którą wydaje. Portfolio powinno być zaprojektowane tak żeby te monety wydawał na treść, nie na nawigację.
+    </ProcessCard>
+
+    Istnieje eksperyment dotyczący domyślnej zgody na oddawanie organów — kraje z formularzem opt-in mają kilkanaście procent zgód, kraje z opt-out dobijają do stu. Nie dlatego że ludzie mają inne przekonania — dlatego że domyślny stan ma znaczenie.
+
+    <ProcessCard type="decision" title="HERO → TIMELINE → O MNIE → FOOTER">
+      Zrezygnowałem z osobnej strony `/projects` i karty projektów jako punktu wejścia. Timeline na stronie głównej pokazuje projekty od razu — bez kliknięcia. Po projektach sekcja o mnie, zanim użytkownik trafi na footer.
+    </ProcessCard>
+  </ContentLeft>
+</SplitLayout>
+
+<SectionHeader num="03" title="SYSTEM MDX" id="mdx" />
+
+<SplitLayout>
+  <ContentLeft>
+    Każdy projekt to folder: `meta.json` z metadanymi, `config.ts` z motywem wizualnym, `pl.mdx` i `en.mdx` z treścią. Zero centralnej bazy, zero zewnętrznych zależności.
+
+    <CompareBlock beforeLabel="INNE PODEJŚCIA" afterLabel="MDX FOLDER-BASED">
+      <CompareRow label="Schemat" before="Jednolity dla wszystkich projektów" after="Każdy projekt może mieć własne komponenty" />
+      <CompareRow label="Zależności" before="Zewnętrzny CMS lub API" after="Lokalny system plików" />
+      <CompareRow label="Kod per-projekt" before="Niemożliwy w JSON/XML" after="Komponenty w content/projects/[slug]/" />
+      <CompareRow label="Dodawanie projektu" before="Panel admina lub API call" after="Jeden workflow: brief → pliki MDX" />
+    </CompareBlock>
+  </ContentLeft>
+
+  <ContentRight>
+    <ProcessCard type="insight" title="NIEZALEŻNOŚĆ">
+      System nigdy nie zaskoczy mnie wymaganiem zewnętrznego serwisu. Pliki są lokalne, format jest otwarty, migracja nie wymaga przepisywania logiki.
+    </ProcessCard>
+  </ContentRight>
+</SplitLayout>
+
+<SectionHeader num="04" title="ANIMACJE" id="animacje" />
+
+Trzy różne narzędzia do trzech różnych zadań — nie dlatego że więcej znaczy lepiej, ale dlatego że każde z nich ma inny stosunek możliwości do kosztu.
+
+<BoxGrid>
+  <ProcessBox title="FRAMER MOTION">
+    Mikrointerakcje, stany UI, przełącznik motywu. Lekki, reaktywny na stan Reacta, wystarczający do prostych animacji.
+  </ProcessBox>
+  <ProcessBox title="GSAP">
+    Animacja Hero (velocity-driven skew), SectionScroller, sekwencje scroll-triggered. Płynne, precyzyjne, niezbędne przy złożonych timeline'ach.
+  </ProcessBox>
+  <ProcessBox title="THREE.JS">
+    Wireframe kostka w footerze — właściwe narzędzie do 3D i tylko do tego jest tu używane. EdgesGeometry + LineSegments, alpha canvas, cleanup na unmount.
+  </ProcessBox>
+</BoxGrid>
+
+<SectionHeader num="05" title="REFLEKSJA" id="refleksja" />
+
+Na małym projekcie warto wcześniej przemyśleć całość nie tylko logicznie ale i wizualnie — jakie komponenty będą potrzebne, jak będą się układać, zanim powstanie pierwsza linijka kodu. Część refaktorów struktury (`layout/`, `_experiments/`) wynikała z braku tego kroku.
+
+<OutcomeBanner statusTag="IN_PROGRESS" githubUrl="https://github.com/jakub-pelka/portfolio">
+  Portfolio live z własną domeną. Dodawanie nowych projektów nie wymaga modyfikowania kodu aplikacji — tylko pliki MDX w nowym folderze. Następny etap: responsywność mobile i dalsze projekty.
+</OutcomeBanner>

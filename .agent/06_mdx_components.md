@@ -236,6 +236,26 @@ Wielka konkluzja na końcu strony projektu. Z lewym borderem w kolorze `--projec
 
 ---
 
+## Zasady unikania duplikacji danych
+
+### Stack technologiczny
+
+**Jeden źródłowy zapis — `meta.json` → `tags[]`.**
+
+`ProjectHero` automatycznie renderuje `tags[]` jako `TECH_STACK` w prawej kolumnie hero. **Nie wstawiaj technologii ponownie** w:
+- `facts[]` frontmatter MDX (np. `TECHNOLOGIE: "NEXT.JS / TYPESCRIPT"`) — **zabronione**
+- `TerminalCard` z `<TagList>` w treści MDX — **zabronione**
+
+`facts[]` służy wyłącznie do danych których nie ma w `meta.json`: ROLA, CZAS, KONTEKST, COMMITY, STATUS, PLATFORMA itp.
+
+### Linki (GitHub / Live)
+
+**Jeden zapis — `meta.json` → `links.github` / `links.live`.**
+
+`ProjectHero` renderuje przyciski automatycznie. `OutcomeBanner` przyjmuje `githubUrl` i `liveUrl` jako props — przepisz je ręcznie z `meta.json` przy tworzeniu OutcomeBanner. Nie dodawaj linków nigdzie indziej w treści MDX.
+
+---
+
 ## Ograniczenia MDX (next-mdx-remote)
 
 - **Tablice obiektów inline** jako props **nie działają**: `prop={[{key: 'val'}]}` → użyj children pattern

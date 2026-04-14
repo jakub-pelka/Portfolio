@@ -1,0 +1,11 @@
+{
+  "slug": "portfolio",
+  "status": "in-progress",
+  "featured": false,
+  "date": "2026-02-21",
+  "thumbnail": "./assets/thumbnail.jpg",
+  "tags": ["Next.js 16", "TypeScript", "Vanilla CSS", "Framer Motion", "GSAP", "Three.js", "MDX"],
+  "links": {
+    "github": "https://github.com/jakub-pelka/portfolio"
+  }
+}

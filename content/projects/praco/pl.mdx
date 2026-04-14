@@ -1,0 +1,126 @@
+---
+title: "PRACO"
+description: "Aplikacja desktopowa, która przeprowadza wywiad i buduje CV dopasowane do oferty — bez formularzy, bez chmury, bez wycieku danych osobowych do zewnętrznych API."
+
+facts:
+  - label: "ROLA"
+    value: "FULL-STACK DEVELOPER (SOLO)"
+  - label: "CZAS"
+    value: "STYCZEŃ–MARZEC 2026 (~2 MIESIĄCE)"
+  - label: "COMMITY"
+    value: "37"
+  - label: "STATUS"
+    value: "IN PROGRESS"
+
+process:
+  - type: decision
+    title: "DANE_LOKALNE"
+    content: "Wrażliwy profil użytkownika — historia pracy, osiągnięcia — zostaje w lokalnym SQLite. Zero zewnętrznej bazy. Tauri zamiast web app, bo architektura ma fizycznie uniemożliwiać wyciek."
+    date: "2026-01-15"
+    anchor: "prywatnosc"
+  - type: decision
+    title: "AI_BEZ_DANYCH_OSOBOWYCH"
+    content: "Imię, email, zdjęcie nie trafiają do modeli AI — nie dlatego że system 'stara się tego nie robić', ale dlatego że nie ma takiej możliwości. Frontend skleja dane osobowe z wygenerowaną treścią już po stronie użytkownika."
+    date: "2026-01-20"
+    anchor: "architektura"
+  - type: decision
+    title: "WYWIAD_ZAMIAST_FORMULARZA"
+    content: "AI prowadzi rozmowę zamiast prezentować rubryki. Wartościowe rzeczy do CV wychodzą w dłuższej rozmowie — 'zarządzanie projektem' zamienia się w konkretną historię o opóźnionym projekcie i zespole który dowozi."
+    date: "2026-02-01"
+    anchor: "wywiad"
+---
+
+<SectionHeader num="01" title="PROBLEM" />
+
+<SplitLayout>
+  <ContentLeft>
+    <QuoteBlock>
+      "Tworzenie CV to nie problem formatowania — to problem wydobycia z siebie właściwych informacji. Wartościowe rzeczy wychodzą dopiero w dłuższej rozmowie, nie przy wypełnianiu rubryk."
+    </QuoteBlock>
+
+    <BoxGrid>
+      <ProcessBox title="OBSERWACJA">
+        LLM-y mają udokumentowaną właściwość: ludzie otwierają się przed nimi jak w rozmowie z człowiekiem. Praco to wykorzystuje — AI prowadzi wywiad, człowiek opowiada, system wyciąga co ważne.
+      </ProcessBox>
+      <ProcessBox title="CEL">
+        CV dopasowane do konkretnej oferty, oparte na prawdziwych informacjach podanych przez użytkownika — nie na szablonach ani wymyślonych opisach.
+      </ProcessBox>
+    </BoxGrid>
+  </ContentLeft>
+
+</SplitLayout>
+
+<SectionHeader num="02" title="PRYWATNOŚĆ" id="prywatnosc" />
+
+<SplitLayout>
+  <ContentLeft>
+    Aplikacja zbiera profil człowieka — imię, historia pracy, osiągnięcia. To nie są anonimowe dane — to czyjś życiorys.
+
+    Test jaki postawiłem sobie przy wyborze architektury: czy byłbym gotowy sam powiedzieć w tej aplikacji wszystko? Przy modelu SaaS z bazą w chmurze — nie. Przy lokalnym SQLite — tak.
+
+    <ProcessCard type="decision" title="TAURI + SQLITE">
+      Zamiast web app z Supabase wybrałem aplikację desktopową z lokalną bazą. Zero zewnętrznego serwera, zero odpowiedzialności za cudze dane. Dane użytkownika nigdy nie opuszczają jego urządzenia — z wyjątkiem treści wysyłanej do AI, i to po anonimizacji.
+    </ProcessCard>
+  </ContentLeft>
+
+  <ContentRight>
+    <ProcessCard type="insight" title="LEKCJA Z BUDOWANIA">
+      Najłatwiej zaprojektować prywatność na poziomie architektury — zanim powstanie pierwszy endpoint. Późniejsze "doklejanie" ochrony danych jest trudniejsze i mniej wiarygodne.
+    </ProcessCard>
+  </ContentRight>
+</SplitLayout>
+
+<SectionHeader num="03" title="ARCHITEKTURA" id="architektura" />
+
+<CompareBlock beforeLabel="STANDARDOWE PODEJŚCIE" afterLabel="PRACO">
+  <CompareRow label="Dane osobowe" before="Trafiają do AI razem z treścią" after="Zostają lokalnie — AI ich nigdy nie widzi" />
+  <CompareRow label="Baza danych" before="Zewnętrzny serwer / chmura" after="SQLite na urządzeniu użytkownika" />
+  <CompareRow label="CV z imieniem" before="Generowane przez API" after="Sklejane po stronie frontendu, po generowaniu" />
+  <CompareRow label="Dane wrażliwe w czacie" before="Użytkownik wysyła dane osobowe bezpośrednio do modelu" after="Anonimizowane przed wysłaniem — AI ich nigdy nie widzi" />
+</CompareBlock>
+
+<SectionHeader num="04" title="WYWIAD" id="wywiad" />
+
+<SplitLayout>
+  <ContentLeft>
+    Standardowe CV-buildery prezentują formularz: firma, daty, zakres obowiązków. Efekt jest przewidywalny — ludzie wpisują "zarządzanie projektem".
+
+    W rozmowie ten sam człowiek opowiedziałby, że projekt był opóźniony o trzy tygodnie, że zebrał rozproszony zespół i dowieźli w dwa tygodnie dzięki codziennym stand-upom. To jest materiał na CV.
+
+    <ProcessCard type="decision" title="AI JAKO PROWADZĄCY WYWIAD">
+      Model pyta, drąży, reaguje na odpowiedzi — zamiast czekać na wypełnienie pól. Formularz obsługuje tylko dane kontaktowe. Reszta wychodzi w rozmowie.
+    </ProcessCard>
+  </ContentLeft>
+
+  <ContentRight>
+    <ProcessCard type="insight" title="DOPASOWANIE DO OFERTY">
+      Aplikując na frontend deva — rekruter zobaczy projekty programistyczne. Aplikując na product managera — wysunie się doświadczenie w prowadzeniu zespołów. Ten sam profil, inne CV, na podstawie tych samych danych.
+    </ProcessCard>
+  </ContentRight>
+</SplitLayout>
+
+<SectionHeader num="05" title="WYZWANIA" id="wyzwania" />
+
+<SplitLayout>
+  <ContentLeft>
+    <ProcessCard type="problem" title="AUTOUZUPEŁNIANIE FORMULARZY">
+      Przyspieszanie wpisywania danych kontaktowych na stronach rekrutacyjnych okazało się trudniejsze niż zakładałem. Wariantów layoutów jest bardzo dużo, a zachowanie skryptów w edge case'ach trudno opisać słownie bez wizualnego kontekstu.
+    </ProcessCard>
+  </ContentLeft>
+
+  <ContentRight>
+    <ProcessCard type="problem" title="PRESJA CZASU">
+      Projekt powstawał pod presją "jak najszybciej zacząć szukać pracy". To doprowadziło do serii decyzji "byle działało", których suma dała CV nienadające się do użytku. Nauczyłem się z tego szacowania — teraz prowadzę tracker godzin i tematów.
+    </ProcessCard>
+  </ContentRight>
+</SplitLayout>
+
+<SectionHeader num="06" title="REFLEKSJA" id="refleksja" />
+
+Pośpiech który miał przyspieszyć szukanie pracy, w efekcie opóźnił powstanie czegoś użytecznego. Lepiej oszacowałbym ile całość zajmie i nie pchał projektu na siłę pod presją czasu.
+
+Z tego projektu pochodzi nawyk prowadzenia trackera godzin i tematów — ten plik który czytasz też jest jego efektem.
+
+<OutcomeBanner statusTag="IN_PROGRESS" githubUrl="https://github.com/jakub-pelka/praco">
+  CV generowane przez Praco nie odbiega od interpretacji człowieka — poziom halucynacji AI jest na tyle niski że wynik jest użyteczny. CV dopasowuje się do oferty na podstawie prawdziwych danych. Projekt w trakcie — autouzupełnianie formularzy rekrutacyjnych jako następny etap.
+</OutcomeBanner>

@@ -15,7 +15,10 @@
 }
 @media (min-width: 768px) {
   .mainColumn {
-    border-right: 1px solid var(--color-border);
+    border-right: none;
+  }
+  .sideColumn {
+    border-left: 1px solid var(--color-border);
   }
 }
 
@@ -23,6 +26,7 @@
   display: flex;
   flex-direction: column;
   padding: 2rem;
+  padding-left: 3rem;
 }
 
 /* ================== COMPONENTS ================== */
@@ -75,7 +79,7 @@
   margin-top: 2rem;
 }
 @media (min-width: 768px) {
-  .boxGrid { grid-template-columns: 1fr 1fr; }
+  .boxGrid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 }
 .processBox {
   background-color: var(--color-bg-secondary);
@@ -187,6 +191,10 @@
 }
 .imageItem[data-frame="false"] {
   border: none;
+  filter: none;
+}
+.imageItem[data-frame="false"]:hover {
+  filter: none;
 }
 .imageItem:hover { filter: grayscale(0%); }
 
@@ -197,7 +205,6 @@
   border-left: 12px solid var(--project-highlight);
   margin-top: 4rem;
   margin-bottom: 4rem;
-  margin-left: 2rem;
   overflow: hidden;
 }
 .outcomeContent {
@@ -218,17 +225,38 @@
   color: var(--color-text);
   margin-bottom: 3rem;
 }
-.outcomeTag {
+.outcomeLabel {
   display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  background-color: var(--color-text);
-  color: var(--color-bg);
-  padding: 1rem 1.5rem;
+  border: 1px solid var(--color-border);
+  padding: 0.375rem 0.75rem;
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  cursor: default;
+  user-select: none;
+}
+
+.outcomeLink {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-ibm-plex-mono);
   font-weight: bold;
+  border: 1px solid var(--color-text);
+  padding: 0.375rem 0.875rem;
   font-size: 0.875rem;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color 200ms ease;
+  cursor: pointer;
+}
+
+.outcomeLink:hover {
+  background-color: color-mix(in srgb, var(--project-highlight) 20%, transparent);
 }
 
 .readingFooter {
@@ -400,6 +428,10 @@
 }
 .fullwidthImageImg[data-frame="false"] {
   border: none;
+  filter: none;
+}
+.fullwidthImageImg[data-frame="false"]:hover {
+  filter: none;
 }
 
 .fullwidthImageImg:hover {

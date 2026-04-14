@@ -6,6 +6,9 @@ import { IndicatorMorph } from '@/components/_experiments/IndicatorMorph';
 import { Button } from '@/components/ui/Button';
 import { HalftoneShadow } from '@/components/ui/HalftoneShadow';
 import { ThemeTogglePreview } from '@/components/_experiments/ThemeTogglePreview';
+import { Tag, TagList, MetaRow } from '@/components/mdx/Primitives';
+import { TerminalCard } from '@/components/mdx/TerminalCard';
+import { BoxGrid, ProcessBox } from '@/components/mdx/ProcessBox';
 
 export default async function PlaygroundPage({
   params,
@@ -804,6 +807,103 @@ export default async function PlaygroundPage({
           </div>
 
         </div>
+      </section>
+
+      {/* STANOWISKO 08: TECH STACK LAYOUT PROPOSALS */}
+      <section style={{
+        width: '100%',
+        minHeight: '50vh',
+        borderBottom: '1px solid var(--color-text)',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        padding: 'calc(var(--space-4) * 2) var(--space-4) var(--space-4)',
+        gap: 'var(--space-4)',
+      }}>
+        <div style={{ position: 'absolute', top: 'var(--space-2)', left: 'var(--space-2)', fontFamily: 'var(--font-vt323)', opacity: 0.5, zIndex: 10 }}>
+          [08] TECH_STACK_LAYOUT_PROPOSALS
+        </div>
+
+        {/* WARIANT A — tagi płaskie pogrupowane separatorem */}
+        <div style={{ marginTop: 'var(--space-4)' }}>
+          <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.4, fontSize: '0.75rem', marginBottom: 'var(--space-1)' }}>[ WARIANT A — PŁASKIE TAGI Z SEPARATOREM KATEGORII ]</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+            {[
+              { label: 'FRONTEND', tags: ['Next.js 16', 'Vue 3', 'TypeScript', 'Vanilla CSS', 'Framer Motion'] },
+              { label: 'BACKEND', tags: ['Node.js', 'Rust', 'SQLite'] },
+              { label: 'AI', tags: ['Claude API', 'OpenAI', 'Gemini Vision'] },
+              { label: 'TOOLS', tags: ['Tauri', 'GSAP', 'Three.js', 'MDX'] },
+            ].map(({ label, tags }) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)' }}>
+                <span style={{
+                  fontFamily: 'var(--font-vt323)',
+                  fontSize: '0.75rem',
+                  opacity: 0.5,
+                  minWidth: '6rem',
+                  letterSpacing: '0.05em',
+                }}>{label}</span>
+                <TagList>
+                  {tags.map(t => <Tag key={t}>{t}</Tag>)}
+                </TagList>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* WARIANT B — TerminalCard per kategoria w gridzie */}
+        <div>
+          <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.4, fontSize: '0.75rem', marginBottom: 'var(--space-1)' }}>[ WARIANT B — TERMINAL CARDS W GRIDZIE ]</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-2)' }}>
+            <TerminalCard title="FRONTEND" status="active">
+              <MetaRow label="FW"><TagList><Tag>Next.js</Tag><Tag>Vue 3</Tag></TagList></MetaRow>
+              <MetaRow label="LANG"><TagList><Tag>TypeScript</Tag></TagList></MetaRow>
+              <MetaRow label="STYLE"><TagList><Tag>Vanilla CSS</Tag></TagList></MetaRow>
+              <MetaRow label="ANIM"><TagList><Tag>Framer Motion</Tag><Tag>GSAP</Tag></TagList></MetaRow>
+            </TerminalCard>
+            <TerminalCard title="BACKEND" status="active">
+              <MetaRow label="RUNTIME"><TagList><Tag>Node.js</Tag><Tag>Rust</Tag></TagList></MetaRow>
+              <MetaRow label="DB"><TagList><Tag>SQLite</Tag></TagList></MetaRow>
+              <MetaRow label="PLATFORM"><TagList><Tag>Tauri</Tag></TagList></MetaRow>
+            </TerminalCard>
+            <TerminalCard title="AI" status="active">
+              <MetaRow label="LLM"><TagList><Tag>Claude API</Tag><Tag>OpenAI</Tag></TagList></MetaRow>
+              <MetaRow label="VISION"><TagList><Tag>Gemini Vision</Tag></TagList></MetaRow>
+            </TerminalCard>
+            <TerminalCard title="3D / VIZ" status="active">
+              <MetaRow label="3D"><TagList><Tag>Three.js</Tag></TagList></MetaRow>
+              <MetaRow label="CONTENT"><TagList><Tag>MDX</Tag></TagList></MetaRow>
+            </TerminalCard>
+          </div>
+        </div>
+
+        {/* WARIANT C — BoxGrid z ProcessBox */}
+        <div>
+          <div style={{ fontFamily: 'var(--font-vt323)', opacity: 0.4, fontSize: '0.75rem', marginBottom: 'var(--space-1)' }}>[ WARIANT C — PROCESS BOXES ]</div>
+          <BoxGrid>
+            <ProcessBox title="FRONTEND">
+              <TagList>
+                <Tag>Next.js 16</Tag><Tag>Vue 3</Tag><Tag>TypeScript</Tag>
+                <Tag>Vanilla CSS</Tag><Tag>Framer Motion</Tag><Tag>GSAP</Tag>
+              </TagList>
+            </ProcessBox>
+            <ProcessBox title="BACKEND & DESKTOP">
+              <TagList>
+                <Tag>Node.js</Tag><Tag>Rust</Tag><Tag>SQLite</Tag><Tag>Tauri</Tag>
+              </TagList>
+            </ProcessBox>
+            <ProcessBox title="AI & ML">
+              <TagList>
+                <Tag>Claude API</Tag><Tag>OpenAI</Tag><Tag>Gemini Vision</Tag>
+              </TagList>
+            </ProcessBox>
+            <ProcessBox title="VIZ & CONTENT">
+              <TagList>
+                <Tag>Three.js</Tag><Tag>MDX</Tag>
+              </TagList>
+            </ProcessBox>
+          </BoxGrid>
+        </div>
+
       </section>
     </main>
   );

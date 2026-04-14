@@ -4,13 +4,16 @@ interface FullwidthImageProps {
   src: string;
   alt: string;
   caption?: string;
-  frame?: boolean;
+  frame?: boolean | string;
 }
 
-export function FullwidthImage({ src, alt, caption, frame = true }: FullwidthImageProps) {
+export function FullwidthImage(props: FullwidthImageProps) {
+  console.log('[FullwidthImage] raw props:', JSON.stringify(props));
+  const { src, alt, caption, frame = false } = props;
+  const hasFrame = frame !== false && frame !== 'false';
   return (
     <figure className={styles.fullwidthImage}>
-      <img src={src} alt={alt} className={styles.fullwidthImageImg} data-frame={frame} />
+      <img src={src} alt={alt} className={styles.fullwidthImageImg} data-frame={hasFrame ? 'true' : 'false'} />
       {caption && (
         <figcaption className={styles.fullwidthImageCaption}>{caption}</figcaption>
       )}

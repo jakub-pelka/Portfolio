@@ -6,8 +6,6 @@ facts:
     value: "FULL-STACK DEVELOPER (SOLO)"
   - label: "KONTEKST"
     value: "INTERNAL TOOL / PROTOTYP"
-  - label: "BACKEND"
-    value: "NODE.JS / POSTGRES"
   - label: "COMMITY"
     value: "106"
   - label: "STATUS"
@@ -18,9 +16,9 @@ process:
     content: "Wybrałem Gemini Vision zamiast custom modelu CV — lepiej rozumiał kontekst 'vintage aesthetic' i generował metadane które faktycznie mają znaczenie dla rekwizytora."
     anchor: "kod"
   - type: insight
-    title: "WDROŻENIE"
-    content: "Gotowy prototyp to za mało — wdrożenie zależy od decyzji organizacyjnych, nie od jakości kodu."
-    anchor: "outcome"
+    title: "SKALA_PROBLEMU"
+    content: "Chaos rośnie proporcjonalnie do liczby produkcji. System nie musi być doskonały na starcie — musi zatrzymać wzrost entropii."
+    anchor: "architektura"
   - type: milestone
     title: "PIPELINE"
     content: "Zbudowałem end-to-end pipeline: zdjęcie → Gemini Vision → Zod schema → Supabase — bez ręcznego parsowania odpowiedzi AI."
@@ -32,12 +30,12 @@ process:
 <SplitLayout>
   <ContentLeft>
     <QuoteBlock>
-      "Rekwizytorzy w produkcjach teatralnych i filmowych spędzają godziny na ręcznym katalogowaniu setek przedmiotów — każdy z opisem, stanem, lokalizacją i przypisaniem do spektaklu. To praca powtarzalna, podatna na błędy i trudna do przeszukiwania."
+      "Spędzają godziny na katalogowaniu ręcznym lub tego nie robią w ogóle — co prowadzi do powiększającego się chaosu. Z czasem sam fakt tego ile trzeba naprawić skutecznie zniechęca do działania."
     </QuoteBlock>
 
     <BoxGrid>
       <ProcessBox title="REALNE ŹRÓDŁO">
-        Projekt wyrósł z konkretnego problemu zgłoszonego przez rekwizytorów pracujących przy produkcjach teatralnych. Potrzeba była realna — wdrożenie nie doszło do skutku z powodów organizacyjnych.
+        Projekt powstał z konkretnego problemu zgłoszonego przez rekwizytorów pracujących w jednym ze śląskich teatrów. Przeglądanie arkuszy Excel, notatek lub zdjęć na prywatnych telefonach — brak jednego miejsca, brak kontroli.
       </ProcessBox>
       <ProcessBox title="HIPOTEZA">
         Jeśli zdjęcie wystarczy do identyfikacji — wystarczy też do katalogowania. Jeden obraz powinien generować pełen rekord bez ręcznego wprowadzania danych.
@@ -45,21 +43,6 @@ process:
     </BoxGrid>
   </ContentLeft>
 
-  <ContentRight>
-    <TerminalCard title="PROJECT_INFO" status="active">
-      <MetaRow label="STACK">
-        <TagList>
-          <Tag>Next.js 16</Tag>
-          <Tag>Supabase</Tag>
-          <Tag>Gemini Vision</Tag>
-          <Tag>TypeScript</Tag>
-          <Tag>Zod</Tag>
-        </TagList>
-      </MetaRow>
-      <MetaRow label="COMMITY">106</MetaRow>
-      <MetaRow label="ETAP">Prototyp — gotowy do wdrożenia</MetaRow>
-    </TerminalCard>
-  </ContentRight>
 </SplitLayout>
 
 <SectionHeader num="02" title="PRODUKT" id="produkt" />
@@ -68,6 +51,7 @@ process:
   src="/projects/rekwizytor/Home-page.png"
   alt="Rekwizytor — strona główna z listą spektakli"
   caption="Ekran główny — lista produkcji z przypisanymi rekwizytami i statusem inwentarza"
+  frame={false}
 />
 
 <SplitLayout>
@@ -76,6 +60,7 @@ process:
       src="/projects/rekwizytor/SpektaklList-page.png"
       alt="Lista spektakli"
       caption="Widok listy spektakli"
+      frame={false}
     />
   </ContentLeft>
   <ContentRight>
@@ -83,6 +68,7 @@ process:
       src="/projects/rekwizytor/Grupy-page.png"
       alt="Grupy rekwizytów"
       caption="Grupowanie rekwizytów per produkcja"
+      frame={false}
     />
   </ContentRight>
 </SplitLayout>
@@ -91,9 +77,9 @@ process:
 
 <CompareBlock beforeLabel="BEZ SYSTEMU" afterLabel="Z REKWIZYTOREM">
   <CompareRow label="Katalogowanie" before="Ręczne opisywanie każdego przedmiotu" after="Zdjęcie → automatyczny rekord przez Vision API" />
-  <CompareRow label="Wyszukiwanie" before="Przeglądanie arkuszy Excel lub notatek" after="Filtrowanie po spektaklu, grupie, statusie" />
-  <CompareRow label="Przypisanie" before="Ustne ustalenia, ryzyko pomyłki" after="Rekwizyt przypisany do sceny z historią zmian" />
-  <CompareRow label="Raport PDF" before="Ręczne tworzenie przed każdą produkcją" after="Generowanie jednym kliknięciem" />
+  <CompareRow label="Wyszukiwanie" before="Przeglądanie arkuszy Excel, notatek lub zdjęć na prywatnych telefonach" after="Filtrowanie po spektaklu, grupie, statusie" />
+  <CompareRow label="Notatki" before="Odręczne, niespójne, łatwe do zgubienia i trudne do odtworzenia" after="Rekwizyt przypisany do sceny z historią zmian" />
+  <CompareRow label="Raport PDF" before="Ręczne tworzenie przed każdą produkcją" after="Generowanie jednym kliknięciem w razie potrzeby" />
 </CompareBlock>
 
 <SectionHeader num="04" title="KOD" id="kod" />
@@ -112,6 +98,6 @@ process:
   code={"export async function POST(req: Request) {\n  const form = await req.formData();\n  const file = form.get('image') as File;\n\n  const { path } = await supabase.storage\n    .from('props')\n    .upload(`${Date.now()}-${file.name}`, file);\n\n  const classification = await classifyProp(\n    await fileToBase64(file)\n  );\n\n  const { data } = await supabase\n    .from('props')\n    .insert({ ...classification, image_path: path })\n    .select()\n    .single();\n\n  return Response.json(data);\n}"}
 />
 
-<OutcomeBanner statusTag="PROTOTYP_GOTOWY">
-  System działa end-to-end — od uploadu zdjęcia do przeszukiwalnego katalogu. Prototyp był demonstrowany zainteresowanym rekwizytorkom, jednak wdrożenie nie doszło do skutku z powodów organizacyjnych. Architektura jest gotowa na produkcję.
+<OutcomeBanner statusTag="PROTOTYP_GOTOWY" githubUrl="https://github.com/jakub-pelka/rekwizytor" liveUrl="https://rekwizytor.vercel.app">
+  System działa end-to-end — od uploadu zdjęcia do przeszukiwalnego katalogu. Wdrożony na Vercel, demonstrowany zainteresowanym rekwizytorkom. Architektura gotowa na produkcję — dalszy los zależy od decyzji organizacyjnych, nie od jakości kodu.
 </OutcomeBanner>

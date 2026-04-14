@@ -17,16 +17,28 @@ export function ProjectHero({ project, lang }: ProjectHeroProps) {
           {project.content.description}
         </p>
 
-        {project.meta.links?.live && (
-          <a
-            href={project.meta.links.live}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.launchBtn}
-          >
-            [ LAUNCH_PROJECT → ]
-          </a>
-        )}
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          {project.meta.links?.live && (
+            <a
+              href={project.meta.links.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.launchBtn}
+            >
+              [ LAUNCH_PROJECT → ]
+            </a>
+          )}
+          {project.meta.links?.github && (
+            <a
+              href={project.meta.links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.launchBtn}
+            >
+              [ GITHUB → ]
+            </a>
+          )}
+        </div>
       </div>
 
       {/* Metadata Grid */}
