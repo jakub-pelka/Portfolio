@@ -34,6 +34,7 @@
     "projects": "PROJECT INDEX",
     "social": "SOCIAL",
     "contact": "CONTACT",
-    "mail_label": "EMAIL"
+    "mail_label": "EMAIL",
+    "cv_download": "[ DOWNLOAD CV ]"
   }
 }

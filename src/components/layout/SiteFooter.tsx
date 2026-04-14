@@ -58,6 +58,15 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
                 jakubpelkapraca@gmail.com
               </a>
             </li>
+            <li className={styles.contactItem}>
+              <a
+                href="/Jakub_Pełka_CV_AI_Agent_Developer.pdf"
+                download
+                className={styles.cvLink}
+              >
+                {dict.footer.cv_download}
+              </a>
+            </li>
           </ul>
         </div>
 

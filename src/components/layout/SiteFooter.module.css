@@ -73,11 +73,35 @@
   gap: 0.25rem;
 }
 
+.contactItem:last-child {
+  align-self: flex-start;
+}
+
 .contactLabel {
   font-family: var(--font-vt323);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   opacity: 0.35;
+}
+
+.cvLink {
+  font-family: var(--font-ibm-plex-mono);
+  font-size: 0.875rem;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  padding: 0.375rem 0.75rem;
+  display: inline-block;
+  margin-top: 0.5rem;
+  transition: border-color 200ms ease, opacity 200ms ease;
+  opacity: 0.7;
+}
+
+.cvLink:hover {
+  opacity: 1;
+  border-color: var(--color-text);
 }
 
 /* ── Cube column ── */

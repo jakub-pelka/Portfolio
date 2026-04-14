@@ -24,7 +24,7 @@ export function AboutSection({ children }: AboutSectionProps) {
           <MetaRow label="RUNTIME"><TagList><Tag>Node.js</Tag><Tag>Rust</Tag></TagList></MetaRow>
           <MetaRow label="DB"><TagList><Tag>PostgreSQL</Tag><Tag>SQLite</Tag><Tag>Supabase</Tag></TagList></MetaRow>
           <MetaRow label="PLATFORM"><TagList><Tag>Tauri</Tag><Tag>Vercel</Tag></TagList></MetaRow>
-          <MetaRow label="TOOLS"><TagList><Tag>Postman</Tag></TagList></MetaRow>
+          <MetaRow label="TOOLS"><TagList><Tag>Postman</Tag><Tag>Docker</Tag><Tag>SonarCloud</Tag></TagList></MetaRow>
         </TerminalCard>
         <TerminalCard title="AI" status="active">
           <MetaRow label="LLM"><TagList><Tag>Claude API</Tag><Tag>OpenAI API</Tag></TagList></MetaRow>
