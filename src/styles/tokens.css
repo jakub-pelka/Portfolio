@@ -37,7 +37,7 @@
 
   /* === Layout === */
   --max-width: 1200px;
-  --page-margin: 2rem;
+  --page-margin: clamp(1rem, 4vw, 2rem);
 
   /* === Z-Index === */
   --z-background: 0;

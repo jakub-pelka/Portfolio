@@ -292,23 +292,27 @@
 /* ── Mobile: single column ── */
 
 @media (max-width: 640px) {
+  .timeline {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .axis {
-    left: 1.25rem;
+    display: none;
   }
 
   .projectEntry {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "marker"
       "content"
       "image";
     gap: 1rem;
-    padding-left: 3rem;
+    padding: 1.5rem var(--page-margin);
+    position: relative;
   }
 
   .projectEntry.projectEntryFlip {
     grid-template-areas:
-      "marker"
       "content"
       "image";
   }
@@ -323,18 +327,25 @@
   }
 
   .axisMarker {
-    position: absolute;
-    left: 0;
-    top: 2rem;
+    display: none;
+  }
+
+  .thumbnail {
+    max-width: 100%;
+    height: auto;
+    opacity: 1;
   }
 
   .processLog {
     grid-template-columns: 1fr;
-    padding-left: 3rem;
+    padding: 1rem var(--page-margin);
+    border-left: 2px solid var(--color-border);
+    margin-left: var(--page-margin);
+    margin-right: var(--page-margin);
   }
 
   .processLogDot {
-    left: 1.25rem;
+    display: none;
   }
 
   .processLogRight .processLogContent,
@@ -347,5 +358,10 @@
 
   .processLogLeft .processLogText {
     margin-left: 0;
+  }
+
+  .projectGroup {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--color-border);
   }
 }

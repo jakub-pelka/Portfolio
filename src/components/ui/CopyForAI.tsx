@@ -56,12 +56,14 @@ export function CopyForAI({ projects, lang }: CopyForAIProps) {
   };
 
   return (
-    <button
-      className={styles.btn}
-      onClick={handleCopy}
-      title="Copy portfolio data for AI"
-    >
-      {copied ? '[ COPIED ✓ ]' : '[ COPY FOR AI ]'}
-    </button>
+    <div className={styles.wrap}>
+      <button
+        className={styles.btn}
+        onClick={handleCopy}
+        title="Copy portfolio data for AI"
+      >
+        {copied ? '[ COPIED ✓ ]' : '[ COPY FOR AI ]'}
+      </button>
+    </div>
   );
 }
