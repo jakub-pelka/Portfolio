@@ -310,6 +310,12 @@
     position: relative;
   }
 
+  .projectEntry.projectEntryFlip {
+    grid-template-areas:
+      "content"
+      "image";
+  }
+
   .projectEntry.projectEntryFlip .projectContent {
     text-align: left;
     align-items: flex-start;
