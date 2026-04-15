@@ -87,6 +87,32 @@ process:
 </CompareBlock>
 
 
+<SectionHeader num="04" title="CO WYPADŁO I DLACZEGO" id="pivot" />
+
+<SplitLayout>
+  <ContentLeft>
+    Trzy funkcje nie trafiły do finalnego prototypu. Każda z innego powodu — i każda po rozmowie z rekwizytorkami które miały z tego korzystać.
+
+    <ProcessCard type="problem" title="MAPOWANIE POMIESZCZEŃ">
+      Prototyp działał — rekwizyty przypisane do konkretnych miejsc w magazynie. Po wglądzie okazało się że miejsca trzymania grup zmieniają się między produkcjami zbyt często żeby mapa miała wartość. Funkcja osiągnęła prototyp i tam została.
+    </ProcessCard>
+
+    <ProcessCard type="decision" title="WYSZUKIWANIE WEKTOROWE">
+      Zbudowane, przetestowane, działające. Porzucone świadomie żeby wyrobić się z kluczowymi funkcjami w określonym czasie. Skomplikowana struktura przy zbyt małej wartości dodanej dla użytkownika na tym etapie — klasyczny trade-off między możliwościami technicznymi a priorytetem produktu.
+    </ProcessCard>
+
+    <ProcessCard type="insight" title="LIVE VIEW">
+      Najbardziej sztandarowy przykład przyznania że nie zawsze ma się rację. Lista na żywo pokazująca kto zajmuje się jakim rekwizytem przy jakiej scenie — teoretycznie pomocna. W praktyce praca na scenie jest bardziej automatyczna niż zakładałem, a synchronizacja w czasie rzeczywistym wnosiłaby więcej problemów niż pożytku. Odkryłem to w rozmowie z użytkowniczkami, nie przez analizę techniczną.
+    </ProcessCard>
+  </ContentLeft>
+
+  <ContentRight>
+    <QuoteBlock>
+      Wszystkie trzy decyzje wyszły z rozmów z ludźmi którzy mieli używać aplikacji — nie z własnych założeń. Kontekst korporacyjny to ma PM, QA i UX. Tutaj był bezpośredni dostęp do użytkownika końcowego — i to z tego źródła przychodziły zmiany priorytetów.
+    </QuoteBlock>
+  </ContentRight>
+</SplitLayout>
+
 <OutcomeBanner statusTag="PROTOTYP_GOTOWY" githubUrl="https://github.com/jakub-pelka/rekwizytor" liveUrl="https://rekwizytor.vercel.app">
   System działa end-to-end — od uploadu zdjęcia do przeszukiwalnego katalogu. Wdrożony na Vercel, demonstrowany zainteresowanym rekwizytorkom. Wdrożenie nie doszło do skutku z przyczyn organizacyjnych po stronie teatru — nie technicznych. Wniosek: ustrukturyzowany brief z odbiorcą przed pierwszym commitem oszczędza więcej czasu niż jakikolwiek refactor.
 </OutcomeBanner>

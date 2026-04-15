@@ -87,6 +87,32 @@ process:
 </CompareBlock>
 
 
+<SectionHeader num="04" title="WHAT DIDN'T MAKE IT AND WHY" id="pivot" />
+
+<SplitLayout>
+  <ContentLeft>
+    Three features didn't reach the final prototype. Each for a different reason — and each after a conversation with the prop masters who were going to use it.
+
+    <ProcessCard type="problem" title="ROOM MAPPING">
+      The prototype worked — props assigned to specific locations in storage. After a closer look it turned out that storage locations change between productions too frequently for a map to hold any value. The feature reached prototype stage and stayed there.
+    </ProcessCard>
+
+    <ProcessCard type="decision" title="VECTOR SEARCH">
+      Built, tested, working. Dropped deliberately to hit the deadline with the core features complete. A complex infrastructure with too little added value for the user at this stage — a classic trade-off between technical capability and product priority.
+    </ProcessCard>
+
+    <ProcessCard type="insight" title="LIVE VIEW">
+      The clearest example of admitting I was wrong. A real-time list showing who is handling which prop at which scene — theoretically useful. In practice, work on stage is more automatic than I assumed, and real-time sync would have introduced more problems than benefits. I found this out in conversation with the users, not through technical analysis.
+    </ProcessCard>
+  </ContentLeft>
+
+  <ContentRight>
+    <QuoteBlock>
+      All three decisions came from conversations with the people who were going to use the app — not from my own assumptions. In a corporate context that input comes from a PM, QA and UX. Here I had direct access to the end user — and that's where the priority changes came from.
+    </QuoteBlock>
+  </ContentRight>
+</SplitLayout>
+
 <OutcomeBanner statusTag="PROTOTYPE_COMPLETE" githubUrl="https://github.com/jakub-pelka/rekwizytor" liveUrl="https://rekwizytor.vercel.app">
   The system works end-to-end — from photo upload to a searchable catalogue. Deployed on Vercel and demonstrated to interested prop masters. Deployment didn't proceed for organisational reasons on the theatre's side — not technical ones. Lesson: a structured brief with the stakeholder before the first commit saves more time than any refactor.
 </OutcomeBanner>
