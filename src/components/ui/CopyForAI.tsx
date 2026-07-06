@@ -143,6 +143,7 @@ const BASE_BOTTOM = 32; // 2rem
 export function CopyForAI({ projects }: CopyForAIProps) {
   const [copied, setCopied] = useState(false);
   const [bottom, setBottom] = useState(BASE_BOTTOM);
+  const [scrollHidden, setScrollHidden] = useState(false);
 
   useEffect(() => {
     const footer = document.querySelector('footer');
@@ -169,6 +170,28 @@ export function CopyForAI({ projects }: CopyForAIProps) {
     };
   }, []);
 
+  useEffect(() => {
+    // On mobile the fixed pill sits directly over single-column timeline
+    // text — hide it while reading down the page, reveal on scroll up
+    // (mirrors SiteHeader's hide-on-scroll so the button never sits on
+    // top of the paragraph the user is currently reading).
+    const mobileQuery = window.matchMedia('(max-width: 640px)');
+    let lastY = window.scrollY;
+
+    const onScroll = () => {
+      if (!mobileQuery.matches) return;
+      const currentY = window.scrollY;
+      const delta = currentY - lastY;
+
+      if (delta > 4) setScrollHidden(true);
+      else if (delta < -4) setScrollHidden(false);
+      lastY = currentY;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const handleCopy = async () => {
     const md = buildMarkdown(projects);
     await navigator.clipboard.writeText(md);
@@ -182,6 +205,7 @@ export function CopyForAI({ projects }: CopyForAIProps) {
       style={{ bottom }}
       onClick={handleCopy}
       title="Copy portfolio data for AI"
+      data-scroll-hidden={scrollHidden}
     >
       {copied ? '[ COPIED ✓ ]' : '[ COPY FOR AI ]'}
     </button>

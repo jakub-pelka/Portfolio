@@ -8,14 +8,14 @@ facts:
   - label: "TIMELINE"
     value: "FEBRUARY–APRIL 2026 (~2 MONTHS)"
   - label: "COMMITS"
-    value: "9"
+    value: "18"
   - label: "STATUS"
-    value: "IN PROGRESS"
+    value: "COMPLETED"
 
 process:
   - type: decision
     title: "ONE_PAGER"
-    content: "Many portfolios have a separate projects page — that's an extra click, extra cognitive cost. I chose a single continuous view: Hero → Timeline → Footer. Whoever lands on the site sees everything immediately."
+    content: "Many portfolios have a separate projects page — that's an extra click, extra cognitive cost. I chose a single continuous view: Hero → Timeline → About → Footer. Whoever lands on the site sees everything immediately."
     date: "2026-02-21"
     anchor: "one-pager"
   - type: decision
@@ -58,8 +58,8 @@ process:
 
     There's a well-known experiment about default organ donation consent — countries with opt-in forms get a few percent, countries with opt-out forms reach nearly a hundred. Not because people hold different values — because the default state matters.
 
-    <ProcessCard type="decision" title="HERO → TIMELINE → FOOTER">
-      I removed the separate `/projects` page and project cards as an entry point. The timeline on the home page shows projects immediately — no click required.
+    <ProcessCard type="decision" title="HERO → TIMELINE → ABOUT → FOOTER">
+      I removed the separate `/projects` page and project cards as an entry point. The timeline on the home page shows projects immediately — no click required. An about section sits between the timeline and the footer, before the visitor reaches the end of the page.
     </ProcessCard>
   </ContentLeft>
 
@@ -111,6 +111,6 @@ Three different tools for three different jobs — not because more is better, b
 
 On a small project it's worth thinking through the whole thing visually before writing code — what components will be needed, how they'll compose together. Some of the structure refactors (`layout/`, `_experiments/`) came from skipping that step.
 
-<OutcomeBanner statusTag="IN_PROGRESS">
-  Portfolio live with a custom domain. Adding new projects requires no changes to application code — just MDX files in a new folder. Next: mobile responsiveness and more projects.
+<OutcomeBanner statusTag="COMPLETED" githubUrl="https://github.com/jakub-pelka/portfolio">
+  Portfolio live with a custom domain, responsive on mobile. Adding new projects requires no changes to application code — just MDX files in a new folder. Next: more projects in the timeline.
 </OutcomeBanner>

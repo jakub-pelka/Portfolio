@@ -5,7 +5,7 @@ export const projectConfig: ProjectConfig = {
     background: "#1C1C1C",
     accent: "#55AAAA",
     primaryText: "#F6F5F0",
-    highlight: "#0C0A09",
+    highlight: "var(--color-text)",
     halftoneStyle: "dark",
   },
   hero: {
