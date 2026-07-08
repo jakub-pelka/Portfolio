@@ -1,7 +1,13 @@
+import Image from 'next/image';
 import styles from './Editorial.module.css';
 
+interface ImageGridItem {
+  src: string;
+  alt: string;
+}
+
 interface ImageGridProps {
-  images: string[];
+  images: ImageGridItem[];
   columns?: number;
   frame?: boolean | string;
 }
@@ -10,11 +16,13 @@ export function ImageGrid({ images = [], columns = 3, frame = true }: ImageGridP
   const hasFrame = frame !== false && frame !== 'false';
   return (
     <div className={styles.imageGrid} data-cols={columns}>
-      {images.map((src, idx) => (
-        <img
+      {images.map(({ src, alt }, idx) => (
+        <Image
           key={idx}
           src={src}
-          alt={`Gallery image ${idx + 1}`}
+          alt={alt}
+          width={600}
+          height={600}
           className={styles.imageItem}
           data-frame={hasFrame ? 'true' : 'false'}
         />

@@ -183,12 +183,18 @@ Obrazek na pełną szerokość z opcjonalnym podpisem. Domyślnie ma ramkę `1px
 Siatka zdjęć z filtrem grayscale (hover = kolor). Domyślnie ramka — wyłącz przez `frame={false}`.
 
 **Props:**
-- `images` (array) — tablica ścieżek z `/public/`
+- `images` (array) — tablica obiektów `{ src, alt }`; `src` to ścieżka z `/public/`, `alt` to opisowy tekst alternatywny (wymagany, bez fallbacku)
 - `columns` (number, opcjonalny) — domyślnie `3`; dostępne: `2`, `3`
 - `frame` (boolean, opcjonalny) — domyślnie `true`
 
 ```mdx
-<ImageGrid columns={2} images={['/projects/rekwizytor/Home-page.png', '/projects/rekwizytor/Grupy-page.png']} />
+<ImageGrid
+  columns={2}
+  images={[
+    { src: '/projects/rekwizytor/Home-page.png', alt: 'Strona główna Rekwizytora — lista dostępnego sprzętu' },
+    { src: '/projects/rekwizytor/Grupy-page.png', alt: 'Widok grup rezerwacyjnych w Rekwizytorze' },
+  ]}
+/>
 ```
 
 ### `CodeSnippet`
