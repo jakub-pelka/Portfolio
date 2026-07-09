@@ -16,9 +16,9 @@ process:
     content: "I chose Gemini Vision over a custom CV model — it understood 'vintage aesthetic' context better and generated metadata that actually matters to a prop master."
     anchor: "architektura"
   - type: insight
-    title: "DEPLOYMENT"
-    content: "A working prototype isn't enough — deployment depends on organisational decisions, not code quality."
-    anchor: "outcome"
+    title: "PROBLEM_SCALE"
+    content: "Chaos grows in proportion to the number of productions. The system doesn't need to be perfect from day one — it needs to stop entropy from growing."
+    anchor: "architektura"
   - type: milestone
     title: "PIPELINE"
     content: "Built an end-to-end pipeline: photo → Gemini Vision → Zod schema → Supabase — without manual parsing of AI responses."
@@ -35,7 +35,7 @@ process:
 
     <BoxGrid>
       <ProcessBox title="REAL ORIGIN">
-        The project grew from a concrete problem raised by prop masters working on theatre productions. The need was genuine — deployment didn't happen due to organisational reasons.
+        The project grew from a concrete problem raised by prop masters working at a theatre in Silesia. Browsing Excel sheets, notes, or photos on private phones — no single source of truth, no control.
       </ProcessBox>
       <ProcessBox title="HYPOTHESIS">
         If a photograph is enough to identify an object — it's enough to catalogue it. One image should generate a full record with no manual data entry.
@@ -114,5 +114,5 @@ process:
 </SplitLayout>
 
 <OutcomeBanner statusTag="PROTOTYPE_COMPLETE" githubUrl="https://github.com/jakub-pelka/rekwizytor" liveUrl="https://rekwizytor.vercel.app">
-  The system works end-to-end — from photo upload to a searchable catalogue. Deployed on Vercel and demonstrated to interested prop masters. Deployment didn't proceed for organisational reasons on the theatre's side — not technical ones. Lesson: a structured brief with the stakeholder before the first commit saves more time than any refactor.
+  The system works end-to-end — from photo to searchable catalogue, with no manual data entry. Tested live with the prop masters it was built for — their feedback shaped the final feature set (see section 04). The technical goal was fully achieved; further rollout stalled at the theatre's organisational level, not the product's. Lesson for next time: a structured brief with the stakeholder before the first commit saves more time than any refactor.
 </OutcomeBanner>

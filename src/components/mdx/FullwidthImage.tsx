@@ -1,6 +1,6 @@
 import path from 'path';
-import Image from 'next/image';
 import { imageSizeFromFile } from 'image-size/fromFile';
+import { ImageLightbox } from './ImageLightbox';
 import styles from './Editorial.module.css';
 
 interface FullwidthImageProps {
@@ -20,14 +20,14 @@ export async function FullwidthImage(props: FullwidthImageProps) {
 
   return (
     <figure className={styles.fullwidthImage}>
-      <Image
+      <ImageLightbox
         src={src}
         alt={alt}
         width={width}
         height={height}
         style={{ width: '100%', height: 'auto' }}
         className={styles.fullwidthImageImg}
-        data-frame={hasFrame ? 'true' : 'false'}
+        frame={hasFrame}
       />
       {caption && (
         <figcaption className={styles.fullwidthImageCaption}>{caption}</figcaption>

@@ -27,8 +27,8 @@
   },
   "about": {
     "heading": "About me",
-    "p1": "I'm finishing a degree in digital economy in Katowice — <b>somewhere between IT, business and project management</b>. In my spare time I build tools that solve real problems — mine or someone I know. A fair description of my approach: \"the fact that I need to learn something new along the way doesn't stop me — even if that something is Rust\".",
-    "p2": "Looking for a first job or internship in Silesia or remotely."
+    "p1": "I graduated with a degree in digital economy in Katowice — <b>somewhere between IT, business and project management</b>. In my spare time I build tools that solve real problems — mine or someone I know. A fair description of my approach: \"the fact that I need to learn something new along the way doesn't stop me — even if that something is Rust\".",
+    "p2": "Looking for work or freelance projects — in Silesia or remotely."
   },
   "footer": {
     "projects": "PROJECT INDEX",

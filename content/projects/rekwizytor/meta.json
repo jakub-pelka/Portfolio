@@ -3,6 +3,7 @@
   "status": "completed",
   "featured": true,
   "date": "2025-11-24",
+  "order": 1,
   "thumbnail": "./assets/thumbnail.png",
   "tags": ["Next.js", "TypeScript", "Supabase", "Google Gemini", "Framer Motion", "React Hook Form", "Tiptap", "Zod"],
   "links": {

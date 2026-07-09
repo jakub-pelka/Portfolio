@@ -1,4 +1,6 @@
-import Image from 'next/image';
+import path from 'path';
+import { imageSizeFromFile } from 'image-size/fromFile';
+import { ImageLightbox } from './ImageLightbox';
 import styles from './Editorial.module.css';
 
 interface ImageGridItem {
@@ -12,19 +14,29 @@ interface ImageGridProps {
   frame?: boolean | string;
 }
 
-export function ImageGrid({ images = [], columns = 3, frame = true }: ImageGridProps) {
+export async function ImageGrid({ images = [], columns = 3, frame = true }: ImageGridProps) {
   const hasFrame = frame !== false && frame !== 'false';
+
+  const sizedImages = await Promise.all(
+    images.map(async ({ src, alt }) => {
+      const { width, height } = await imageSizeFromFile(
+        path.join(process.cwd(), 'public', src)
+      );
+      return { src, alt, width, height };
+    })
+  );
+
   return (
     <div className={styles.imageGrid} data-cols={columns}>
-      {images.map(({ src, alt }, idx) => (
-        <Image
+      {sizedImages.map(({ src, alt, width, height }, idx) => (
+        <ImageLightbox
           key={idx}
           src={src}
           alt={alt}
-          width={600}
-          height={600}
+          width={width}
+          height={height}
           className={styles.imageItem}
-          data-frame={hasFrame ? 'true' : 'false'}
+          frame={hasFrame}
         />
       ))}
     </div>

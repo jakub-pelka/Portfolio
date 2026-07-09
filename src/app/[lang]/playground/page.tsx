@@ -5,6 +5,7 @@ import { MiniScrollC } from '@/components/_experiments/MiniScrollC';
 import { IndicatorMorph } from '@/components/_experiments/IndicatorMorph';
 import { Button } from '@/components/ui/Button';
 import { HalftoneShadow } from '@/components/ui/HalftoneShadow';
+import { HalftoneShadowHover } from '@/components/ui/HalftoneShadowHover';
 import { ThemeTogglePreview } from '@/components/_experiments/ThemeTogglePreview';
 import { Tag, TagList, MetaRow } from '@/components/mdx/Primitives';
 import { TerminalCard } from '@/components/mdx/TerminalCard';
@@ -31,7 +32,7 @@ export default async function PlaygroundPage({
         justifyContent: 'flex-end',
         gap: 'var(--space-2)',
       }}>
-        <div style={{ fontFamily: 'var(--font-vt323)', fontSize: '4rem', lineHeight: 1 }}>
+        <div style={{ fontFamily: 'var(--font-ibm-plex-mono)', fontSize: '6rem', lineHeight: 1, letterSpacing: '-0.1em' }}>
           *
         </div>
         <h1 style={{
@@ -54,27 +55,6 @@ export default async function PlaygroundPage({
         </p>
         <p style={{ fontFamily: 'var(--font-vt323)', fontSize: '0.85rem', opacity: 0.3, marginTop: 'var(--space-1)' }}>
           [ STREFA EKSPERYMENTALNA — WSTĘP NA WŁASNE RYZYKO ]
-        </p>
-      </section>
-
-      {/* HEADER PLAYGROUNDU */}
-      <section style={{
-        width: '100%',
-        minHeight: '20vh',
-        padding: 'calc(var(--space-4) * 2) var(--space-4)',
-        borderBottom: '1px solid var(--color-text)',
-      }}>
-        <h1
-          style={{
-            fontFamily: 'var(--font-ibm-plex-mono)',
-            fontSize: 'var(--text-title)',
-            marginBottom: 'var(--space-2)'
-          }}
-        >
-          X_PLAYGROUND
-        </h1>
-        <p style={{ fontFamily: 'var(--font-vt323)', fontSize: 'var(--text-label)', opacity: 0.6 }}>
-          [ STANOWISKA TESTOWE KLOCKÓW SYSTEMU - KAŻDE ZAJMUJE 50VH ORAZ PEŁNĄ SZEROKOŚĆ ]
         </p>
       </section>
 
@@ -904,6 +884,70 @@ export default async function PlaygroundPage({
           </BoxGrid>
         </div>
 
+      </section>
+
+      {/* STANOWISKO 09: Hover Pop — Halftone Shadow Reveal */}
+      <section style={{
+        width: '100vw',
+        minHeight: '60vh',
+        borderBottom: '1px solid var(--color-text)',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 'calc(var(--space-4) * 2) var(--space-4) var(--space-4)',
+        position: 'relative',
+        gap: 'var(--space-4)'
+      }}>
+        <div style={{ position: 'absolute', top: 'var(--space-2)', left: 'var(--space-2)', fontFamily: 'var(--font-vt323)', opacity: 0.5, zIndex: 10 }}>
+          [09] HOVER_POP_HALFTONE_REVEAL
+        </div>
+
+        <p className="font-ibm">
+          Rozwinięcie [06]. W spoczynku cień jest niewidoczny — karta leży płasko. Po najechaniu karta
+          &bdquo;wyskakuje&rdquo; w stronę przeciwną do kierunku cienia, a za nią materializuje się halftone shadow.
+        </p>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '64px', alignItems: 'flex-start', marginTop: 'var(--space-4)' }}>
+
+          <div>
+            <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>direction: bottom-right | najedź</p>
+            <HalftoneShadowHover cardWidth={260} cardHeight={140} direction="bottom-right">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontFamily: 'var(--font-vt323)', fontSize: '1.2rem' }}>HOVER_ME</div>
+            </HalftoneShadowHover>
+          </div>
+
+          <div>
+            <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>direction: top-left | najedź</p>
+            <HalftoneShadowHover cardWidth={260} cardHeight={140} direction="top-left">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontFamily: 'var(--font-vt323)', fontSize: '1.2rem' }}>HOVER_ME</div>
+            </HalftoneShadowHover>
+          </div>
+
+          <div>
+            <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>direction: bottom | offset=24 (duży wyskok)</p>
+            <HalftoneShadowHover cardWidth={260} cardHeight={140} direction="bottom" offset={24}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontFamily: 'var(--font-vt323)', fontSize: '1.2rem' }}>HOVER_ME</div>
+            </HalftoneShadowHover>
+          </div>
+
+          <div>
+            <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>grid=6, maxRadius=2.5 (drobny raster)</p>
+            <HalftoneShadowHover cardWidth={260} cardHeight={140} direction="bottom-right" grid={6} maxRadius={2.5} minRadius={0.3}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontFamily: 'var(--font-vt323)', fontSize: '1.2rem' }}>HOVER_ME</div>
+            </HalftoneShadowHover>
+          </div>
+
+          <div>
+            <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>karta jako link / przycisk projektu</p>
+            <HalftoneShadowHover cardWidth={280} cardHeight={160} direction="bottom-right" offset={18}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', height: '100%', padding: 'var(--space-3)', justifyContent: 'space-between' }}>
+                <div className="font-vt" style={{ opacity: 0.5, fontSize: '10px' }}>[ PROJECT_04 ]</div>
+                <div className="font-ibm" style={{ fontSize: 'var(--text-label)', fontWeight: 'bold' }}>Rekwizytor</div>
+                <div className="font-vt" style={{ fontSize: '0.75rem', opacity: 0.6 }}>ZOBACZ PROJEKT -&gt;</div>
+              </div>
+            </HalftoneShadowHover>
+          </div>
+
+        </div>
       </section>
     </main>
   );

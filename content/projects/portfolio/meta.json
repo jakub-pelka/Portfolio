@@ -3,6 +3,7 @@
   "status": "completed",
   "featured": false,
   "date": "2026-02-21",
+  "order": 2,
   "thumbnail": "./assets/thumbnail.png",
   "tags": ["Next.js 16", "TypeScript", "Vanilla CSS", "Framer Motion", "GSAP", "Three.js", "MDX"],
   "links": {

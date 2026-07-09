@@ -7,6 +7,7 @@ export interface ProjectMeta {
   status: "in-progress" | "completed" | "archived";
   featured: boolean;
   date: string; // ISO date format
+  order?: number; // curated display order (ascending); falls back to date when absent
   thumbnail: string; // relative path to thumbnail
   tags: string[];
   links?: {

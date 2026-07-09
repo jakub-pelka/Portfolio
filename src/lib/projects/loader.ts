@@ -108,8 +108,11 @@ export const getAllProjects = cache(async (
     ? projects.filter((project) => project.meta.featured)
     : projects;
 
-  // Sort by date (newest first)
+  // Sort by curated `order` when present, otherwise fall back to date (newest first)
   return filteredProjects.sort((a, b) => {
+    const orderA = a.meta.order ?? Infinity;
+    const orderB = b.meta.order ?? Infinity;
+    if (orderA !== orderB) return orderA - orderB;
     return new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime();
   });
 });
