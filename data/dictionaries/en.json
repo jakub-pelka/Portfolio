@@ -9,7 +9,7 @@
     "intro": "It's",
     "name_first": "Jakub",
     "name_last": "Pełka",
-    "cta_projects": "[ PROJECTS ]",
+    "cta_projects": "See what I've built",
     "cta_contact": "[ CONTACT → ]"
   },
   "projects": {
@@ -28,13 +28,46 @@
   "about": {
     "heading": "About me",
     "p1": "I graduated with a degree in digital economy in Katowice — <b>somewhere between IT, business and project management</b>. In my spare time I build tools that solve real problems — mine or someone I know. A fair description of my approach: \"the fact that I need to learn something new along the way doesn't stop me — even if that something is Rust\".",
-    "p2": "Looking for work or freelance projects — in Silesia or remotely."
+    "p2": "Open to freelance projects and job offers — in Silesia or remotely."
+  },
+  "services": {
+    "heading": "HOW I CAN HELP",
+    "intro": "I build websites, web apps and AI automations for companies and teams that need more than an off-the-shelf template.",
+    "items": [
+      {
+        "title": "WEBSITES & APPS",
+        "body": "A landing page, portfolio, or internal company tool — built from scratch, fast, and easy to maintain, without a bloated CMS."
+      },
+      {
+        "title": "AI AUTOMATION",
+        "body": "Gemini/OpenAI integrations that turn repetitive manual work — cataloging, describing, data entry — into a process that takes seconds."
+      },
+      {
+        "title": "PROTOTYPE / MVP",
+        "body": "Have an idea and want to validate it before investing in a full team? I build a working prototype you can put in front of real users."
+      }
+    ],
+    "process_heading": "HOW WE'D WORK TOGETHER",
+    "process": [
+      { "step": "01", "title": "CALL", "body": "You reach out, we talk through the problem and the goal." },
+      { "step": "02", "title": "QUOTE", "body": "You get a scope and a quote — no obligation." },
+      { "step": "03", "title": "BUILD", "body": "Regular updates while it's being built, not radio silence for a month." },
+      { "step": "04", "title": "HANDOFF", "body": "Code, access and docs — yours to keep, no lock-in." }
+    ],
+    "pricing_note": "Quote depends on project scope. Reach out — that's the first step.",
+    "cta_label": "[ SCHEDULE A CALL → ]",
+    "cta_subject": "Project inquiry",
+    "cta_body": "Hi Jakub,\n\nI'd like to talk about a project:\n- What you want to build:\n- Rough timeline:\n\nThanks!"
   },
   "footer": {
     "projects": "PROJECT INDEX",
     "social": "SOCIAL",
     "contact": "CONTACT",
     "mail_label": "EMAIL",
-    "cv_download": "[ DOWNLOAD CV ]"
+    "mail_body": "I'm reaching out because ",
+    "cv_download": "[ DOWNLOAD CV ]",
+    "contact_cta_label": "[ GET A QUOTE ]",
+    "contact_cta_subject": "Project inquiry",
+    "contact_cta_body": "Hi Jakub,\n\nI'd like to build: \n\nI suspect I'll need / would like to use: \n\nThanks!"
   }
 }

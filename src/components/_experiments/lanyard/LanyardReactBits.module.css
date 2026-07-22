@@ -1,0 +1,14 @@
+.stage {
+  position: relative;
+  width: 360px;
+  height: 480px;
+  border: 1px solid var(--color-text);
+  background: var(--color-bg);
+  touch-action: none;
+  overflow: hidden;
+}
+
+.stage canvas {
+  display: block;
+  cursor: grab;
+}

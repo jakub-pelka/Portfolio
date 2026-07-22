@@ -7,7 +7,7 @@ import SplitType from 'split-type';
 import styles from './Hero.module.css';
 
 
-export function Hero() {
+export function Hero({ scrollLabel }: { scrollLabel: string }) {
   const pathname = usePathname();
   const lang = pathname.split('/')[1] || 'pl';
   const heyRef = useRef<HTMLDivElement>(null);
@@ -213,7 +213,7 @@ export function Hero() {
           onClick={scrollToTimeline}
           style={{ cursor: 'pointer' }}
         >
-          Portfolio
+          {scrollLabel}
         </span>
         <div
           className={styles.arrowDown}

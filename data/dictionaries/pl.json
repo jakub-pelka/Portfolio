@@ -9,7 +9,7 @@
     "intro": "To",
     "name_first": "Jakub",
     "name_last": "Pełka",
-    "cta_projects": "[ PROJEKTY ]",
+    "cta_projects": "Zobacz co zrobiłem",
     "cta_contact": "[ KONTAKT → ]"
   },
   "projects": {
@@ -28,13 +28,46 @@
   "about": {
     "heading": "O mnie",
     "p1": "Skończyłem studia na kierunku gospodarka cyfrowa w Katowicach — <b>coś pomiędzy IT, biznesem i zarządzaniem projektami</b>. W wolnym czasie buduję narzędzia, które rozwiązują realne problemy — moje albo kogoś kogo znam. Dobry opis mojego podejścia to coś pokroju \"nie zatrzymuje mnie fakt, że muszę po drodze nauczyć się czegoś nowego - nawet jeśli tym czymś jest Rust\".",
-    "p2": "Szukam pracy lub zleceń — na Śląsku albo zdalnie."
+    "p2": "Otwarty na projekty freelance i oferty pracy — na Śląsku albo zdalnie."
+  },
+  "services": {
+    "heading": "JAK MOGĘ POMÓC",
+    "intro": "Buduję strony, aplikacje webowe i automatyzacje AI dla firm i zespołów, które potrzebują czegoś więcej niż gotowego szablonu.",
+    "items": [
+      {
+        "title": "STRONY & APLIKACJE",
+        "body": "Strona wizytówka, portfolio albo panel wewnętrzny firmy — zbudowany od zera, szybki i łatwy w utrzymaniu, bez zbędnego CMS-a."
+      },
+      {
+        "title": "AUTOMATYZACJE AI",
+        "body": "Integracje z Gemini/OpenAI, które zamieniają powtarzalną ręczną pracę — katalogowanie, opisywanie, wprowadzanie danych — w proces trwający sekundy."
+      },
+      {
+        "title": "PROTOTYP / MVP",
+        "body": "Masz pomysł i chcesz sprawdzić, czy działa, zanim zainwestujesz w duży zespół? Buduję działający prototyp, z którym można wyjść do pierwszych użytkowników."
+      }
+    ],
+    "process_heading": "JAK WYGLĄDA WSPÓŁPRACA",
+    "process": [
+      { "step": "01", "title": "ROZMOWA", "body": "Piszesz, rozmawiamy o problemie i celu." },
+      { "step": "02", "title": "WYCENA", "body": "Dostajesz zakres prac i wycenę — bez zobowiązań." },
+      { "step": "03", "title": "BUILD", "body": "Regularne update'y w trakcie budowy, nie cisza przez miesiąc." },
+      { "step": "04", "title": "PRZEKAZANIE", "body": "Kod, dostępy i dokumentacja — na własność, bez uzależnienia od mnie." }
+    ],
+    "pricing_note": "Wycena indywidualna — zależy od zakresu projektu. Napisz, to pierwszy krok.",
+    "cta_label": "[ UMÓW ROZMOWĘ → ]",
+    "cta_subject": "Wycena projektu",
+    "cta_body": "Cześć Kuba,\n\nChciałbym porozmawiać o projekcie:\n- Co chcesz zbudować:\n- Orientacyjny termin:\n\nDzięki!"
   },
   "footer": {
     "projects": "INDEKS PROJEKTÓW",
     "social": "MEDIA SPOŁECZNOŚCIOWE",
     "contact": "KONTAKT",
     "mail_label": "EMAIL",
-    "cv_download": "[ POBIERZ CV ]"
+    "mail_body": "Kontaktuję się z Panem, ponieważ ",
+    "cv_download": "[ POBIERZ CV ]",
+    "contact_cta_label": "[ WYCEŃ PROJEKT ]",
+    "contact_cta_subject": "Wycena projektu",
+    "contact_cta_body": "Cześć Kuba,\n\nChciałbym zrobić: \n\nPodejrzewam, że przyda się / chciałbym wykorzystać: \n\nDzięki!"
   }
 }

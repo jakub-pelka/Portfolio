@@ -10,6 +10,9 @@ import { ThemeTogglePreview } from '@/components/_experiments/ThemeTogglePreview
 import { Tag, TagList, MetaRow } from '@/components/mdx/Primitives';
 import { TerminalCard } from '@/components/mdx/TerminalCard';
 import { BoxGrid, ProcessBox } from '@/components/mdx/ProcessBox';
+import { LanyardScene } from '@/components/_experiments/lanyard/LanyardScene';
+import { LanyardCssCard } from '@/components/_experiments/lanyard/LanyardCssCard';
+import LanyardReactBits from '@/components/_experiments/lanyard/LanyardReactBits';
 
 export default async function PlaygroundPage({
   params,
@@ -947,6 +950,54 @@ export default async function PlaygroundPage({
             </HalftoneShadowHover>
           </div>
 
+        </div>
+      </section>
+
+      {/* STANOWISKO 10: Lanyard Card — R3F+Rapier vs CSS+GSAP */}
+      <section style={{
+        width: '100vw',
+        minHeight: '80vh',
+        borderBottom: '1px solid var(--color-text)',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 'calc(var(--space-4) * 2) var(--space-4) var(--space-4)',
+        position: 'relative',
+        gap: 'var(--space-4)'
+      }}>
+        <div style={{ position: 'absolute', top: 'var(--space-2)', left: 'var(--space-2)', fontFamily: 'var(--font-vt323)', opacity: 0.5, zIndex: 10 }}>
+          [10] LANYARD_CARD_ON_STRING
+        </div>
+
+        <p className="font-ibm">
+          Prototyp karty na smyczy — złap i przeciągnij, puść i zobacz jak wraca do pozycji.
+          Lewa wersja to prawdziwa fizyka (React Three Fiber + Rapier: liny jako łańcuch
+          sztywnych ciał połączonych złączami + karta obracająca się w 3D). Prawa wersja to
+          &bdquo;oszustwo&rdquo; — sam GSAP + CSS <code>perspective</code>/<code>rotateX/Y/Z</code> +
+          elastic easing, bez silnika fizyki. Tekstura karty to placeholder — podmienialny przez
+          prop <code>imageUrl</code>.
+        </p>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-4)', alignItems: 'flex-start' }}>
+          <div>
+            <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>
+              WARIANT A — REACT THREE FIBER + RAPIER (prawdziwa fizyka)
+            </p>
+            <LanyardScene />
+          </div>
+
+          <div>
+            <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>
+              WARIANT B — GSAP + CSS 3D (bez silnika fizyki)
+            </p>
+            <LanyardCssCard />
+          </div>
+
+          <div>
+            <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>
+              WARIANT C — REACT BITS (przytrzymaj = przeciągnij · kliknij = obróć na drugą stronę)
+            </p>
+            <LanyardReactBits frontImage="/lanyard/face-front.png" backImage="/lanyard/face-back.png" />
+          </div>
         </div>
       </section>
     </main>

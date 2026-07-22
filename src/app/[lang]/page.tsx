@@ -3,6 +3,7 @@ import type { Locale } from '@/i18n/config';
 import { assertLocale } from '@/i18n/guard';
 import { Hero } from '@/components/home/Hero';
 import { ProjectTimeline } from '@/components/home/ProjectTimeline';
+import { ServicesSection } from '@/components/home/ServicesSection';
 import { AboutSection } from '@/components/home/AboutSection';
 import { getAllProjects } from '@/lib/projects/loader';
 import { getDictionary } from '@/i18n/get-dictionary';
@@ -74,8 +75,9 @@ export default async function Home({
 
   return (
     <main>
-      <Hero />
+      <Hero scrollLabel={dict.hero.cta_projects} />
       <ProjectTimeline lang={lang} projects={projects} />
+      <ServicesSection lang={lang} />
       <AboutSection>
         <h2>{dict.about.heading}</h2>
         <p dangerouslySetInnerHTML={{ __html: dict.about.p1 }} />

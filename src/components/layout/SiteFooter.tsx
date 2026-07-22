@@ -10,9 +10,13 @@ interface SiteFooterProps {
   projects: ProjectWithLocale[];
 }
 
+const CONTACT_EMAIL = 'jakubpelkapraca@gmail.com';
+
 export async function SiteFooter({ lang, projects }: SiteFooterProps) {
   const dict = await getDictionary(lang);
   const year = new Date().getFullYear();
+  const mailHref = `mailto:${CONTACT_EMAIL}?body=${encodeURIComponent(dict.footer.mail_body)}`;
+  const ctaMailtoHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(dict.footer.contact_cta_subject)}&body=${encodeURIComponent(dict.footer.contact_cta_body)}`;
 
   return (
     <footer className={styles.footer}>
@@ -54,8 +58,13 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
           <ul className={styles.list}>
             <li className={styles.contactItem}>
               <span className={styles.contactLabel}>{dict.footer.mail_label}</span>
-              <a href="mailto:jakubpelkapraca@gmail.com" className={styles.link}>
-                jakubpelkapraca@gmail.com
+              <a href={mailHref} className={styles.link}>
+                {CONTACT_EMAIL}
+              </a>
+            </li>
+            <li className={styles.contactItem}>
+              <a href={ctaMailtoHref} className={styles.ctaLink}>
+                {dict.footer.contact_cta_label}
               </a>
             </li>
             <li className={styles.contactItem}>
