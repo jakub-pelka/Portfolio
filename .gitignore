@@ -44,3 +44,8 @@ next-env.d.ts
 00_project_state.md
 01_project_brain.md
 02_future_features.md
+
+# Local-only dev UI tweak panel (loaded optionally by DevTweak.tsx, which is
+# committed and no-ops when these are absent — see its header comment).
+src/components/dev/DevTweakPanel.tsx
+src/components/dev/DevTweakPanel.module.css

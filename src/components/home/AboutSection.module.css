@@ -1,13 +1,34 @@
 .section {
-  padding: 4rem;
+  /* Padding/gap are var()s so the dev tweak panel (DevTweak) can dial them
+     live; the fallbacks are the committed defaults. Vertical padding is
+     trimmed vs. horizontal so the section stays short while filling width. */
+  padding: var(--tweak-section-py, 2.5rem) var(--tweak-section-px, 4rem);
   border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: var(--tweak-section-gap, 5rem);
+}
+
+.textRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
 }
 
 .text {
+  /* Fixed-width sidebar (AboutLanyard, flex-shrink:0) + flexible main content
+     is the standard pattern here: .text always gets "whatever's left after
+     the card", so the card's own width/scale can never squeeze or resize it.
+     min-width:0 lets a flex item shrink below its content's intrinsic width
+     (the flexbox default is auto, which would otherwise refuse to shrink and
+     overflow the row instead). */
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: 48rem;
+  /* Stacking context above AboutLanyard (z-index:1) — the card's translateY
+     intentionally hangs it up over this row, and it must never cover the text. */
+  position: relative;
+  z-index: 2;
 }
 
 .text h2 {
@@ -15,25 +36,48 @@
   font-weight: bold;
   font-size: var(--text-title);
   letter-spacing: -0.03em;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-transform: uppercase;
 }
 
 .text p {
   font-family: var(--font-ibm-plex-mono);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.5;
   color: var(--color-text);
 }
 
 .text p + p {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: var(--tweak-about-grid-gap, 1rem);
+}
+
+/* ── Inline tech rows: label + tags on one line (short cards, filled width) ── */
+
+.techRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.techLabel {
+  flex: 0 0 4.5rem;
+  font-family: var(--font-vt323);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  opacity: 0.5;
+  text-transform: uppercase;
+}
+
+.techTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 @media (max-width: 768px) {
@@ -44,6 +88,11 @@
   .grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
+  }
+
+  .techLabel {
+    flex-basis: 3.5rem;
+    font-size: 0.8rem;
   }
 }
 

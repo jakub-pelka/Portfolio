@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import gsap from 'gsap';
 import SplitType from 'split-type';
+import { HeroLanyard } from './HeroLanyard';
 import styles from './Hero.module.css';
 
 
@@ -189,6 +190,7 @@ export function Hero({ scrollLabel }: { scrollLabel: string }) {
 
   return (
     <section className={styles.hero}>
+      <HeroLanyard lang={lang} />
       <a href={`/${lang}/playground`} className={styles.star} ref={starRef} title="?">*</a>
       <div className={styles.content}>
         <div className={styles.hey} ref={heyRef}>Hey</div>

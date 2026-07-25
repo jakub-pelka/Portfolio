@@ -1,0 +1,24 @@
+.wrap {
+  /* Sits in the About text row on the right. Position offset is its own
+     var() (group "Smycz About" in the dev panel), but the WIDTH intentionally
+     shares HeroLanyard's exact base clamp + scale variable, so both cards
+     render at the same real size by default — --tweak-about-lanyard-scale is
+     a multiplier ON TOP of that (1 = identical to Hero), not an independent
+     base. The transform moves it up to "hang" from the section's top border,
+     which can visually overlap .text above it — z-index keeps that overlap
+     behind the text (see AboutSection.module.css's z-index on .text). */
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: calc(clamp(360px, 38vw, 620px) * var(--tweak-lanyard-scale, 1.2) * var(--tweak-about-lanyard-scale, 1));
+  aspect-ratio: 3 / 4;
+  transform: translate(var(--tweak-about-lanyard-x, 4px), var(--tweak-about-lanyard-y, -88px));
+}
+
+/* Heavy WebGL/physics decoration — skip on small screens (also lets the About
+   text use the full width there). */
+@media (max-width: 768px) {
+  .wrap {
+    display: none;
+  }
+}

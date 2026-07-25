@@ -13,6 +13,7 @@ import { BoxGrid, ProcessBox } from '@/components/mdx/ProcessBox';
 import { LanyardScene } from '@/components/_experiments/lanyard/LanyardScene';
 import { LanyardCssCard } from '@/components/_experiments/lanyard/LanyardCssCard';
 import LanyardReactBits from '@/components/_experiments/lanyard/LanyardReactBits';
+import lanyardStyles from '@/components/_experiments/lanyard/LanyardReactBits.module.css';
 
 export default async function PlaygroundPage({
   params,
@@ -996,7 +997,7 @@ export default async function PlaygroundPage({
             <p className="font-vt" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '6px' }}>
               WARIANT C — REACT BITS (przytrzymaj = przeciągnij · kliknij = obróć na drugą stronę)
             </p>
-            <LanyardReactBits frontImage="/lanyard/face-front.png" backImage="/lanyard/face-back.png" />
+            <LanyardReactBits backImage="/lanyard/face-photo.jpg" className={lanyardStyles.demoStage} lang={lang} />
           </div>
         </div>
       </section>

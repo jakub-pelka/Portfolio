@@ -8,6 +8,9 @@
   width: 100%;
   padding: var(--space-4);
   background-color: var(--color-bg);
+  /* Clips HeroLanyard's upper half, which deliberately hangs above the
+     section's own top edge (see HeroLanyard.module.css). */
+  overflow: hidden;
   /* The reference image shows a border or a card-like effect */
   /* Let's keep it clean as per design system but maybe add a subtle border if it's the global container */
 }

@@ -31,7 +31,7 @@ export async function ServicesSection({ lang }: { lang: Locale }) {
 
       <div className={styles.grid}>
         {s.items.map((item: ServiceItem) => (
-          <TerminalCard key={item.title} title={item.title} status="active">
+          <TerminalCard key={item.title} title={item.title} status="active" dense>
             <p className={styles.itemBody}>{item.body}</p>
           </TerminalCard>
         ))}

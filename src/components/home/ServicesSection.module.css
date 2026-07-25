@@ -1,9 +1,11 @@
 .section {
-  padding: 4rem;
+  /* var()s driven by the dev tweak panel (DevTweak); fallbacks are the
+     committed defaults. Vertical trimmed vs. horizontal to fill width. */
+  padding: var(--tweak-section-py, 2.5rem) var(--tweak-section-px, 4rem);
   border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: var(--tweak-section-gap, 5rem);
 }
 
 .intro {
@@ -15,14 +17,14 @@
   font-weight: bold;
   font-size: var(--text-title);
   letter-spacing: -0.03em;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-transform: uppercase;
 }
 
 .intro p {
   font-family: var(--font-ibm-plex-mono);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.5;
   color: var(--color-text);
   opacity: 0.85;
 }
@@ -30,7 +32,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: var(--tweak-services-grid-gap, 1rem);
 }
 
 .itemBody {
@@ -59,7 +61,7 @@
 .processSteps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  gap: var(--tweak-process-gap, 1.5rem);
 }
 
 .processStep {
@@ -99,7 +101,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   border-top: 1px solid var(--color-border);
 }
 

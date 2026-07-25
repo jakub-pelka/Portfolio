@@ -22,12 +22,54 @@ import {
 } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import * as THREE from 'three';
+import { createLanyardStrapTexture } from './createLanyardStrapTexture';
+import { createDuotoneImage } from './createDuotoneImage';
 import styles from './LanyardReactBits.module.css';
 
 const CARD_GLB_URL = '/lanyard/card.glb';
-const LANYARD_TEXTURE_URL = '/lanyard/lanyard.png';
+// Fixed badge colors — not theme CSS vars. The card is meant to look like a
+// printed physical object, so its tone shouldn't invert when the site
+// switches to dark mode the way `--color-text`/`--color-bg` do.
+const CARD_SHADOW = '#1A1A1A';
+const CARD_CREAM = '#F5F1E8';
+const CARD_ACCENT = '#55AAAA';
+// How far the card's visible top edge sits above its own RigidBody origin,
+// in world units — derived from the card group's own transform
+// (position=[0,-1.2,-0.05], scale=2.25) applied to the card mesh's local top
+// Y (1.0229, measured from card.glb's POSITION accessor, same source as the
+// CARD_MESH_* constants in the cardMap texture code below): -1.2 + 2.25 *
+// 1.0229 ≈ 1.1015. Used by the optional drag ceiling (dragCeilingFraction)
+// to convert "don't let the card's visible top cross this line" into a limit
+// on the RigidBody origin's Y translation.
+const CARD_VISUAL_TOP_OFFSET = 1.1015;
+// Same derivation as CARD_VISUAL_TOP_OFFSET, for the card's other two edges
+// (mesh X range ±0.3582, Y min 0.0229 — same card.glb POSITION accessor):
+// bottom = -1.2 + 2.25 * 0.0229 ≈ -1.1485 (below the RigidBody origin);
+// half-width = 2.25 * 0.3582 ≈ 0.8060 (no group X offset, so symmetric).
+// Used to keep the card's actual visible edges — not just its origin point —
+// away from the canvas frame's true edge on every side, not only the top.
+const CARD_VISUAL_BOTTOM_OFFSET = -1.1485;
+const CARD_VISUAL_HALF_WIDTH = 0.806;
 
 extend({ MeshLineGeometry, MeshLineMaterial });
+
+// Force an image upright for the portrait card slot. Phone photos often decode
+// landscape on a <canvas> (the browser doesn't apply their EXIF orientation
+// tag when drawing to canvas), which showed the photo lying on its side. If
+// the decoded image is wider than tall, rotate it 90° clockwise into a
+// portrait canvas so it always lands upright regardless of the file's EXIF.
+function uprightForPortrait(img: HTMLImageElement): HTMLImageElement | HTMLCanvasElement {
+  if (img.width <= img.height) return img;
+  const c = document.createElement('canvas');
+  c.width = img.height;
+  c.height = img.width;
+  const cx = c.getContext('2d');
+  if (!cx) return img;
+  cx.translate(c.width / 2, c.height / 2);
+  cx.rotate(Math.PI / 2);
+  cx.drawImage(img, -img.width / 2, -img.height / 2);
+  return c;
+}
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
@@ -58,6 +100,15 @@ interface LanyardProps {
   imageFit?: 'cover' | 'contain';
   lanyardImage?: string | null;
   lanyardWidth?: number;
+  className?: string;
+  // Fraction of the frame height, measured from the top, that the card can't
+  // be dragged above — meant to match a CSS crop (e.g. HeroLanyard.module.css's
+  // translateY) so dragging can never pull the card into a clipped, invisible
+  // region. 0 = top of frame, 1 = bottom. Omit/null for no limit (playground).
+  dragCeilingFraction?: number | null;
+  // Locale for the card's own on-canvas prompt text (front face when no
+  // frontImage is supplied). Defaults to 'pl'.
+  lang?: 'pl' | 'en';
 }
 
 function LanyardCanvas({
@@ -70,6 +121,8 @@ function LanyardCanvas({
   imageFit = 'cover',
   lanyardImage = null,
   lanyardWidth = 1,
+  dragCeilingFraction = null,
+  lang = 'pl',
 }: LanyardProps) {
   const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
@@ -96,9 +149,11 @@ function LanyardCanvas({
             imageFit={imageFit}
             lanyardImage={lanyardImage}
             lanyardWidth={lanyardWidth}
+            dragCeilingFraction={dragCeilingFraction}
+            lang={lang}
           />
         </Physics>
-        <Environment blur={0.75}>
+        <Environment blur={0.2}>
           <Lightformer
             intensity={2}
             color="white"
@@ -133,7 +188,7 @@ function LanyardCanvas({
   );
 }
 
-export default function Lanyard(props: LanyardProps) {
+export default function Lanyard({ className, ...props }: LanyardProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
 
@@ -148,7 +203,7 @@ export default function Lanyard(props: LanyardProps) {
   }, []);
 
   return (
-    <div ref={stageRef} className={styles.stage}>
+    <div ref={stageRef} className={className ? `${styles.stage} ${className}` : styles.stage}>
       {active && <LanyardCanvas {...props} />}
     </div>
   );
@@ -163,6 +218,8 @@ interface BandProps {
   imageFit?: 'cover' | 'contain';
   lanyardImage?: string | null;
   lanyardWidth?: number;
+  dragCeilingFraction?: number | null;
+  lang?: 'pl' | 'en';
 }
 
 type LanyardRigidBody = RapierRigidBody & {
@@ -178,6 +235,8 @@ function Band({
   imageFit = 'cover',
   lanyardImage = null,
   lanyardWidth = 1,
+  dragCeilingFraction = null,
+  lang = 'pl',
 }: BandProps) {
   const band = useRef<THREE.Mesh<InstanceType<typeof MeshLineGeometry>, InstanceType<typeof MeshLineMaterial>>>(
     null!
@@ -262,17 +321,25 @@ function Band({
     nodes: { card: THREE.Mesh; clip: THREE.Mesh; clamp: THREE.Mesh };
     materials: { base: THREE.MeshStandardMaterial; metal: THREE.MeshStandardMaterial };
   };
-  const texture = useTexture(lanyardImage || LANYARD_TEXTURE_URL);
   // useTexture must be called unconditionally; use a blank pixel when an image
   // isn't supplied for a given face, then skip compositing it below.
   const frontTex = useTexture(frontImage || BLANK_PIXEL);
   const backTex = useTexture(backImage || BLANK_PIXEL);
+  // Same unconditional-hook rule for the strap: load a blank pixel when no
+  // custom lanyardImage is supplied, then fall back to our own procedural
+  // strap print (see createLanyardStrapTexture) instead of the react-bits
+  // demo's baked-in logo texture.
+  const loadedLanyardTexture = useTexture(lanyardImage || BLANK_PIXEL);
+  const ownLanyardTexture = useMemo(
+    () => (lanyardImage ? null : createLanyardStrapTexture()),
+    [lanyardImage]
+  );
+  const texture = ownLanyardTexture ?? loadedLanyardTexture;
 
   // Composite the front/back images into the card's texture atlas (front = left
   // half, back = right half). Each image is drawn aspect-preserving (no stretch).
   const cardMap = useMemo(() => {
     const baseMap = materials.base.map as THREE.Texture;
-    if (!frontImage && !backImage) return baseMap;
 
     const baseImg = baseMap.image as HTMLImageElement;
     const W = baseImg.width;
@@ -282,30 +349,199 @@ function Band({
     canvas.height = H;
     const ctx = canvas.getContext('2d');
     if (!ctx) return baseMap;
-    // Keep the original baked atlas for the card edges and any untouched face.
+    // Keep the original baked atlas for the card edges (its rounded silhouette
+    // extends slightly past FRONT/BACK_UV_RECT). The two faces themselves are
+    // always fully overpainted below — by a real image if one was supplied,
+    // otherwise by our own placeholder — so the react-bits demo's own baked-in
+    // logo/mockup never shows through either face.
     ctx.drawImage(baseImg, 0, 0, W, H);
 
-    const drawFitted = (img: HTMLImageElement, rect: typeof FRONT_UV_RECT) => {
+    const NAME = 'Jakub Pełka';
+    const ROLE = 'FULL-STACK DEVELOPER';
+    const FRONT_PROMPT = lang === 'en'
+      ? { title: 'CLICK ME', sub: '[ flip card ]' }
+      : { title: 'KLIKNIJ MNIE', sub: '[ obróć kartę ]' };
+
+    // The card.glb "card" mesh's true bounds, measured directly from its
+    // POSITION accessor: width 0.7164, height 1.0000 (mesh units), rounded
+    // corners of radius 0.0386 (found by tracing where the flat edges end
+    // and the corner arc begins). FRONT_UV_RECT/BACK_UV_RECT are ~839×1266px
+    // of the 1678×1677 atlas — aspect ~0.663, NOT the mesh's true 0.716
+    // aspect. That ~8% mismatch means a plain pixel-space circle or "cover"
+    // fit drawn straight into the rect renders on the actual 3D card
+    // visibly flattened/stretched horizontally. `inMeshSpace` below opens a
+    // per-rect coordinate space that cancels this out, so ordinary isotropic
+    // pixel math inside it comes out true on the rendered card.
+    const CARD_MESH_WIDTH = 0.7164179086685181;
+    const CARD_MESH_HEIGHT = 1.0000001192092896;
+    const CARD_MESH_CORNER_RADIUS = 0.0386; // measured, not guessed
+    const FRAME_MESH = 0.018; // dark frame thickness, same mesh units as above
+    const PAD_MESH = 0.014; // gap between inner card edge and its content
+    const PHOTO_H = 0.6; // photo height as fraction of inner-card height
+
+    // Concentric rounded-rect path (manual — no dependency on ctx.roundRect).
+    const roundRectPath = (x: number, y: number, w: number, h: number, r: number) => {
+      const rr = Math.max(0, Math.min(r, w / 2, h / 2));
+      ctx.beginPath();
+      ctx.moveTo(x + rr, y);
+      ctx.arcTo(x + w, y, x + w, y + h, rr);
+      ctx.arcTo(x + w, y + h, x, y + h, rr);
+      ctx.arcTo(x, y + h, x, y, rr);
+      ctx.arcTo(x, y, x + w, y, rr);
+      ctx.closePath();
+    };
+
+    // Opens the mesh-corrected coordinate space for one UV rect: everything
+    // drawn inside `draw`, using its localW/localH and the meshToLocal(...)
+    // helper for any mesh-unit measurement (like the corner radius), comes
+    // out at the correct real-world proportions once mapped onto the card.
+    const inMeshSpace = (
+      rect: typeof FRONT_UV_RECT,
+      draw: (localW: number, localH: number, meshToLocal: (meshUnits: number) => number) => void
+    ) => {
       const rx = rect.x * W;
       const ry = rect.y * H;
       const rw = rect.w * W;
       const rh = rect.h * H;
-      const pick = imageFit === 'contain' ? Math.min : Math.max;
-      const scale = pick(rw / img.width, rh / img.height);
-      const dw = img.width * scale;
-      const dh = img.height * scale;
-      const dx = rx + (rw - dw) / 2;
-      const dy = ry + (rh - dh) / 2;
+      const scaleX = rw / CARD_MESH_WIDTH;
+      const scaleY = rh / CARD_MESH_HEIGHT;
+      const yRatio = scaleY / scaleX;
       ctx.save();
-      ctx.beginPath();
-      ctx.rect(rx, ry, rw, rh);
-      ctx.clip();
-      ctx.drawImage(img, dx, dy, dw, dh);
+      ctx.translate(rx, ry);
+      ctx.scale(1, yRatio);
+      draw(rw, rh / yRatio, (meshUnits: number) => meshUnits * scaleX);
       ctx.restore();
     };
 
-    if (frontImage && frontTex.image) drawFitted(frontTex.image as HTMLImageElement, FRONT_UV_RECT);
-    if (backImage && backTex.image) drawFitted(backTex.image as HTMLImageElement, BACK_UV_RECT);
+    // Draw an image to "cover" a region (crop, never stretch), anchored to
+    // the top so a portrait crops away the bottom instead of the middle.
+    const coverTopAligned = (
+      img: HTMLImageElement | HTMLCanvasElement,
+      x: number, y: number, w: number, h: number
+    ) => {
+      const pick = imageFit === 'contain' ? Math.min : Math.max;
+      const scale = pick(w / img.width, h / img.height);
+      const dw = img.width * scale;
+      const dh = img.height * scale;
+      ctx.drawImage(img, x + (w - dw) / 2, y, dw, dh);
+    };
+
+    // Full dark fill over the whole face first — the card mesh's own
+    // silhouette is what actually clips this to a rounded shape. Filling
+    // completely (not just a thin border) means the near-black clip/clamp
+    // metal, which sits flush against the card, always meets a matching
+    // dark tone at every edge, so any z-fight flicker there is invisible.
+    const drawDarkFill = (rect: typeof FRONT_UV_RECT) => {
+      const rx = rect.x * W, ry = rect.y * H, rw = rect.w * W, rh = rect.h * H;
+      ctx.fillStyle = CARD_SHADOW;
+      ctx.fillRect(rx, ry, rw, rh);
+    };
+
+    const drawPhotoFace = (rect: typeof FRONT_UV_RECT, img: HTMLImageElement | HTMLCanvasElement) => {
+      drawDarkFill(rect);
+      inMeshSpace(rect, (w, h, toLocal) => {
+        const frame = toLocal(FRAME_MESH);
+        const innerR = Math.max(0, toLocal(CARD_MESH_CORNER_RADIUS) - frame);
+        const ix = frame, iy = frame, iw = w - 2 * frame, ih = h - 2 * frame;
+        ctx.fillStyle = CARD_CREAM;
+        roundRectPath(ix, iy, iw, ih, innerR);
+        ctx.fill();
+
+        const pad = toLocal(PAD_MESH);
+        const photoR = Math.max(0, innerR - pad);
+        const photoX = ix + pad;
+        const photoY = iy + pad;
+        const photoW = iw - 2 * pad;
+        const photoH = ih * PHOTO_H;
+
+        ctx.save();
+        roundRectPath(photoX, photoY, photoW, photoH, photoR);
+        ctx.clip();
+        coverTopAligned(img, photoX, photoY, photoW, photoH);
+        ctx.restore();
+
+        // small bracketed tag in the photo's top-left corner (badge motif)
+        const tagSize = Math.round(ih * 0.032);
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.font = `500 ${tagSize}px "IBM Plex Mono", monospace`;
+        ctx.fillStyle = CARD_CREAM;
+        ctx.globalAlpha = 0.9;
+        ctx.fillText('[ * ]', photoX + pad * 0.5, photoY + pad * 0.5);
+        ctx.globalAlpha = 1;
+
+        // name plate below the photo — sized up and pushed further down into
+        // the previously near-empty lower band so it reads clearly at the
+        // card's actual small on-screen size, not just at full-canvas zoom.
+        const nameSize = Math.round(ih * 0.078);
+        const nameY = photoY + photoH + ih * 0.1;
+        ctx.textBaseline = 'alphabetic';
+        ctx.font = `700 ${nameSize}px "IBM Plex Mono", monospace`;
+        ctx.fillStyle = CARD_SHADOW;
+        ctx.fillText(NAME, photoX, nameY);
+        ctx.fillStyle = CARD_ACCENT;
+        ctx.fillText('*', photoX + ctx.measureText(NAME).width + nameSize * 0.3, nameY - nameSize * 0.06);
+
+        // accent underline
+        ctx.fillStyle = CARD_ACCENT;
+        ctx.fillRect(photoX, nameY + nameSize * 0.42, iw * 0.2, Math.max(2, nameSize * 0.08));
+
+        // role — bigger and noticeably more opaque than before (was 0.5,
+        // easy to lose against the cream card at the card's real render size)
+        const roleSize = Math.round(ih * 0.046);
+        ctx.font = `500 ${roleSize}px "IBM Plex Mono", monospace`;
+        ctx.fillStyle = CARD_SHADOW;
+        ctx.globalAlpha = 0.7;
+        ctx.fillText(ROLE, photoX, nameY + nameSize * 1.05 + roleSize * 1.15);
+        ctx.globalAlpha = 1;
+      });
+    };
+
+    const drawPromptFace = (rect: typeof FRONT_UV_RECT, title: string, sub: string) => {
+      drawDarkFill(rect);
+      inMeshSpace(rect, (w, h, toLocal) => {
+        const frame = toLocal(FRAME_MESH);
+        const innerR = Math.max(0, toLocal(CARD_MESH_CORNER_RADIUS) - frame);
+        ctx.fillStyle = CARD_CREAM;
+        roundRectPath(frame, frame, w - 2 * frame, h - 2 * frame, innerR);
+        ctx.fill();
+
+        const cx = w / 2;
+        const cy = h / 2;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        const titleSize = Math.round(h * 0.075);
+        ctx.fillStyle = CARD_ACCENT;
+        ctx.font = `700 ${titleSize}px "IBM Plex Mono", monospace`;
+        ctx.fillText('*', cx, cy - titleSize * 1.6);
+
+        ctx.fillStyle = CARD_SHADOW;
+        ctx.fillText(title, cx, cy - titleSize * 0.2);
+
+        const subSize = Math.round(h * 0.038);
+        ctx.font = `400 ${subSize}px "IBM Plex Mono", monospace`;
+        ctx.globalAlpha = 0.55;
+        ctx.fillText(sub, cx, cy + titleSize * 0.9);
+        ctx.globalAlpha = 1;
+        ctx.textAlign = 'left';
+      });
+    };
+
+    const frontPhoto =
+      frontImage && frontTex.image
+        ? createDuotoneImage(uprightForPortrait(frontTex.image as HTMLImageElement), CARD_SHADOW, CARD_CREAM)
+        : null;
+    const backPhoto =
+      backImage && backTex.image
+        ? createDuotoneImage(uprightForPortrait(backTex.image as HTMLImageElement), CARD_SHADOW, CARD_CREAM)
+        : null;
+
+    if (frontPhoto) drawPhotoFace(FRONT_UV_RECT, frontPhoto);
+    else drawPromptFace(FRONT_UV_RECT, FRONT_PROMPT.title, FRONT_PROMPT.sub);
+
+    if (backPhoto) drawPhotoFace(BACK_UV_RECT, backPhoto);
+    else drawPromptFace(BACK_UV_RECT, 'TWOJE ZDJĘCIE', 'podmień: frontImage / backImage');
 
     const composite = new THREE.CanvasTexture(canvas);
     composite.colorSpace = THREE.SRGBColorSpace;
@@ -313,7 +549,7 @@ function Band({
     composite.anisotropy = 16;
     composite.needsUpdate = true;
     return composite;
-  }, [frontImage, backImage, imageFit, frontTex, backTex, materials.base.map]);
+  }, [frontImage, backImage, imageFit, frontTex, backTex, materials.base.map, lang]);
   const [curve] = useState(() => {
     const c = new THREE.CatmullRomCurve3([
       new THREE.Vector3(),
@@ -345,6 +581,29 @@ function Band({
   }, [hovered, dragged]);
 
   useFrame((state, delta) => {
+    // Keep the card's actual visible edges (not just its origin point) away
+    // from the canvas's true edge on all four sides — a <canvas> only ever
+    // draws inside its own pixel rect, so anything that swings past it isn't
+    // "hidden" by CSS, it's simply never drawn there at all. No overflow or
+    // clip-path rule can put those pixels back; the only fix is keeping the
+    // card inside the frame in the first place. state.viewport gives the
+    // *live* world-space size of that frame at the card's distance — computed
+    // fresh every frame straight from the real camera/canvas, so this stays
+    // correct across resizes without duplicating fov/aspect trig by hand.
+    const halfW = state.viewport.width / 2;
+    const halfH = state.viewport.height / 2;
+    // General safety margin on the sides with no other constraint (left,
+    // right, bottom). The top uses dragCeilingFraction instead when given —
+    // that one is tied to a specific CSS crop (see HeroLanyard.module.css)
+    // rather than a generic margin.
+    const EDGE_MARGIN = 0.06;
+    const maxX = halfW * (1 - EDGE_MARGIN) - CARD_VISUAL_HALF_WIDTH;
+    const minX = -maxX;
+    const minY = -halfH * (1 - EDGE_MARGIN) - CARD_VISUAL_BOTTOM_OFFSET;
+    const maxY = dragCeilingFraction != null
+      ? halfH - dragCeilingFraction * halfH * 2 - CARD_VISUAL_TOP_OFFSET
+      : halfH * (1 - EDGE_MARGIN) - CARD_VISUAL_TOP_OFFSET;
+
     if (dragged && typeof dragged !== 'boolean') {
       // state.pointer is normalized to the canvas's own rect ([-1, 1] on
       // each axis exactly at its edges) — once the cursor leaves that rect
@@ -361,10 +620,29 @@ function Band({
         vec.add(dir.multiplyScalar(state.camera.position.length()));
         [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
         card.current?.setNextKinematicTranslation({
-          x: vec.x - dragged.x,
-          y: vec.y - dragged.y,
+          x: Math.min(Math.max(vec.x - dragged.x, minX), maxX),
+          y: Math.min(Math.max(vec.y - dragged.y, minY), maxY),
           z: vec.z - dragged.z,
         });
+      }
+    } else if (card.current) {
+      // Not being dragged — the pendulum swings freely under the physics
+      // solver and can overshoot past any of these lines on momentum alone
+      // (e.g. right after a drag-release, or during the initial drop). The
+      // drag path above only clamps the *target* while a kinematic drag is
+      // driving it; a free (dynamic) swing needs its own correction, so
+      // gently stop it at the same lines instead of letting it swing into
+      // the part of the scene the canvas never draws.
+      const t = card.current.translation();
+      const cx = Math.min(Math.max(t.x, minX), maxX);
+      const cy = Math.min(Math.max(t.y, minY), maxY);
+      if (cx !== t.x || cy !== t.y) {
+        card.current.setTranslation({ x: cx, y: cy, z: t.z }, true);
+        const v = card.current.linvel();
+        card.current.setLinvel(
+          { x: cx !== t.x ? 0 : v.x, y: cy !== t.y ? 0 : v.y, z: v.z },
+          true
+        );
       }
     }
     if (fixed.current) {

@@ -108,6 +108,12 @@
   overflow: hidden;
   height: 100%;
 }
+.terminalCard.dense {
+  padding: 1.25rem 1.5rem;
+}
+.terminalCard.dense .terminalTitle {
+  margin-bottom: 0.25rem;
+}
 .halftoneBg {
   position: absolute;
   inset: 0;
