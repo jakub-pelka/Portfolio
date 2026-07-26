@@ -11,7 +11,7 @@ const SNAP_THRESHOLD = 240;
 // Breathing room when header is hidden
 const NO_HEADER_MARGIN = 24;
 
-function getHeaderHeight(): number {
+export function getHeaderHeight(): number {
   const header = document.querySelector<HTMLElement>('[data-header-visible]');
   if (!header) return 0;
   return header.getBoundingClientRect().height;

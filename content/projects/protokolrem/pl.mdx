@@ -1,0 +1,115 @@
+---
+title: "PROTOKÓŁ REM"
+description: "Sklep z merchem fikcyjnego podcastu, zbudowany w PrestaShop od zera — z realną integracją płatności w trybie sandbox, żeby nauczyć się architektury prawdziwego e-commerce zamiast luźnych ćwiczeń."
+
+facts:
+  - label: "ROLA"
+    value: "FULL-STACK DEVELOPER (SOLO)"
+  - label: "CZAS"
+    value: "LIPIEC 2026 (~2 TYGODNIE, W TOKU)"
+  - label: "KONTEKST"
+    value: "FIKCYJNY BRIEF KLIENCKI / NAUKA PRZEZ BUDOWĘ"
+  - label: "STATUS"
+    value: "IN PROGRESS"
+
+process:
+  - type: decision
+    title: "TPAY_ZAMIAST_STRIPE"
+    content: "Stripe wymagał integracji od zera (oficjalny moduł do PrestaShop martwy od 2023), PayPal działał natywnie ale mniej pasował do sklepu po polsku. Tpay dał aktywnie utrzymywany moduł z jawnym wsparciem PS9 i w pełni self-service sandbox bez weryfikacji."
+    anchor: "platnosci"
+  - type: decision
+    title: "NATYWNY_CHECKOUT"
+    content: "Gotowy mockup checkoutu spłaszczał layout w jeden widok, ale natywny akordeon PrestaShop działa przez AJAX opięty o hooki i atrybuty data-*. Zachowany akordeon, zrestylowany czystym CSS — jedyny override to pasek ostrzegawczy sandbox."
+    anchor: "checkout"
+  - type: decision
+    title: "CSS_ONLY_OVERRIDE"
+    content: "Restyling przez motyw-dziecko i override'y Smarty, zero zmian w rdzeniu PrestaShop — żeby panel administracyjny został w pełni zarządzalny, a nie zamienił się w hardkodowaną makietę."
+    anchor: "architektura"
+---
+
+<SectionHeader num="01" title="PROBLEM" />
+
+<SplitLayout>
+  <ContentLeft>
+    <QuoteBlock>
+      "Chciałem nauczyć się PrestaShop nie przez luźne ćwiczenia, tylko przez zbudowanie sklepu, który realnie działa — od katalogu po płatność."
+    </QuoteBlock>
+
+    <BoxGrid>
+      <ProcessBox title="ZAŁOŻENIE">
+        Fikcyjny brief klienta: twórca podcastu potrzebuje klikalnego, wiarygodnie wyglądającego prototypu sklepu z merchem, żeby pokazać go partnerom — z płatnościami w trybie sandbox, zanim padnie decyzja o realnej sprzedaży.
+      </ProcessBox>
+      <ProcessBox title="CEL NAUKI">
+        Architektura modułów i hooków PrestaShop, obsługa płatności, panel administracyjny — nie przez dokumentację, tylko przez realny projekt z ograniczeniami prawdziwego klienta.
+      </ProcessBox>
+    </BoxGrid>
+  </ContentLeft>
+</SplitLayout>
+
+<SectionHeader num="02" title="PŁATNOŚCI" id="platnosci" />
+
+<SplitLayout>
+  <ContentLeft>
+    Klient wprost wymagał, żeby proces płatności wyglądał i działał jak produkcyjny, bez ryzyka prawdziwych transakcji. Stripe odpadł szybko — oficjalny moduł do PrestaShop martwy od 2023, integracja oznaczałaby pisanie bramki od zera tylko po to, żeby dostać działające demo. PayPal Sandbox miał natywne wsparcie, ale Tpay — polska bramka z aktywnie utrzymywanym modułem i jawnym wsparciem PS9 — okazał się trafniejszym wyborem.
+
+    <ProcessCard type="decision" title="TPAY_ZAMIAST_STRIPE">
+      Aktywnie rozwijany moduł plus w pełni self-service sandbox (żadnych dokumentów weryfikacyjnych, tylko dane firmy) pozwoliły uniknąć pisania integracji płatności od zera, a przy okazji dały bardziej realistyczny wybór dla sklepu po polsku niż Stripe czy PayPal.
+    </ProcessCard>
+  </ContentLeft>
+
+  <ContentRight>
+    <ProcessCard type="insight" title="SANDBOX BEZ TARCIA">
+      Brak weryfikacji dokumentów w Tpay sandbox oznaczał, że cały proces integracji dało się przejść od razu, zamiast czekać na akceptację konta testowego.
+    </ProcessCard>
+  </ContentRight>
+</SplitLayout>
+
+<SectionHeader num="03" title="CHECKOUT" id="checkout" />
+
+<SplitLayout>
+  <ContentLeft>
+    Do przełożenia na kod był gotowy hi-fi mockup checkoutu — spłaszczony layout, jeden ciągły widok zamiast kroków. Ale checkout `classic` w PrestaShop działa w całości przez AJAX opięty o konkretne hooki i atrybuty `data-*` w istniejącym markupie. Przepisanie struktury pod mockup oznaczałoby odtworzenie tego mechanizmu od zera tylko dla zmiany wizualnej.
+
+    <ProcessCard type="decision" title="NATYWNY_AKORDEON">
+      Zachowany natywny akordeon kroków (Adres → Dostawa → Płatność) — jedyny override to nowy plik Smarty dopisujący pasek ostrzegawczy sandbox, reszta to czysty CSS (np. podświetlanie wybranej metody przez `:has(input:checked)`).
+    </ProcessCard>
+  </ContentLeft>
+
+  <ContentRight>
+    <QuoteBlock>
+      Wygląd dostosowany do projektu, mechanika zostawiona nietknięta — zbyt duże ryzyko dla demo, żeby dla samej estetyki odtwarzać mechanizm AJAX od zera.
+    </QuoteBlock>
+  </ContentRight>
+</SplitLayout>
+
+<SectionHeader num="04" title="ARCHITEKTURA" id="architektura" />
+
+<SplitLayout>
+  <ContentLeft>
+    Cały motyw wymagał głębokiego restylingu pod autorski kierunek wizualny "odtajnione akta sprawy" — ale sklep musiał zostać w pełni zarządzalny z panelu administracyjnego. To była realnie najtrudniejsza część całego projektu.
+
+    <ProcessCard type="decision" title="CSS-ONLY, NIGDY RDZEŃ">
+      Zamiast edytować pliki rdzenia PrestaShop, konsekwentnie użyty motyw-dziecko nad `classic`, override'y Smarty (extends + block) i hooki własnego modułu. Żadna zmiana wizualna nie hardkodowała treści, która powinna zostać edytowalna.
+    </ProcessCard>
+  </ContentLeft>
+
+  <ContentRight>
+    <ProcessCard type="insight" title="PRZYKŁAD">
+      Przy scalaniu dwóch pasków nagłówka w jeden rząd hooki menu, kontaktu i logo zostały nietknięte — pozycje menu i dane kontaktowe nadal edytowalne z Back Office.
+    </ProcessCard>
+  </ContentRight>
+</SplitLayout>
+
+<SectionHeader num="05" title="WYZWANIA" id="wyzwania" />
+
+<ProcessCard type="problem" title="DYSCYPLINA, NIE BUGI">
+  Bez większych walk technicznych w sensie "coś nie działało" — realnym wyzwaniem było utrzymanie samoograniczenia: żeby każda zmiana wizualna była kompatybilna z istniejącymi mechanizmami PrestaShop i nie odbierała możliwości zarządzania sklepem z panelu administracyjnego.
+</ProcessCard>
+
+<SectionHeader num="06" title="REFLEKSJA" id="refleksja" />
+
+Największym zaskoczeniem było tempo pracy. Dotychczasowe doświadczenie to głównie budowanie rzeczy czysto w kodzie od zera — nieoczekiwane było, jak bardzo przyspiesza pracę gotowy, dojrzały panel zarządzania PrestaShop (katalog, zamówienia, konfiguracja). Zamiast budować to wszystko samemu, dało się skupić na integracji płatności i warstwie wizualnej.
+
+<OutcomeBanner statusTag="IN_PROGRESS" githubUrl="https://github.com/jakub-pelka/prestashop" liveUrl="https://protokolrem.pl">
+  Sklep jest publiczny i można go realnie przejść od katalogu przez koszyk po checkout z płatnością w sandboksie — wdrożony przez CI/CD (GitHub Actions → Cyberfolks). To pole eksperymentalne, nie prawdziwy biznes, więc bez twardych liczb sprzedażowych — efekt mierzalny inaczej: działający prototyp e-commerce jako dowód zrozumienia architektury PrestaShop.
+</OutcomeBanner>

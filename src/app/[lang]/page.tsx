@@ -5,6 +5,7 @@ import { Hero } from '@/components/home/Hero';
 import { ProjectTimeline } from '@/components/home/ProjectTimeline';
 import { ServicesSection } from '@/components/home/ServicesSection';
 import { AboutSection } from '@/components/home/AboutSection';
+import { PortfolioLanyard } from '@/components/home/PortfolioLanyard';
 import { DevTweak } from '@/components/dev/DevTweak';
 import { getAllProjects } from '@/lib/projects/loader';
 import { getDictionary } from '@/i18n/get-dictionary';
@@ -75,15 +76,18 @@ export default async function Home({
   ]);
 
   return (
-    <main>
+    <main style={{ position: 'relative' }}>
       <Hero scrollLabel={dict.hero.cta_projects} />
       <ProjectTimeline lang={lang} projects={projects} />
       <ServicesSection lang={lang} />
-      <AboutSection lang={lang}>
+      <AboutSection>
         <h2>{dict.about.heading}</h2>
         <p dangerouslySetInnerHTML={{ __html: dict.about.p1 }} />
         <p>{dict.about.p2}</p>
       </AboutSection>
+      {/* Single, permanently-mounted lanyard card — see PortfolioLanyard.tsx
+          for why this lives here rather than inside Hero/AboutSection. */}
+      <PortfolioLanyard lang={lang} />
       <DevTweak />
     </main>
   );

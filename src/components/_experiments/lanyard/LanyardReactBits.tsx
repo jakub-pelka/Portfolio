@@ -102,13 +102,18 @@ interface LanyardProps {
   lanyardWidth?: number;
   className?: string;
   // Fraction of the frame height, measured from the top, that the card can't
-  // be dragged above — meant to match a CSS crop (e.g. HeroLanyard.module.css's
-  // translateY) so dragging can never pull the card into a clipped, invisible
+  // be dragged above — meant to match a CSS crop (e.g. PortfolioLanyard's
+  // HERO_CLIP) so dragging can never pull the card into a clipped, invisible
   // region. 0 = top of frame, 1 = bottom. Omit/null for no limit (playground).
   dragCeilingFraction?: number | null;
   // Locale for the card's own on-canvas prompt text (front face when no
   // frontImage is supplied). Defaults to 'pl'.
   lang?: 'pl' | 'en';
+  // Fired on a plain tap/click (the same gesture that triggers the flip —
+  // see the onPointerUp handler in Band below), in addition to the flip
+  // itself. Lets a page-level orchestrator (PortfolioLanyard) hook into the
+  // click without this component knowing anything about flights/scrolling.
+  onFlipClick?: () => void;
 }
 
 function LanyardCanvas({
@@ -123,6 +128,7 @@ function LanyardCanvas({
   lanyardWidth = 1,
   dragCeilingFraction = null,
   lang = 'pl',
+  onFlipClick,
 }: LanyardProps) {
   const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
@@ -151,6 +157,7 @@ function LanyardCanvas({
             lanyardWidth={lanyardWidth}
             dragCeilingFraction={dragCeilingFraction}
             lang={lang}
+            onFlipClick={onFlipClick}
           />
         </Physics>
         <Environment blur={0.2}>
@@ -220,6 +227,7 @@ interface BandProps {
   lanyardWidth?: number;
   dragCeilingFraction?: number | null;
   lang?: 'pl' | 'en';
+  onFlipClick?: () => void;
 }
 
 type LanyardRigidBody = RapierRigidBody & {
@@ -237,6 +245,7 @@ function Band({
   lanyardWidth = 1,
   dragCeilingFraction = null,
   lang = 'pl',
+  onFlipClick,
 }: BandProps) {
   const band = useRef<THREE.Mesh<InstanceType<typeof MeshLineGeometry>, InstanceType<typeof MeshLineMaterial>>>(
     null!
@@ -594,7 +603,7 @@ function Band({
     const halfH = state.viewport.height / 2;
     // General safety margin on the sides with no other constraint (left,
     // right, bottom). The top uses dragCeilingFraction instead when given —
-    // that one is tied to a specific CSS crop (see HeroLanyard.module.css)
+    // that one is tied to a specific CSS crop (see PortfolioLanyard's HERO_CLIP)
     // rather than a generic margin.
     const EDGE_MARGIN = 0.06;
     const maxX = halfW * (1 - EDGE_MARGIN) - CARD_VISUAL_HALF_WIDTH;
@@ -741,6 +750,8 @@ function Band({
                 err = Math.atan2(Math.sin(err), Math.cos(err));
                 const flipDir = Math.sign(err) || 1;
                 card.current.applyTorqueImpulse({ x: 0, y: flipDir * FLIP_IMPULSE, z: 0 }, true);
+
+                onFlipClick?.();
               }
             }}
             onPointerDown={(e: ThreeEvent<PointerEvent>) => {

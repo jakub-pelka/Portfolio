@@ -1,0 +1,21 @@
+.mount {
+  /* Absolute relative to <main> (position:relative, see page.tsx). top/left/
+     width/height are set imperatively in PortfolioLanyard.tsx to match
+     whichever slot (#hero-lanyard-slot / #about-lanyard-slot) is current —
+     this is the only DOM location this card ever lives in; "moving" between
+     sections is purely this box's position changing, never a React
+     unmount/remount, so the WebGL context and physics simulation are never
+     disturbed. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+/* Mirrors both slots' own mobile breakpoint — the card doesn't exist on
+   small screens (matches the previous HeroLanyard/AboutLanyard behavior). */
+@media (max-width: 768px) {
+  .mount {
+    display: none;
+  }
+}

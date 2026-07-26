@@ -1,0 +1,13 @@
+{
+  "slug": "protokolrem",
+  "status": "in-progress",
+  "featured": false,
+  "date": "2026-07-10",
+  "order": 4,
+  "thumbnail": "./assets/thumbnail.png",
+  "tags": ["PrestaShop", "PHP", "Smarty", "MariaDB", "Docker", "Tpay", "GitHub Actions"],
+  "links": {
+    "github": "https://github.com/jakub-pelka/prestashop",
+    "live": "https://protokolrem.pl"
+  }
+}

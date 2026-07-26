@@ -105,6 +105,13 @@
   padding: 2rem;
   background-color: var(--color-bg-secondary);
   position: relative;
+  /* z-index (any value) turns this into its own stacking context, containing
+     .terminalCardContent's z-index:10 (needed to sit above .halftoneBg)
+     locally. Without it, that z-index:10 has nothing to be relative to
+     *inside* this component and escapes all the way to the root stacking
+     context — where it was outranking unrelated positioned content
+     elsewhere on the page, e.g. the homepage's PortfolioLanyard card. */
+  z-index: 0;
   overflow: hidden;
   height: 100%;
 }

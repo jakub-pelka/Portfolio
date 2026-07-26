@@ -7,6 +7,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--tweak-section-gap, 5rem);
+  /* Positioning context for .lanyardSlot, which anchors to this section's
+     top border — the divider line the lanyard visually hangs from. */
+  position: relative;
 }
 
 .textRow {
@@ -16,7 +19,7 @@
 }
 
 .text {
-  /* Fixed-width sidebar (AboutLanyard, flex-shrink:0) + flexible main content
+  /* Fixed-width sidebar (.lanyardSlot, flex-shrink:0) + flexible main content
      is the standard pattern here: .text always gets "whatever's left after
      the card", so the card's own width/scale can never squeeze or resize it.
      min-width:0 lets a flex item shrink below its content's intrinsic width
@@ -25,10 +28,43 @@
   flex: 1 1 auto;
   min-width: 0;
   max-width: 48rem;
-  /* Stacking context above AboutLanyard (z-index:1) — the card's translateY
-     intentionally hangs it up over this row, and it must never cover the text. */
-  position: relative;
-  z-index: 2;
+  /* No z-index here on purpose — the card (PortfolioLanyard, z-index:1) is
+     meant to render as a physical object hanging in FRONT of this section's
+     content, text included, not tucked behind it. */
+}
+
+/* Empty position reference for PortfolioLanyard (see AboutSection.tsx) — the
+   real card lives in PortfolioLanyard.tsx and only reads this box's rect.
+   Absolutely positioned so it reserves NO layout space: the card's box is
+   ~880px tall, and as a flex item that height pushed everything below the bio
+   (the tech grid) down by roughly that much for no visual reason.
+   X reuses --tweak-lanyard-x/the same left% + translateX(-50%) centering
+   Hero.module.css's .lanyardSlot uses (rather than an independent variable),
+   so the card lands at the same horizontal spot in both homes by construction
+   — .section and .hero are both full-width blocks with the same default
+   padding (--tweak-section-px/--space-4, both 4rem), so a % of one's padding
+   box matches the other's almost exactly.
+   Y is anchored to the section's top border — the divider line the lanyard
+   hangs from — so --tweak-about-lanyard-y is measured from that line and is
+   independent from Hero's own Y (a %, measured from a different reference).
+   The default is negative (the box sits mostly above the line) so the card
+   lands at a comfortable height next to the bio text; PortfolioLanyard.tsx
+   clips off whatever part of the box pushes above the line itself, so the
+   strap never runs into the section above no matter how negative this gets. */
+.lanyardSlot {
+  position: absolute;
+  top: 0;
+  left: var(--tweak-lanyard-x, 85%);
+  width: calc(clamp(360px, 38vw, 620px) * var(--tweak-lanyard-scale, 1.2) * var(--tweak-about-lanyard-scale, 1));
+  aspect-ratio: 3 / 4;
+  transform: translate(-50%, var(--tweak-about-lanyard-y, -232px));
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .lanyardSlot {
+    display: none;
+  }
 }
 
 .text h2 {

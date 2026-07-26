@@ -1,11 +1,9 @@
 import { Tag } from '@/components/mdx/Primitives';
 import { TerminalCard } from '@/components/mdx/TerminalCard';
-import { AboutLanyard } from './AboutLanyard';
 import styles from './AboutSection.module.css';
 
 interface AboutSectionProps {
   children: React.ReactNode;
-  lang: string;
 }
 
 /** One category row with the label and its tags on the same line, so the card
@@ -19,14 +17,18 @@ function TechRow({ label, children }: { label: string; children: React.ReactNode
   );
 }
 
-export function AboutSection({ children, lang }: AboutSectionProps) {
+export function AboutSection({ children }: AboutSectionProps) {
   return (
-    <section className={styles.section}>
+    <section id="about" className={styles.section}>
       <div className={styles.textRow}>
         <div className={styles.text}>
           {children}
         </div>
-        <AboutLanyard lang={lang} />
+        {/* Empty placeholder — reserves layout space and gives PortfolioLanyard
+            (mounted once in page.tsx) a position reference. The actual live
+            card lives outside this section's DOM so it's never unmounted
+            when it "arrives" here after flying from Hero; see PortfolioLanyard.tsx. */}
+        <div id="about-lanyard-slot" className={styles.lanyardSlot} />
       </div>
 
       <div className={styles.grid}>
