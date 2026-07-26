@@ -19,7 +19,7 @@
   position: absolute;
   top: 0;
   left: var(--tweak-lanyard-x, 85%);
-  transform: translate(-50%, var(--tweak-lanyard-y, -15%));
+  transform: translate(-50%, var(--tweak-lanyard-y, 80%));
   width: calc(clamp(360px, 38vw, 620px) * var(--tweak-lanyard-scale, 1.2));
   aspect-ratio: 3 / 4;
 }

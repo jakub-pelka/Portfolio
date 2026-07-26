@@ -46,9 +46,13 @@ type RenderState = 'restingHero' | 'transit' | 'restingAbout';
 // scrolls back into view in About, with the swap never visible. Nothing is
 // pinned or animated: scroll past About and it just keeps scrolling away.
 //
-// The one exception is the click: the card holds the exact screen spot it was
-// clicked at (position:fixed) while a smooth scroll carries the page down to
-// About underneath it, then drops into its About home once the scroll lands.
+// The one exception is the click: the card switches to position:fixed and
+// rides the scroll down to About, X held constant (Hero and About share the
+// same --tweak-lanyard-x, so it's already correct) while Y eases from Hero's
+// click-time spot to About's resting spot over the same duration as the
+// scroll itself — the two homes sit at slightly different heights by design
+// (Hero's is lower, to look right on an otherwise-empty page; About's sits
+// right at the divider line), so animating Y avoids a pop at the end.
 export function PortfolioLanyard({ lang }: { lang: string }) {
   const [mounted, setMounted] = useState(false);
   const [renderState, setRenderState] = useState<RenderState>('restingHero');
@@ -146,8 +150,9 @@ export function PortfolioLanyard({ lang }: { lang: string }) {
       if (transiting.current) {
         setRenderStateIfChanged('transit');
         el.style.position = 'fixed';
-        el.style.top = `${clickFixedPos.current.y}px`;
         el.style.left = `${clickFixedPos.current.x}px`;
+        // top is intentionally left alone here — the Y-tween in handleClick
+        // owns it exclusively for the duration of the transit.
         return;
       }
 
@@ -188,14 +193,26 @@ export function PortfolioLanyard({ lang }: { lang: string }) {
 
     const el = mountRef.current;
     const about = document.getElementById('about');
-    if (!el || !about) return;
+    const aboutSlot = document.getElementById('about-lanyard-slot');
+    if (!el || !about || !aboutSlot) return;
 
     const rect = el.getBoundingClientRect();
+    // Where the card should be on screen once the scroll below finishes.
+    // aboutSlot's rect relative to about's own rect is scroll-invariant (both
+    // read in the same tick), and the scroll always ends with about's top at
+    // exactly 0 (offsetY:0, see below) — so that delta already *is* the final
+    // on-screen Y, without needing to wait for the scroll to actually land.
+    const targetY = aboutSlot.getBoundingClientRect().top - about.getBoundingClientRect().top;
+
     clickFixedPos.current = { x: rect.left, y: rect.top };
+    el.style.top = `${rect.top}px`;
     transiting.current = true;
     // Pin to the current screen spot before the scroll starts, so the card
-    // doesn't drift for even one frame.
+    // doesn't drift for even one frame; top stays under the Y-tween's control
+    // below, not this call's (see the transit branch in applyPosition).
     applyPositionRef.current?.();
+
+    const yState = { y: rect.top };
 
     const endTransit = () => {
       if (transitTimer.current) {
@@ -203,13 +220,28 @@ export function PortfolioLanyard({ lang }: { lang: string }) {
         transitTimer.current = null;
       }
       transiting.current = false;
-      // Drops the card into its About home — the one reposition of the whole
-      // journey, deliberately at the end (it holds its Hero spot the entire
-      // way down rather than shifting under the pointer at click time).
+      yTween.kill();
+      // Drops the card into its About home (position:absolute, document
+      // coordinates) — the Y-tween above only ever drove an on-screen
+      // approximation of that, so this also settles any rounding drift.
       applyPositionRef.current?.(true);
     };
 
     transitTimer.current = setTimeout(endTransit, TRANSIT_TIMEOUT_MS);
+
+    // Two independent tweens sharing duration+ease rather than one timeline —
+    // GSAP's ticker updates both in the same animation frame regardless, so
+    // they stay in lockstep either way, and autoKill below only ever needs to
+    // reach into the scrollTo tween.
+    const yTween = gsap.to(yState, {
+      y: targetY,
+      duration: SCROLL_DURATION,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        el.style.top = `${yState.y}px`;
+      },
+    });
+
     gsap.to(window, {
       // offsetY:0 — the header (position:fixed) hides itself on scroll-down
       // (see SiteHeader), so by the time this lands there's nothing to
@@ -236,10 +268,10 @@ export function PortfolioLanyard({ lang }: { lang: string }) {
         // About, aboutClip hides whatever slice of the box sits above the
         // divider line (see restAt) instead of a flat fraction like Hero's.
         clipPath: renderState === 'restingAbout' ? `inset(${aboutClip}px 0 0 0)` : HERO_CLIP,
-        // 1 at rest — deliberately *below* AboutSection's .text (z-index:2),
-        // which must stay readable where the card hangs over that row. 50 only
-        // during the transit, so it visibly passes over ProjectTimeline /
-        // ServicesSection content instead of tucking behind it.
+        // 1 at rest, above AboutSection's own content (which has no z-index of
+        // its own) — the card hangs in front of the bio text and tech grid
+        // alike, like a physical object would. 50 only during the transit, so
+        // it visibly passes over ProjectTimeline/ServicesSection content too.
         zIndex: renderState === 'transit' ? 50 : 1,
         // Only blocked while passing over other sections' content — dragging
         // and flipping stay available at rest in either home.

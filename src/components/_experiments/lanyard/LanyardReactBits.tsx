@@ -51,6 +51,40 @@ const CARD_VISUAL_TOP_OFFSET = 1.1015;
 const CARD_VISUAL_BOTTOM_OFFSET = -1.1485;
 const CARD_VISUAL_HALF_WIDTH = 0.806;
 
+// Angle (from horizontal) the rope chain is laid out along before gravity
+// takes over on the first physics step. Stock react-bits lays it out flat
+// (0°), which starts the card level with its anchor and already inside the
+// frame — so on mount it pops into view half-visible and only then falls.
+// Starting it up above the frame instead means the drop-in enters from
+// off-screen, which is the whole point of this constant.
+// The chain starts fully extended (the rope joints below are max-distance-1
+// constraints, so each link sits exactly 1 unit further along this direction)
+// and the card hangs 1.45 under the last link — the spherical joint's anchor
+// offset — so the card's origin starts at world y = 4 + 3·sin(θ) − 1.45,
+// where 4 is the <group> the whole assembly lives in.
+// At 75° that lands at ≈5.45, putting the card's bottom edge
+// (CARD_VISUAL_BOTTOM_OFFSET) at ≈4.30. With the camera at z=30 / fov 20°
+// the frame's half-height is 30·tan(10°) ≈ 5.29, and PortfolioLanyard's
+// HERO_CLIP hides the top 15% of it — everything above y ≈ 3.70 — so the card
+// clears that line by ≈0.6 world units (~50px in Hero's box) and is fully
+// hidden until it falls. Deliberately not 90°: straight up is an inverted
+// pendulum, which can sit there balanced or topple to either side at random
+// instead of swinging the same way every load.
+const INTRO_ANGLE_DEG = 75;
+const INTRO_STEP_X = Math.cos((INTRO_ANGLE_DEG * Math.PI) / 180);
+const INTRO_STEP_Y = Math.sin((INTRO_ANGLE_DEG * Math.PI) / 180);
+/** Nth rope link's starting position; n = 1..3 (the fixed anchor is n = 0). */
+const introLink = (n: number): [number, number, number] => [
+  INTRO_STEP_X * n,
+  INTRO_STEP_Y * n,
+  0,
+];
+const INTRO_CARD_POSITION: [number, number, number] = [
+  INTRO_STEP_X * 3,
+  INTRO_STEP_Y * 3 - 1.45,
+  0,
+];
+
 extend({ MeshLineGeometry, MeshLineMaterial });
 
 // Force an image upright for the portrait card slot. Phone photos often decode
@@ -283,6 +317,15 @@ function Band({
   const HOLD_TO_DRAG_MS = 180;
   const dragTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingDragOffset = useRef(new THREE.Vector3());
+
+  // The card starts above the frame (see INTRO_ANGLE_DEG) so it drops into
+  // view rather than popping in already half-visible — but the free-swing
+  // ceiling in useFrame would snap it back down on the very first physics
+  // step and undo exactly that. So the ceiling stays disarmed until the card
+  // has fallen below it once under its own weight; from then on it behaves as
+  // before, catching drag-release overshoot. One-way on purpose: re-disarming
+  // it would let a hard throw escape off the top of the frame.
+  const ceilingArmed = useRef(false);
 
   // Bistable "flip" mechanic. The card has two rest orientations: facing the
   // camera (front, Y-angle 0) and turned around (back, Y-angle π). A click
@@ -643,8 +686,13 @@ function Band({
       // gently stop it at the same lines instead of letting it swing into
       // the part of the scene the canvas never draws.
       const t = card.current.translation();
+      if (!ceilingArmed.current && t.y <= maxY) ceilingArmed.current = true;
       const cx = Math.min(Math.max(t.x, minX), maxX);
-      const cy = Math.min(Math.max(t.y, minY), maxY);
+      // Floor and sides always apply; the ceiling only once armed (see
+      // ceilingArmed) — until then the card is still dropping in from above.
+      const cy = ceilingArmed.current
+        ? Math.min(Math.max(t.y, minY), maxY)
+        : Math.max(t.y, minY);
       if (cx !== t.x || cy !== t.y) {
         card.current.setTranslation({ x: cx, y: cy, z: t.z }, true);
         const v = card.current.linvel();
@@ -701,19 +749,19 @@ function Band({
         <RigidBody ref={fixed} {...segmentProps} type="fixed">
           <group ref={fixedObj} />
         </RigidBody>
-        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type="dynamic">
+        <RigidBody position={introLink(1)} ref={j1} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
           <group ref={j1Obj} />
         </RigidBody>
-        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps} type="dynamic">
+        <RigidBody position={introLink(2)} ref={j2} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
           <group ref={j2Obj} />
         </RigidBody>
-        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps} type="dynamic">
+        <RigidBody position={introLink(3)} ref={j3} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
           <group ref={j3Obj} />
         </RigidBody>
-        <RigidBody position={[2, 0, 0]} ref={card} {...segmentProps} type={dragged ? 'kinematicPosition' : 'dynamic'}>
+        <RigidBody position={INTRO_CARD_POSITION} ref={card} {...segmentProps} type={dragged ? 'kinematicPosition' : 'dynamic'}>
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group
             scale={2.25}
