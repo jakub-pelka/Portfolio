@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 import { IBM_Plex_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
@@ -76,6 +77,7 @@ export default async function LangLayout({
           {children}
           <SiteFooter lang={lang} projects={projects} />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

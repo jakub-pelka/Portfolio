@@ -104,7 +104,18 @@ export default async function ProjectPage({
 
           {/* MDX Body - Tu dzieje się magia komponentowa */}
           <div className={editorStyles.projectBody}>
-            <MDXRemote source={project.content.body} components={mergedComponents as any} />
+            <MDXRemote
+              source={project.content.body}
+              components={mergedComponents as any}
+              // next-mdx-remote@6 strips JSX expression attributes (e.g.
+              // columns={2}, images={[...]}) by default and silently falls
+              // back to the component's own default — no error anywhere, the
+              // prop is just gone. Safe to disable here: this MDX is
+              // author-only project content, never visitor input.
+              // blockDangerousJS stays at its default (true), so eval/
+              // Function/process/require are still blocked.
+              options={{ blockJS: false }}
+            />
           </div>
           
         </main>
