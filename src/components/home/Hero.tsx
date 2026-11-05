@@ -51,9 +51,10 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
     const splitFirst = new SplitType(firstNameRef.current, { types: 'chars' });
     const splitLast = new SplitType(lastNameRef.current, { types: 'chars' });
 
-    // Jeśli user wrócił na stronę i jest już poniżej Hero — pokaż końcowy stan bez animacji
+    // Jeśli user ma włączone prefers-reduced-motion lub wrócił na stronę i jest już poniżej Hero — pokaż końcowy stan bez animacji
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isScrolledPast = window.scrollY > window.innerHeight * 0.3;
-    if (isScrolledPast) {
+    if (isScrolledPast || prefersReducedMotion) {
       gsap.set(heyRef.current, { opacity: 1, x: 0, y: 0, skewX: -15, transformOrigin: 'bottom center' });
       gsap.set(nameContainerRef.current, { opacity: 1 });
       gsap.set([...(splitIts.chars || []), ...(splitFirst.chars || []), ...(splitLast.chars || [])], { yPercent: 0, opacity: 1 });

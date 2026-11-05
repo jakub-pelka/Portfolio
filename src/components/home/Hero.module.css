@@ -213,6 +213,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .arrowDown {
+    animation: none;
+  }
+}
+
 /* Mobile Adjustments */
 @media (max-width: 768px) {
   .star {
