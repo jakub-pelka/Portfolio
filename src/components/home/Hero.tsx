@@ -30,9 +30,9 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
   const lastNameRef = useRef<HTMLHeadingElement>(null);
   const starRef = useRef<HTMLAnchorElement>(null);
   const roleRef = useRef<HTMLParagraphElement>(null);
-  const portfolioRef = useRef<HTMLSpanElement>(null);
+  const portfolioRef = useRef<HTMLButtonElement>(null);
   const contactRef = useRef<HTMLElement>(null);
-  const arrowRef = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<HTMLButtonElement>(null);
 
   const cleanContactLabel = dict.hero.cta_contact
     ? dict.hero.cta_contact.replace(/^\[\s*|\s*\]$/g, '')
@@ -237,14 +237,14 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       </div>
       <div className={styles.bottomTokens}>
         <div className={styles.ctaRow}>
-          <span
+          <button
+            type="button"
             className={styles.portfolio}
             ref={portfolioRef}
             onClick={scrollToTimeline}
-            style={{ cursor: 'pointer' }}
           >
             {scrollLabel}
-          </span>
+          </button>
           {dict.hero.cta_contact && (
             <Button
               ref={contactRef}
@@ -256,11 +256,12 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
             </Button>
           )}
         </div>
-        <div
+        <button
+          type="button"
           className={styles.arrowDown}
           ref={arrowRef}
           onClick={scrollToTimeline}
-          style={{ cursor: 'pointer' }}
+          aria-label={scrollLabel}
         >
           <svg width="21" height="12" viewBox="0 0 21 12" fill="currentColor">
             <rect x="0" y="0" width="3" height="3" />
@@ -271,7 +272,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
             <rect x="15" y="3" width="3" height="3" />
             <rect x="18" y="0" width="3" height="3" />
           </svg>
-        </div>
+        </button>
       </div>
     </section>
   );
