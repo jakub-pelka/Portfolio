@@ -28,7 +28,7 @@
   },
   "about": {
     "heading": "O mnie",
-    "p1": "Skończyłem studia na kierunku gospodarka cyfrowa w Katowicach — <b>coś pomiędzy IT, biznesem i zarządzaniem projektami</b>. W wolnym czasie buduję narzędzia, które rozwiązują realne problemy — moje albo kogoś kogo znam. Dobry opis mojego podejścia to coś pokroju \"nie zatrzymuje mnie fakt, że muszę po drodze nauczyć się czegoś nowego - nawet jeśli tym czymś jest Rust\".",
+    "p1": "Skończyłem studia na kierunku gospodarka cyfrowa w Katowicach — <b>coś pomiędzy IT, biznesem i zarządzaniem projektami</b>. W wolnym czasie buduję narzędzia, które rozwiązują realne problemy — moje albo kogoś, kogo znam. Dobry opis mojego podejścia to coś pokroju \"nie zatrzymuje mnie fakt, że muszę po drodze nauczyć się czegoś nowego - nawet jeśli tym czymś jest Rust\".",
     "p2": "Otwarty na projekty freelance i oferty pracy — na Śląsku albo zdalnie."
   },
   "services": {
@@ -53,19 +53,19 @@
       { "step": "01", "title": "ROZMOWA", "body": "Piszesz, rozmawiamy o problemie i celu." },
       { "step": "02", "title": "WYCENA", "body": "Dostajesz zakres prac i wycenę — bez zobowiązań." },
       { "step": "03", "title": "BUILD", "body": "Regularne update'y w trakcie budowy, nie cisza przez miesiąc." },
-      { "step": "04", "title": "PRZEKAZANIE", "body": "Kod, dostępy i dokumentacja — na własność, bez uzależnienia od mnie." }
+      { "step": "04", "title": "PRZEKAZANIE", "body": "Kod, dostępy i dokumentacja — na własność, bez uzależnienia ode mnie." }
     ],
     "pricing_note": "Wycena indywidualna — zależy od zakresu projektu. Napisz, to pierwszy krok.",
     "cta_label": "[ UMÓW ROZMOWĘ → ]",
     "cta_subject": "Wycena projektu",
-    "cta_body": "Cześć Kuba,\n\nChciałbym porozmawiać o projekcie:\n- Co chcesz zbudować:\n- Orientacyjny termin:\n\nDzięki!"
+    "cta_body": "Cześć Kuba,\n\nChciałbym porozmawiać o projekcie:\n- Co chcę zbudować:\n- Orientacyjny termin:\n\nDzięki!"
   },
   "footer": {
     "projects": "INDEKS PROJEKTÓW",
     "social": "MEDIA SPOŁECZNOŚCIOWE",
     "contact": "KONTAKT",
     "mail_label": "EMAIL",
-    "mail_body": "Kontaktuję się z Panem, ponieważ ",
+    "mail_body": "Cześć Kuba, piszę, bo ",
     "cv_download": "[ POBIERZ CV ]",
     "contact_cta_label": "[ WYCEŃ PROJEKT ]",
     "contact_cta_subject": "Wycena projektu",

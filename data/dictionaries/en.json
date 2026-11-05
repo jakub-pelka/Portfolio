@@ -58,14 +58,14 @@
     "pricing_note": "Quote depends on project scope. Reach out — that's the first step.",
     "cta_label": "[ SCHEDULE A CALL → ]",
     "cta_subject": "Project inquiry",
-    "cta_body": "Hi Jakub,\n\nI'd like to talk about a project:\n- What you want to build:\n- Rough timeline:\n\nThanks!"
+    "cta_body": "Hi Jakub,\n\nI'd like to talk about a project:\n- What I want to build:\n- Rough timeline:\n\nThanks!"
   },
   "footer": {
     "projects": "PROJECT INDEX",
     "social": "SOCIAL",
     "contact": "CONTACT",
     "mail_label": "EMAIL",
-    "mail_body": "I'm reaching out because ",
+    "mail_body": "Hi Jakub, I'm reaching out because ",
     "cv_download": "[ DOWNLOAD CV ]",
     "contact_cta_label": "[ GET A QUOTE ]",
     "contact_cta_subject": "Project inquiry",
