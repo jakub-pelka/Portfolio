@@ -3,14 +3,13 @@ import type { Locale } from '@/i18n/config';
 import type { ProjectWithLocale } from '@/lib/types/project';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { FooterCube } from './FooterCube';
+import { CONTACT_EMAIL } from '@/lib/contact';
 import styles from './SiteFooter.module.css';
 
 interface SiteFooterProps {
   lang: Locale;
   projects: ProjectWithLocale[];
 }
-
-const CONTACT_EMAIL = 'jakubpelkapraca@gmail.com';
 
 export async function SiteFooter({ lang, projects }: SiteFooterProps) {
   const dict = await getDictionary(lang);

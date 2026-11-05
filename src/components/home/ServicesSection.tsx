@@ -1,9 +1,8 @@
 import type { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { TerminalCard } from '@/components/mdx/TerminalCard';
+import { CONTACT_EMAIL } from '@/lib/contact';
 import styles from './ServicesSection.module.css';
-
-const CONTACT_EMAIL = 'jakubpelkapraca@gmail.com';
 
 interface ServiceItem {
   title: string;
