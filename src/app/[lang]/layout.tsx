@@ -42,10 +42,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Jakub Pełka — Portfolio',
+    default: 'Jakub Pełka — AI Agent Developer',
     template: '%s — Jakub Pełka',
   },
-  description: 'Portfolio projektanta i developera — fakty i proces.',
+  description: 'AI Agent Developer — strony, aplikacje i automatyzacje AI.',
 };
 
 export async function generateStaticParams() {
