@@ -7,7 +7,19 @@ import SplitType from 'split-type';
 import styles from './Hero.module.css';
 
 
-export function Hero({ scrollLabel }: { scrollLabel: string }) {
+interface HeroProps {
+  dict: {
+    hero: {
+      intro: string;
+      cta_projects: string;
+      [key: string]: any;
+    };
+  };
+  scrollLabel?: string;
+}
+
+export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
+  const scrollLabel = propScrollLabel ?? dict.hero.cta_projects;
   const pathname = usePathname();
   const lang = pathname.split('/')[1] || 'pl';
   const heyRef = useRef<HTMLDivElement>(null);
@@ -199,7 +211,7 @@ export function Hero({ scrollLabel }: { scrollLabel: string }) {
         <div className={styles.hey} ref={heyRef}>Hey</div>
         <div className={styles.nameContainer} ref={nameContainerRef}>
           <span className={`${styles.its} ${styles.maskWrapper}`}>
-            <span ref={itsRef}>It's</span>
+            <span ref={itsRef}>{dict.hero.intro}</span>
           </span>
           <div className={styles.nameGroup}>
             <div className={styles.maskWrapper}>

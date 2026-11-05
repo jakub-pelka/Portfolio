@@ -77,7 +77,7 @@ export default async function Home({
 
   return (
     <main style={{ position: 'relative' }}>
-      <Hero scrollLabel={dict.hero.cta_projects} />
+      <Hero dict={dict} />
       <ProjectTimeline lang={lang} projects={projects} />
       <ServicesSection lang={lang} />
       <AboutSection>
