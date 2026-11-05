@@ -50,6 +50,11 @@
   text-decoration: none;
   cursor: pointer;
   transition: opacity 200ms ease;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .star:hover {

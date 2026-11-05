@@ -10,9 +10,13 @@ import styles from './SiteHeader.module.css';
 
 interface SiteHeaderProps {
   lang: Locale;
+  themeLabels?: {
+    toggle_dark: string;
+    toggle_light: string;
+  };
 }
 
-export function SiteHeader({ lang }: SiteHeaderProps) {
+export function SiteHeader({ lang, themeLabels }: SiteHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [visible, setVisible] = useState(true);
@@ -67,10 +71,10 @@ export function SiteHeader({ lang }: SiteHeaderProps) {
 
         {/* Lang switcher + Theme toggle */}
         <div className={styles.right}>
-          <Button variant="v3" href={switchedPath} rawText>
+          <Button variant="v3" href={switchedPath} rawText className={styles.langBtn}>
             {otherLang.toUpperCase()}
           </Button>
-          <ThemeToggle />
+          <ThemeToggle labels={themeLabels} />
         </div>
       </div>
     </header>

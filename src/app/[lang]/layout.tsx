@@ -7,6 +7,7 @@ import { SiteHeader } from '@/components/layout/SiteHeader';
 import { CopyForAI } from '@/components/ui/CopyForAI';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { getAllProjects } from '@/lib/projects/loader';
+import { getDictionary } from '@/i18n/get-dictionary';
 import { locales } from '@/i18n/config';
 import { assertLocale } from '@/i18n/guard';
 import { SITE_URL } from '@/lib/seo/constants';
@@ -62,7 +63,10 @@ export default async function LangLayout({
   assertLocale(rawLang);
   const lang = rawLang;
 
-  const projects = await getAllProjects(lang);
+  const [projects, dict] = await Promise.all([
+    getAllProjects(lang),
+    getDictionary(lang),
+  ]);
 
   return (
     <html
@@ -72,7 +76,7 @@ export default async function LangLayout({
     >
       <body>
         <ThemeProvider>
-          <SiteHeader lang={lang} />
+          <SiteHeader lang={lang} themeLabels={dict.theme} />
           <CopyForAI projects={projects} />
           {children}
           <SiteFooter lang={lang} projects={projects} />
