@@ -32,7 +32,7 @@ const vt323 = localFont({
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['400', '400', '700'],
+  weight: ['400', '500', '700'],
   style: ['normal', 'italic'],
   subsets: ['latin', 'latin-ext'],
   variable: '--font-ibm-plex-mono',
