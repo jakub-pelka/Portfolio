@@ -28,6 +28,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
   const firstNameRef = useRef<HTMLHeadingElement>(null);
   const lastNameRef = useRef<HTMLHeadingElement>(null);
   const starRef = useRef<HTMLAnchorElement>(null);
+  const roleRef = useRef<HTMLParagraphElement>(null);
   const portfolioRef = useRef<HTMLSpanElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
 
@@ -50,7 +51,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       gsap.set(heyRef.current, { opacity: 1, x: 0, y: 0, skewX: -15, transformOrigin: 'bottom center' });
       gsap.set(nameContainerRef.current, { opacity: 1 });
       gsap.set([...(splitIts.chars || []), ...(splitFirst.chars || []), ...(splitLast.chars || [])], { yPercent: 0, opacity: 1 });
-      gsap.set([starRef.current, portfolioRef.current, arrowRef.current], { opacity: 1 });
+      gsap.set([roleRef.current, starRef.current, portfolioRef.current, arrowRef.current], { opacity: 1 });
       return () => { splitIts.revert(); splitFirst.revert(); splitLast.revert(); };
     }
 
@@ -101,7 +102,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
     gsap.set(allChars, { yPercent: 120, opacity: 0 });
 
     // Set initial state for star, portfolio, and arrow (invisible)
-    gsap.set([starRef.current, portfolioRef.current, arrowRef.current], { opacity: 0 });
+    gsap.set([roleRef.current, starRef.current, portfolioRef.current, arrowRef.current], { opacity: 0 });
 
     const tl = gsap.timeline({ delay: 1 }); // Wait 1 second at the absolute center
 
@@ -183,8 +184,8 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       duration: 1.5,
       ease: "expo.out",
     }, "<0.5")
-    // 4. Fade in star, portfolio, and arrow after main animation completes
-    .to([starRef.current, portfolioRef.current, arrowRef.current], {
+    // 4. Fade in role, star, portfolio, and arrow after main animation completes
+    .to([roleRef.current, starRef.current, portfolioRef.current, arrowRef.current], {
       opacity: 1,
       duration: 0.8,
       ease: "power2.out",
@@ -222,6 +223,11 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
             </div>
           </div>
         </div>
+        {dict.hero.role && (
+          <p className={styles.role} ref={roleRef}>
+            {dict.hero.role}
+          </p>
+        )}
       </div>
       <div className={styles.bottomTokens}>
         <span
