@@ -53,7 +53,7 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
         </div>
 
         {/* Col 3: Contact */}
-        <div className={styles.col}>
+        <div className={styles.col} id="contact">
           <span className={styles.colHeader}>{dict.footer.contact}</span>
           <ul className={styles.list}>
             <li className={styles.contactItem}>

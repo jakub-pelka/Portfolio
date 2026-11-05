@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import gsap from 'gsap';
 import SplitType from 'split-type';
+import { Button } from '@/components/ui/Button';
 import styles from './Hero.module.css';
 
 
@@ -30,7 +31,12 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
   const starRef = useRef<HTMLAnchorElement>(null);
   const roleRef = useRef<HTMLParagraphElement>(null);
   const portfolioRef = useRef<HTMLSpanElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
+
+  const cleanContactLabel = dict.hero.cta_contact
+    ? dict.hero.cta_contact.replace(/^\[\s*|\s*\]$/g, '')
+    : '';
 
   function scrollToTimeline() {
     document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -51,7 +57,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       gsap.set(heyRef.current, { opacity: 1, x: 0, y: 0, skewX: -15, transformOrigin: 'bottom center' });
       gsap.set(nameContainerRef.current, { opacity: 1 });
       gsap.set([...(splitIts.chars || []), ...(splitFirst.chars || []), ...(splitLast.chars || [])], { yPercent: 0, opacity: 1 });
-      gsap.set([roleRef.current, starRef.current, portfolioRef.current, arrowRef.current], { opacity: 1 });
+      gsap.set([roleRef.current, starRef.current, portfolioRef.current, contactRef.current, arrowRef.current], { opacity: 1 });
       return () => { splitIts.revert(); splitFirst.revert(); splitLast.revert(); };
     }
 
@@ -101,8 +107,8 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
     // Set all chars initially shifted down a bit more to clear paddings
     gsap.set(allChars, { yPercent: 120, opacity: 0 });
 
-    // Set initial state for star, portfolio, and arrow (invisible)
-    gsap.set([roleRef.current, starRef.current, portfolioRef.current, arrowRef.current], { opacity: 0 });
+    // Set initial state for star, portfolio, contact, and arrow (invisible)
+    gsap.set([roleRef.current, starRef.current, portfolioRef.current, contactRef.current, arrowRef.current], { opacity: 0 });
 
     const tl = gsap.timeline({ delay: 1 }); // Wait 1 second at the absolute center
 
@@ -184,8 +190,8 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       duration: 1.5,
       ease: "expo.out",
     }, "<0.5")
-    // 4. Fade in role, star, portfolio, and arrow after main animation completes
-    .to([roleRef.current, starRef.current, portfolioRef.current, arrowRef.current], {
+    // 4. Fade in role, star, portfolio, contact, and arrow after main animation completes
+    .to([roleRef.current, starRef.current, portfolioRef.current, contactRef.current, arrowRef.current], {
       opacity: 1,
       duration: 0.8,
       ease: "power2.out",
@@ -230,14 +236,26 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
         )}
       </div>
       <div className={styles.bottomTokens}>
-        <span
-          className={styles.portfolio}
-          ref={portfolioRef}
-          onClick={scrollToTimeline}
-          style={{ cursor: 'pointer' }}
-        >
-          {scrollLabel}
-        </span>
+        <div className={styles.ctaRow}>
+          <span
+            className={styles.portfolio}
+            ref={portfolioRef}
+            onClick={scrollToTimeline}
+            style={{ cursor: 'pointer' }}
+          >
+            {scrollLabel}
+          </span>
+          {dict.hero.cta_contact && (
+            <Button
+              ref={contactRef}
+              variant="v3"
+              href="#contact"
+              className={styles.contactBtn}
+            >
+              {cleanContactLabel}
+            </Button>
+          )}
+        </div>
         <div
           className={styles.arrowDown}
           ref={arrowRef}
