@@ -13,7 +13,9 @@ interface HeroProps {
     hero: {
       intro: string;
       cta_projects: string;
-      [key: string]: any;
+      cta_contact?: string;
+      role?: string;
+      [key: string]: unknown;
     };
   };
   scrollLabel?: string;
