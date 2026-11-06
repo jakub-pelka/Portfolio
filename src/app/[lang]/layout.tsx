@@ -7,6 +7,7 @@ import { SiteHeader } from '@/components/layout/SiteHeader';
 import { CopyForAI } from '@/components/ui/CopyForAI';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { getAllProjects } from '@/lib/projects/loader';
+import { getDictionary } from '@/i18n/get-dictionary';
 import { locales } from '@/i18n/config';
 import { assertLocale } from '@/i18n/guard';
 import { SITE_URL } from '@/lib/seo/constants';
@@ -31,7 +32,7 @@ const vt323 = localFont({
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['400', '400', '700'],
+  weight: ['400', '500', '700'],
   style: ['normal', 'italic'],
   subsets: ['latin', 'latin-ext'],
   variable: '--font-ibm-plex-mono',
@@ -41,10 +42,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Jakub Pełka — Portfolio',
+    default: 'Jakub Pełka — Full-stack & AI Developer',
     template: '%s — Jakub Pełka',
   },
-  description: 'Portfolio projektanta i developera — fakty i proces.',
+  description: 'Full-stack & AI Developer — strony, aplikacje i automatyzacje AI.',
 };
 
 export async function generateStaticParams() {
@@ -62,7 +63,10 @@ export default async function LangLayout({
   assertLocale(rawLang);
   const lang = rawLang;
 
-  const projects = await getAllProjects(lang);
+  const [projects, dict] = await Promise.all([
+    getAllProjects(lang),
+    getDictionary(lang),
+  ]);
 
   return (
     <html
@@ -72,7 +76,7 @@ export default async function LangLayout({
     >
       <body>
         <ThemeProvider>
-          <SiteHeader lang={lang} />
+          <SiteHeader lang={lang} themeLabels={dict.theme} contactLabel={dict.nav.contact} roleLabel={dict.nav.role} />
           <CopyForAI projects={projects} />
           {children}
           <SiteFooter lang={lang} projects={projects} />
