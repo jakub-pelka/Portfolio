@@ -175,9 +175,14 @@
   opacity: 0.7;
   transition: opacity 150ms ease;
   margin-top: 0.25rem;
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
+  position: relative;
+}
+
+/* Powiększony obszar klikalny bez wpływu na layout */
+.moreLink::after {
+  content: '';
+  position: absolute;
+  inset: -6px -4px;
 }
 
 .moreLink:hover {

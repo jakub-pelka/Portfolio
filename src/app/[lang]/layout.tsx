@@ -42,10 +42,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Jakub Pełka — AI Agent Developer',
+    default: 'Jakub Pełka — Full-stack & AI Developer',
     template: '%s — Jakub Pełka',
   },
-  description: 'AI Agent Developer — strony, aplikacje i automatyzacje AI.',
+  description: 'Full-stack & AI Developer — strony, aplikacje i automatyzacje AI.',
 };
 
 export async function generateStaticParams() {
@@ -76,7 +76,7 @@ export default async function LangLayout({
     >
       <body>
         <ThemeProvider>
-          <SiteHeader lang={lang} themeLabels={dict.theme} />
+          <SiteHeader lang={lang} themeLabels={dict.theme} contactLabel={dict.nav.contact} roleLabel={dict.nav.role} />
           <CopyForAI projects={projects} />
           {children}
           <SiteFooter lang={lang} projects={projects} />

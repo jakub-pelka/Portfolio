@@ -51,7 +51,7 @@ export function ThemeToggle({ labels }: ThemeToggleProps = {}) {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
-  if (!mounted) return <div style={{ width: 44, height: 44 }} />;
+  if (!mounted) return <div style={{ width: 22, height: 22 }} />;
 
   const isDark = resolvedTheme === 'dark';
   const label = isDark
@@ -74,8 +74,8 @@ export function ThemeToggle({ labels }: ThemeToggleProps = {}) {
         justifyContent: 'center',
         opacity: 0.5,
         transition: 'opacity 150ms ease',
-        minWidth: 44,
-        minHeight: 44,
+        // 44x44 hit area, but layout footprint stays 22x22
+        margin: -11,
         width: 44,
         height: 44,
         overflow: 'hidden',

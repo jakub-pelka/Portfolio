@@ -14,9 +14,11 @@ interface SiteHeaderProps {
     toggle_dark: string;
     toggle_light: string;
   };
+  contactLabel?: string;
+  roleLabel?: string;
 }
 
-export function SiteHeader({ lang, themeLabels }: SiteHeaderProps) {
+export function SiteHeader({ lang, themeLabels, contactLabel, roleLabel }: SiteHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [visible, setVisible] = useState(true);
@@ -53,6 +55,7 @@ export function SiteHeader({ lang, themeLabels }: SiteHeaderProps) {
       <div className={styles.inner}>
         {/* Back — visible outside home */}
         <div className={styles.left}>
+          {isHome && roleLabel && <span className={styles.role}>{roleLabel}</span>}
           {!isHome && (
             <Button variant="v3" onClick={() => router.back()}>
               ← BACK
@@ -71,6 +74,11 @@ export function SiteHeader({ lang, themeLabels }: SiteHeaderProps) {
 
         {/* Lang switcher + Theme toggle */}
         <div className={styles.right}>
+          {contactLabel && (
+            <Button variant="v3" href="#contact" rawText className={styles.langBtn}>
+              {contactLabel.toUpperCase()}
+            </Button>
+          )}
           <Button variant="v3" href={switchedPath} rawText className={styles.langBtn}>
             {otherLang.toUpperCase()}
           </Button>

@@ -13,14 +13,14 @@ import { SITE_URL } from '@/lib/seo/constants';
 
 const HOME_SEO = {
   pl: {
-    title: 'Jakub Pełka — AI Agent Developer',
+    title: 'Jakub Pełka — Full-stack & AI Developer',
     description:
-      'AI Agent Developer. Buduję strony, aplikacje webowe i automatyzacje AI dla firm — od zera, szybko i bez zbędnego długu technicznego.',
+      'Full-stack & AI Developer. Buduję strony, aplikacje webowe i automatyzacje AI dla firm — od zera, szybko i bez zbędnego długu technicznego.',
   },
   en: {
-    title: 'Jakub Pełka — AI Agent Developer',
+    title: 'Jakub Pełka — Full-stack & AI Developer',
     description:
-      'AI Agent Developer. I build websites, web apps, and AI automations for companies — from scratch, fast, and with zero lock-in.',
+      'Full-stack & AI Developer. I build websites, web apps, and AI automations for companies — from scratch, fast, and with zero lock-in.',
   },
 } as const;
 

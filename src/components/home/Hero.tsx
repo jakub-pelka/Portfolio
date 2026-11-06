@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import gsap from 'gsap';
 import SplitType from 'split-type';
-import { Button } from '@/components/ui/Button';
 import styles from './Hero.module.css';
 
 
@@ -13,8 +12,6 @@ interface HeroProps {
     hero: {
       intro: string;
       cta_projects: string;
-      cta_contact?: string;
-      role?: string;
       [key: string]: unknown;
     };
   };
@@ -31,14 +28,8 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
   const firstNameRef = useRef<HTMLHeadingElement>(null);
   const lastNameRef = useRef<HTMLHeadingElement>(null);
   const starRef = useRef<HTMLAnchorElement>(null);
-  const roleRef = useRef<HTMLParagraphElement>(null);
   const portfolioRef = useRef<HTMLButtonElement>(null);
-  const contactRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<HTMLButtonElement>(null);
-
-  const cleanContactLabel = dict.hero.cta_contact
-    ? dict.hero.cta_contact.replace(/^\[\s*|\s*\]$/g, '')
-    : '';
 
   function scrollToTimeline() {
     document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -60,7 +51,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       gsap.set(heyRef.current, { opacity: 1, x: 0, y: 0, skewX: -15, transformOrigin: 'bottom center' });
       gsap.set(nameContainerRef.current, { opacity: 1 });
       gsap.set([...(splitIts.chars || []), ...(splitFirst.chars || []), ...(splitLast.chars || [])], { yPercent: 0, opacity: 1 });
-      gsap.set([roleRef.current, starRef.current, portfolioRef.current, contactRef.current, arrowRef.current], { opacity: 1 });
+      gsap.set([starRef.current, portfolioRef.current, arrowRef.current], { opacity: 1 });
       return () => { splitIts.revert(); splitFirst.revert(); splitLast.revert(); };
     }
 
@@ -110,8 +101,8 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
     // Set all chars initially shifted down a bit more to clear paddings
     gsap.set(allChars, { yPercent: 120, opacity: 0 });
 
-    // Set initial state for star, portfolio, contact, and arrow (invisible)
-    gsap.set([roleRef.current, starRef.current, portfolioRef.current, contactRef.current, arrowRef.current], { opacity: 0 });
+    // Set initial state for star, portfolio, and arrow (invisible)
+    gsap.set([starRef.current, portfolioRef.current, arrowRef.current], { opacity: 0 });
 
     const tl = gsap.timeline({ delay: 1 }); // Wait 1 second at the absolute center
 
@@ -193,8 +184,8 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       duration: 1.5,
       ease: "expo.out",
     }, "<0.5")
-    // 4. Fade in role, star, portfolio, contact, and arrow after main animation completes
-    .to([roleRef.current, starRef.current, portfolioRef.current, contactRef.current, arrowRef.current], {
+    // 4. Fade in star, portfolio, and arrow after main animation completes
+    .to([starRef.current, portfolioRef.current, arrowRef.current], {
       opacity: 1,
       duration: 0.8,
       ease: "power2.out",
@@ -232,33 +223,16 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
             </div>
           </div>
         </div>
-        {dict.hero.role && (
-          <p className={styles.role} ref={roleRef}>
-            {dict.hero.role}
-          </p>
-        )}
       </div>
       <div className={styles.bottomTokens}>
-        <div className={styles.ctaRow}>
-          <button
-            type="button"
-            className={styles.portfolio}
-            ref={portfolioRef}
-            onClick={scrollToTimeline}
-          >
-            {scrollLabel}
-          </button>
-          {dict.hero.cta_contact && (
-            <Button
-              ref={contactRef}
-              variant="v3"
-              href="#contact"
-              className={styles.contactBtn}
-            >
-              {cleanContactLabel}
-            </Button>
-          )}
-        </div>
+        <button
+          type="button"
+          className={styles.portfolio}
+          ref={portfolioRef}
+          onClick={scrollToTimeline}
+        >
+          {scrollLabel}
+        </button>
         <button
           type="button"
           className={styles.arrowDown}

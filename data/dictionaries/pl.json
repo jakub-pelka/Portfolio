@@ -2,16 +2,15 @@
   "nav": {
     "projects": "Projekty",
     "about": "O mnie",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "role": "Full-stack & AI Developer"
   },
   "hero": {
     "greeting": "Hey",
     "intro": "To",
     "name_first": "Jakub",
     "name_last": "Pełka",
-    "role": "AI Agent Developer · strony, aplikacje i automatyzacje AI",
-    "cta_projects": "Zobacz co zrobiłem",
-    "cta_contact": "[ KONTAKT → ]"
+    "cta_projects": "Zobacz co zrobiłem"
   },
   "projects": {
     "title": "Projekty",
@@ -55,10 +54,7 @@
       { "step": "03", "title": "BUILD", "body": "Regularne update'y w trakcie budowy, nie cisza przez miesiąc." },
       { "step": "04", "title": "PRZEKAZANIE", "body": "Kod, dostępy i dokumentacja — na własność, bez uzależnienia ode mnie." }
     ],
-    "pricing_note": "Wycena indywidualna — zależy od zakresu projektu. Napisz, to pierwszy krok.",
-    "cta_label": "[ UMÓW ROZMOWĘ → ]",
-    "cta_subject": "Wycena projektu",
-    "cta_body": "Cześć Kuba,\n\nChciałbym porozmawiać o projekcie:\n- Co chcę zbudować:\n- Orientacyjny termin:\n\nDzięki!"
+    "pricing_note": "Wycena indywidualna — zależy od zakresu projektu. Napisz, to pierwszy krok."
   },
   "footer": {
     "projects": "INDEKS PROJEKTÓW",
