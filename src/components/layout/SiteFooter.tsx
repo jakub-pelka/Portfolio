@@ -68,7 +68,7 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
             </li>
             <li className={styles.contactItem}>
               <a
-                href="/Jakub_Pełka_CV_AI_Agent_Developer.pdf"
+                href={`/Jakub_Pelka_CV_Fullstack_AI_${lang === 'pl' ? 'PL' : 'EN'}.pdf`}
                 download
                 className={styles.cvLink}
               >
