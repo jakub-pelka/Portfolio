@@ -1,0 +1,30 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: calc(var(--space-4) * 2) var(--space-2) var(--space-4);
+}
+
+.code {
+  font-family: var(--font-vt323);
+  font-size: clamp(6rem, 22vw, 14rem);
+  line-height: 0.85;
+  color: var(--color-accent);
+}
+
+.title {
+  font-family: var(--font-ibm-plex-mono);
+  font-size: var(--text-title);
+  font-weight: bold;
+  letter-spacing: -0.03em;
+}
+
+.description {
+  font-family: var(--font-ibm-plex-mono);
+  font-size: var(--text-body);
+  max-width: 40ch;
+  margin-bottom: var(--space-1);
+}

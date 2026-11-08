@@ -66,5 +66,11 @@
     "contact_cta_label": "[ WYCEŃ PROJEKT ]",
     "contact_cta_subject": "Wycena projektu",
     "contact_cta_body": "Cześć Kuba,\n\nChciałbym zrobić: \n\nPodejrzewam, że przyda się / chciałbym wykorzystać: \n\nDzięki!"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Nie ma takiej strony",
+    "description": "Ten adres nie prowadzi donikąd — mógł się zmienić albo go nigdy nie było.",
+    "cta_home": "STRONA GŁÓWNA →"
   }
 }
