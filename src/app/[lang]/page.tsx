@@ -13,14 +13,14 @@ import { SITE_URL } from '@/lib/seo/constants';
 
 const HOME_SEO = {
   pl: {
-    title: 'Portfolio',
+    title: 'Jakub Pełka — Full-stack & AI Developer',
     description:
-      'Portfolio projektanta i developera — fakty i proces za każdym projektem, bez lania wody.',
+      'Full-stack & AI Developer. Buduję strony, aplikacje webowe i automatyzacje AI dla firm — od zera, szybko i bez zbędnego długu technicznego.',
   },
   en: {
-    title: 'Portfolio',
+    title: 'Jakub Pełka — Full-stack & AI Developer',
     description:
-      'Design & developer portfolio — the facts and the process behind every project.',
+      'Full-stack & AI Developer. I build websites, web apps, and AI automations for companies — from scratch, fast, and with zero lock-in.',
   },
 } as const;
 
@@ -36,7 +36,9 @@ export async function generateMetadata({
   const canonical = `${SITE_URL}/${lang}`;
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
     alternates: {
       canonical,
@@ -77,7 +79,7 @@ export default async function Home({
 
   return (
     <main style={{ position: 'relative' }}>
-      <Hero scrollLabel={dict.hero.cta_projects} />
+      <Hero dict={dict} />
       <ProjectTimeline lang={lang} projects={projects} />
       <ServicesSection lang={lang} />
       <AboutSection>
