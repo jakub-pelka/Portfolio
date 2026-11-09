@@ -19,6 +19,18 @@
   background-color: var(--color-bg);
 }
 
+/* Warstwa paralaksy gwiazdki (Parallax: outer stały, inner przesuwany transformem) */
+.starLayer,
+.starLayerInner {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.starLayer {
+  z-index: var(--z-background);
+}
+
 /* Kontener rozmiarowy: jednostki cqw/cqh dają --u bez JS */
 .stage {
   position: absolute;

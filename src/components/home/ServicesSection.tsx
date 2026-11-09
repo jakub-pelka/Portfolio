@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
+import { Parallax } from '@/components/ui/Parallax';
 import styles from './ServicesSection.module.css';
 
 interface ServiceItem {
@@ -25,9 +26,11 @@ export async function ServicesSection({ lang }: { lang: Locale }) {
       <section id="services" className={`jp-web-section ${styles.offer}`}>
         <div className="jp-web-section__inner">
           <p className="jp-web-section__label">[ {s.heading} ]</p>
-          <h2 className={`jp-web-section__title ${styles.title}`}>
-            {s.title_lead} <span className={styles.accent}>{s.title_accent}</span>
-          </h2>
+          <Parallax distance={32} mobileFactor={0.5}>
+            <h2 className={`jp-web-section__title ${styles.title}`}>
+              {s.title_lead} <span className={styles.accent}>{s.title_accent}</span>
+            </h2>
+          </Parallax>
           <p className="jp-web-section__lead">{s.lead}</p>
 
           <ol className={styles.rows}>

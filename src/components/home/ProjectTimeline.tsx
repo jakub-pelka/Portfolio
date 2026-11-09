@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Locale } from '@/i18n/config';
 import type { ProjectWithLocale, ProcessEntry } from '@/lib/types/project';
+import { Parallax } from '@/components/ui/Parallax';
 import styles from './ProjectTimeline.module.css';
 
 const TYPE_LABELS: Record<ProcessEntry['type'], string> = {
@@ -121,7 +122,10 @@ export function ProjectTimeline({
 }) {
   return (
     <section className={`jp-web-section ${styles.timeline}`} id="timeline">
-      <div className={styles.axis} />
+      {/* Oś: wolniejsza od treści (paralaksa). Przycięta do sekcji; linia jest dłuższa o zapas, więc przesunięcie nie odsłania przerw. */}
+      <Parallax distance={64} mobileFactor={0.5} className={styles.axisClip} innerClassName={styles.axis}>
+        {null}
+      </Parallax>
       <div className={`jp-web-section__inner ${styles.inner}`}>
         {projects.map((project: ProjectWithLocale, projectIndex: number) => {
           const entries = project.content.process.slice(0, 1);

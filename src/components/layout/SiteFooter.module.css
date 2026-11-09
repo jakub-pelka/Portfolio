@@ -1,4 +1,9 @@
 /* Wygląd: klasy .jp-web-footer* z globals.css. */
+
+/* Zawartość odsłania się spod górnej krawędzi (Parallax mode="reveal"): przycinamy do stopki. */
+.footer {
+  overflow: clip;
+}
 .contact {
   scroll-margin-top: var(--space-2);
 }

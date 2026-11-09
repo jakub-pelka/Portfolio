@@ -6,13 +6,20 @@ section.timeline {
   padding-bottom: var(--section-y);
 }
 
-/* Central vertical axis */
+/* Central vertical axis: clip = stały obszar sekcji, axis = przesuwana linia z zapasem 48 px (> połowa przesunięcia 64 px) */
+.axisClip {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+}
+
 .axis {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: -48px;
+  bottom: -48px;
   left: 50%;
-  transform: translateX(-50%);
+  margin-left: -0.5px; /* bez transform: ten należy do paralaksy */
   width: 1px;
   background: repeating-linear-gradient(
     to bottom,

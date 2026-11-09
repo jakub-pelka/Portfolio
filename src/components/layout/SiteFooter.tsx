@@ -4,6 +4,7 @@ import type { ProjectWithLocale } from '@/lib/types/project';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { CopyForAI } from '@/components/ui/CopyForAI';
 import { CONTACT_EMAIL } from '@/lib/contact';
+import { Parallax } from '@/components/ui/Parallax';
 import styles from './SiteFooter.module.css';
 
 interface SiteFooterProps {
@@ -19,7 +20,9 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
   const ctaMailtoHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(f.contact_cta_subject)}&body=${encodeURIComponent(f.contact_cta_body)}`;
 
   return (
-    <footer className="jp-web-footer">
+    <footer className={`jp-web-footer ${styles.footer}`}>
+      {/* Odsłanianie: zawartość wsuwa się pod górną krawędź stopki (efekt wyłączony przy reduced motion i gdy stopka jest wyższa niż okno) */}
+      <Parallax mode="reveal" revealPercent={30} mobileFactor={1}>
       <div className="jp-web-footer__inner">
         <div id="contact" className={styles.contact}>
           <p className="jp-web-footer__label">{f.label}</p>
@@ -78,6 +81,7 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
           </div>
         </div>
       </div>
+      </Parallax>
     </footer>
   );
 }

@@ -1,4 +1,5 @@
 import type { ProjectWithLocale } from '@/lib/types/project';
+import { Parallax } from '@/components/ui/Parallax';
 import styles from './ProjectHero.module.css';
 
 export interface ProjectHeroLabels {
@@ -42,7 +43,10 @@ export function ProjectHero({ project, lang, labels, position, total }: ProjectH
           </span>
         </div>
 
-        <h1 className={`jp-web-display ${styles.title}`}>{content.title}</h1>
+        {/* Paralaksa tytułu: jedzie wolniej niż reszta (maks. 28 px, na telefonie 14 px; odstęp do leadu to 48 px) */}
+        <Parallax mode="fromTop" distance={28} mobileFactor={0.5}>
+          <h1 className={`jp-web-display ${styles.title}`}>{content.title}</h1>
+        </Parallax>
 
         <p className={`jp-web-section__lead ${styles.lead}`}>{content.description}</p>
 

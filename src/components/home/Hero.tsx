@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
+import { Parallax } from '@/components/ui/Parallax';
 import { INTRO_DURATION, INTRO_TEXT_START, type StarHandle } from './heroIntroConfig';
 import styles from './Hero.module.css';
 
@@ -156,6 +158,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       onComplete: () => {
         finished.current = true;
         starHandle.current?.startLoop(INTRO_DURATION);
+        ScrollTrigger.refresh();
       },
     });
 
@@ -273,7 +276,10 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
 
   return (
     <section className={styles.hero}>
-      <HeroStar onReady={handleStar} />
+      {/* Paralaksa: gwiazdka jedzie wolniej niż napisy. Osobny wrapper, żeby nie dotykać elementów animowanych w intro. */}
+      <Parallax mode="fromTop" speed={0.45} mobileFactor={0.5} className={styles.starLayer} innerClassName={styles.starLayerInner}>
+        <HeroStar onReady={handleStar} />
+      </Parallax>
       <div className={styles.stage}>
         <div className={styles.stageBox}>
           <div className={styles.content}>

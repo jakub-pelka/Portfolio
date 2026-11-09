@@ -1,5 +1,6 @@
 import type { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
+import { Parallax } from '@/components/ui/Parallax';
 import styles from './SkillsSection.module.css';
 
 interface SkillGroup {
@@ -17,7 +18,9 @@ export async function SkillsSection({ lang }: { lang: Locale }) {
         <div className={styles.head}>
           <div className={styles.headTitle}>
             <p className={`jp-web-section__label ${styles.label}`}>[ {s.label} ]</p>
-            <h2 className={`jp-web-section__title ${styles.title}`}>{s.title}</h2>
+            <Parallax distance={32} mobileFactor={0.5}>
+              <h2 className={`jp-web-section__title ${styles.title}`}>{s.title}</h2>
+            </Parallax>
           </div>
           <p className={`jp-web-section__lead ${styles.lead}`}>{s.lead}</p>
         </div>
