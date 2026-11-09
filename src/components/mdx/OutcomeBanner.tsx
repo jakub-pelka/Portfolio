@@ -3,55 +3,40 @@ import styles from './Editorial.module.css';
 
 interface OutcomeBannerProps {
   statusTag?: string;
+  /** Etykieta karty (np. "$ EFEKT"); strona projektu podaje wersję językową. */
+  label?: string;
+  /** Zachowane dla zgodności z MDX; gdy podane, zastępuje etykietę. */
   title?: string;
   githubUrl?: string;
   liveUrl?: string;
   children: React.ReactNode;
 }
 
-export function OutcomeBanner({ statusTag, title = 'Outcome', githubUrl, liveUrl, children }: OutcomeBannerProps) {
+export function OutcomeBanner({ statusTag, label = '$ OUTCOME', title, githubUrl, liveUrl, children }: OutcomeBannerProps) {
   return (
-    <div className={styles.outcomeBanner}>
-      <div className={styles.halftoneBg} />
+    <div className={`jp-web-card jp-web-card--term ${styles.outcomeBanner}`}>
+      <div className={styles.outcomeMain}>
+        <span className="jp-web-card__label">{title ?? label}</span>
+        <div className={styles.outcomeText}>{children}</div>
+      </div>
 
-      <div className={styles.outcomeContent}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div>
-            <h2 className={styles.outcomeTitle}>{title}</h2>
-            <div className={styles.outcomeText}>
-              {children}
-            </div>
+      {(statusTag || githubUrl || liveUrl) && (
+        <div className={styles.outcomeFooter}>
+          {statusTag && <span className={styles.outcomeStatus}>[ {statusTag} ]</span>}
+          <div className={styles.outcomeLinks}>
+            {githubUrl && (
+              <a href={githubUrl} target="_blank" rel="noopener noreferrer" className={styles.outcomeLink}>
+                [ GITHUB → ]
+              </a>
+            )}
+            {liveUrl && (
+              <a href={liveUrl} target="_blank" rel="noopener noreferrer" className={styles.outcomeLink}>
+                [ LAUNCH_PROJECT → ]
+              </a>
+            )}
           </div>
         </div>
-
-        <div style={{ marginTop: '3rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-          {statusTag && (
-            <span className={styles.outcomeLabel}>
-              {statusTag}
-            </span>
-          )}
-          {githubUrl && (
-            <a
-              href={githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.outcomeLink}
-            >
-              [ GITHUB → ]
-            </a>
-          )}
-          {liveUrl && (
-            <a
-              href={liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.outcomeLink}
-            >
-              [ LAUNCH_PROJECT → ]
-            </a>
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

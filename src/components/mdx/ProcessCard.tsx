@@ -5,29 +5,20 @@ interface ProcessCardProps {
   title: string;
   type: 'INSIGHT' | 'DECISION' | 'PROBLEM' | 'insight' | 'decision' | 'problem';
   children: React.ReactNode;
+  /** Tłumaczenia etykiet typu (klucze małymi literami); dostarcza strona projektu. */
+  typeLabels?: Partial<Record<'insight' | 'decision' | 'problem', string>>;
 }
 
-export function ProcessCard({ title, type, children }: ProcessCardProps) {
-  // Border is tied to primary highlight or plain border based on type.
-  const isInsight = type.toUpperCase() === 'INSIGHT';
-  const borderColorValue = isInsight ? 'var(--project-highlight)' : 'var(--color-border)';
-  const labelBgValue = isInsight ? 'var(--project-highlight)' : 'var(--color-bg-secondary)';
+export function ProcessCard({ title, type, children, typeLabels }: ProcessCardProps) {
+  const key = type.toLowerCase() as 'insight' | 'decision' | 'problem';
+  const label = typeLabels?.[key] ?? type.toUpperCase();
+  const variant = key === 'insight' ? 'jp-web-card--strong' : '';
 
   return (
-    <div className={styles.processCard} style={{ borderLeft: `4px solid ${borderColorValue}` }}>
-      <div className={styles.processCardHeader}>
-        <span 
-          className={styles.processCardType}
-          style={{ backgroundColor: `color-mix(in srgb, ${labelBgValue} 20%, transparent)` }}
-        >
-          [ {type.toUpperCase()} ]
-        </span>
-        <span className={styles.processCardTitle}>{title}</span>
-      </div>
-      
-      <div className={styles.processCardBody}>
-        {children}
-      </div>
+    <div className={`jp-web-card ${variant} ${styles.processCard}`.trim()} data-type={key}>
+      <span className="jp-web-card__label">[ {label} ]</span>
+      <h3 className="jp-web-card__title">{title}</h3>
+      <div className={`jp-web-card__text ${styles.cardText}`}>{children}</div>
     </div>
   );
 }

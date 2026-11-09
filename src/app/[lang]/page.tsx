@@ -89,7 +89,7 @@ export default async function Home({
         <p className="jp-web-section__lead">{dict.about.p2}</p>
       </AboutSection>
       <SkillsSection lang={lang} />
-      <ProjectTimeline lang={lang} projects={projects} />
+      <ProjectTimeline lang={lang} projects={projects} labels={dict.projects} />
       <ServicesSection lang={lang} />
       {/* Jedna, na stałe zamontowana karta na smyczy: spoczywa w slocie
           #about-lanyard-slot (zob. PortfolioLanyard.tsx). */}

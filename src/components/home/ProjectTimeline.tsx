@@ -41,14 +41,21 @@ function ProcessLog({
   );
 }
 
+export interface TimelineLabels {
+  see_more: string;
+  status: Record<string, string>;
+}
+
 function ProjectEntry({
   project,
   lang,
   flip,
+  labels,
 }: {
   project: ProjectWithLocale;
   lang: Locale;
   flip: boolean;
+  labels: TimelineLabels;
 }) {
   const { meta, content } = project;
   const year = new Date(meta.date).getFullYear();
@@ -69,7 +76,7 @@ function ProjectEntry({
       <div className={styles.projectContent}>
         <span className={styles.year}>{year}</span>
         <span className={styles.status} data-status={meta.status}>
-          [ {meta.status.toUpperCase().replace('-', '_')} ]
+          {labels.status[meta.status] ?? meta.status}
         </span>
         <Link href={`/${lang}/projects/${meta.slug}`} className={styles.contentLink}>
           <h2 className={styles.projectTitle}>{content.title}</h2>
@@ -83,7 +90,7 @@ function ProjectEntry({
           )}
         </Link>
         <Link href={`/${lang}/projects/${meta.slug}`} className={styles.moreLink}>
-          [ SEE MORE → ]
+          {labels.see_more}
         </Link>
       </div>
 
@@ -103,7 +110,15 @@ function ProjectEntry({
   );
 }
 
-export function ProjectTimeline({ lang, projects }: { lang: Locale; projects: ProjectWithLocale[] }) {
+export function ProjectTimeline({
+  lang,
+  projects,
+  labels,
+}: {
+  lang: Locale;
+  projects: ProjectWithLocale[];
+  labels: TimelineLabels;
+}) {
   return (
     <section className={`jp-web-section ${styles.timeline}`} id="timeline">
       <div className={styles.axis} />
@@ -114,7 +129,7 @@ export function ProjectTimeline({ lang, projects }: { lang: Locale; projects: Pr
 
           return (
             <div key={project.meta.slug} className={styles.projectGroup}>
-              <ProjectEntry project={project} lang={lang} flip={flip} />
+              <ProjectEntry project={project} lang={lang} flip={flip} labels={labels} />
               {entries.map((entry: ProcessEntry, i: number) => (
                 <ProcessLog
                   key={`${project.meta.slug}-${entry.title}`}

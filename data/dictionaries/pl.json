@@ -21,7 +21,25 @@
     "title": "Projekty",
     "view_facts": "Fakty",
     "view_process": "Proces",
-    "read_more": "[ CZYTAJ WIĘCEJ ]"
+    "read_more": "[ CZYTAJ WIĘCEJ ]",
+    "see_more": "[ ZOBACZ WIĘCEJ → ]",
+    "status": {
+      "in-progress": "[ W TOKU ]",
+      "completed": "[ UKOŃCZONY ]",
+      "archived": "[ ZARCHIWIZOWANY ]"
+    },
+    "project_count": "PROJEKT {n} Z {total}",
+    "toc": "SPIS",
+    "toc_aria": "Spis sekcji",
+    "outcome_label": "$ EFEKT",
+    "other_projects_aria": "Inne projekty",
+    "prev": "← POPRZEDNI",
+    "next": "NASTĘPNY →",
+    "process_types": {
+      "decision": "DECYZJA",
+      "insight": "WNIOSEK",
+      "problem": "PROBLEM"
+    }
   },
   "theme": {
     "toggle_dark": "Ciemny",

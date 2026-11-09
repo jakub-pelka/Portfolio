@@ -21,7 +21,25 @@
     "title": "Projects",
     "view_facts": "Facts",
     "view_process": "Process",
-    "read_more": "[ READ MORE ]"
+    "read_more": "[ READ MORE ]",
+    "see_more": "[ SEE MORE → ]",
+    "status": {
+      "in-progress": "[ IN PROGRESS ]",
+      "completed": "[ COMPLETED ]",
+      "archived": "[ ARCHIVED ]"
+    },
+    "project_count": "PROJECT {n} OF {total}",
+    "toc": "CONTENTS",
+    "toc_aria": "Table of contents",
+    "outcome_label": "$ OUTCOME",
+    "other_projects_aria": "Other projects",
+    "prev": "← PREVIOUS",
+    "next": "NEXT →",
+    "process_types": {
+      "decision": "DECISION",
+      "insight": "INSIGHT",
+      "problem": "PROBLEM"
+    }
   },
   "theme": {
     "toggle_dark": "Dark",

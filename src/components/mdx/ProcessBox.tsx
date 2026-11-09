@@ -11,9 +11,9 @@ export function BoxGrid({ children }: { children: React.ReactNode }) {
 
 export function ProcessBox({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className={styles.processBox}>
-      <h4>{title}</h4>
-      <div className={styles.processBoxContent}>{children}</div>
+    <div className="jp-web-card">
+      <h3 className="jp-web-card__title">{title}</h3>
+      <div className={`jp-web-card__text ${styles.cardText}`}>{children}</div>
     </div>
   );
 }

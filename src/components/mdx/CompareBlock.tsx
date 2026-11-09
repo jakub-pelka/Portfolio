@@ -27,8 +27,8 @@ export function CompareBlock({
       <div className={styles.compareBlock}>
         <div className={styles.compareHeader}>
           <span className={styles.compareHeaderLabel} />
-          <span className={styles.compareHeaderBefore}>{beforeLabel}</span>
-          <span className={styles.compareHeaderAfter}>{afterLabel}</span>
+          <span className={styles.compareHeaderBefore}>[ ] {beforeLabel}</span>
+          <span className={styles.compareHeaderAfter}>[x] {afterLabel}</span>
         </div>
         {children}
       </div>
