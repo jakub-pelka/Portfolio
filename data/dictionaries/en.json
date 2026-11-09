@@ -3,7 +3,12 @@
     "projects": "Projects",
     "about": "About",
     "contact": "Contact",
-    "role": "Full-stack & AI Developer"
+    "role": "Full-stack & AI Developer",
+    "contact_button": "[ CONTACT → ]",
+    "all_projects": "[ ← ALL PROJECTS ]",
+    "all_projects_aria": "All projects",
+    "home_aria": "Home page",
+    "lang_aria": "Polski"
   },
   "hero": {
     "greeting": "Hey",
@@ -36,35 +41,123 @@
     "items": [
       {
         "title": "WEBSITES & APPS",
-        "body": "A landing page, portfolio, or internal company tool — built from scratch, fast, and easy to maintain, without a bloated CMS."
+        "body": "A landing page, portfolio, or internal company tool — built from scratch, fast, and easy to maintain, without a bloated CMS.",
+        "example": {
+          "name": "PORTFOLIO",
+          "slug": "portfolio"
+        }
       },
       {
         "title": "AI AUTOMATION",
-        "body": "Gemini/OpenAI integrations that turn repetitive manual work — cataloging, describing, data entry — into a process that takes seconds."
+        "body": "Gemini/OpenAI integrations that turn repetitive manual work — cataloging, describing, data entry — into a process that takes seconds.",
+        "example": {
+          "name": "REKWIZYTOR",
+          "slug": "rekwizytor"
+        }
       },
       {
         "title": "PROTOTYPE / MVP",
-        "body": "Have an idea and want to validate it before investing in a full team? I build a working prototype you can put in front of real users."
+        "body": "Have an idea and want to validate it before investing in a full team? I build a working prototype you can put in front of real users.",
+        "example": {
+          "name": "PRACO",
+          "slug": "praco"
+        }
       }
     ],
     "process_heading": "HOW WE'D WORK TOGETHER",
     "process": [
-      { "step": "01", "title": "CALL", "body": "You reach out, we talk through the problem and the goal." },
-      { "step": "02", "title": "QUOTE", "body": "You get a scope and a quote — no obligation." },
-      { "step": "03", "title": "BUILD", "body": "Regular updates while it's being built, not radio silence for a month." },
-      { "step": "04", "title": "HANDOFF", "body": "Code, access and docs — yours to keep, no lock-in." }
+      {
+        "step": "01",
+        "title": "CALL",
+        "body": "You reach out, we talk through the problem and the goal."
+      },
+      {
+        "step": "02",
+        "title": "QUOTE",
+        "body": "You get a scope and a quote — no obligation."
+      },
+      {
+        "step": "03",
+        "title": "BUILD",
+        "body": "Regular updates while it's being built, not radio silence for a month."
+      },
+      {
+        "step": "04",
+        "title": "HANDOFF",
+        "body": "Code, access and docs — yours to keep, no lock-in."
+      }
     ],
-    "pricing_note": "Quote depends on project scope. Reach out — that's the first step."
+    "pricing_note": "Quote depends on project scope. Reach out — that's the first step.",
+    "title_lead": "WEBSITES, APPS AND",
+    "title_accent": "AI AUTOMATION",
+    "lead": "For companies and teams that need more than an off-the-shelf template.",
+    "example_prefix": "EXAMPLE:"
   },
   "footer": {
     "projects": "PROJECT INDEX",
-    "social": "SOCIAL",
+    "social": "ELSEWHERE",
     "contact": "CONTACT",
     "mail_label": "EMAIL",
     "mail_body": "Hi Jakub, I'm reaching out because ",
     "cv_download": "[ DOWNLOAD CV ]",
     "contact_cta_label": "[ GET A QUOTE ]",
     "contact_cta_subject": "Project inquiry",
-    "contact_cta_body": "Hi Jakub,\n\nI'd like to build: \n\nI suspect I'll need / would like to use: \n\nThanks!"
+    "contact_cta_body": "Hi Jakub,\n\nI'd like to build: \n\nI suspect I'll need / would like to use: \n\nThanks!",
+    "label": "[ CONTACT ]",
+    "heading": "GOT A PROJECT?",
+    "where_title": "WHERE I WORK",
+    "where_text": "Katowice. In Silesia or remotely. Open to freelance projects and job offers.",
+    "copyright": "WRITTEN FROM SCRATCH IN NEXT.JS",
+    "copy_for_ai": "[ COPY PAGE FOR AI ]",
+    "copy_for_ai_done": "[ COPIED ✓ ]",
+    "copy_for_ai_title": "Copy portfolio data for AI",
+    "to_top": "[ TO TOP ↑ ]"
+  },
+  "skills": {
+    "label": "SKILLS",
+    "title": "WHAT I BUILD WITH",
+    "lead": "The technologies I work with. How I used them and why, I describe in the projects.",
+    "groups": [
+      {
+        "title": "FRONTEND",
+        "tags": [
+          "TypeScript",
+          "Next.js",
+          "React",
+          "Vue 3",
+          "Framer Motion",
+          "GSAP",
+          "Three.js",
+          "Tailwind CSS",
+          "Vanilla CSS",
+          "MDX"
+        ]
+      },
+      {
+        "title": "BACKEND AND DESKTOP",
+        "tags": [
+          "Node.js",
+          "Supabase",
+          "PostgreSQL",
+          "SQLite",
+          "Tauri",
+          "Rust",
+          "Python",
+          "PrestaShop / PHP",
+          "Docker",
+          "Vercel",
+          "Postman",
+          "SonarCloud"
+        ]
+      },
+      {
+        "title": "AI",
+        "tags": [
+          "Claude API",
+          "OpenAI API",
+          "Gemini Vision"
+        ]
+      }
+    ]
   }
 }

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { ProjectWithLocale } from '@/lib/types/project';
 import { getDictionary } from '@/i18n/get-dictionary';
-import { FooterCube } from './FooterCube';
+import { CopyForAI } from '@/components/ui/CopyForAI';
 import { CONTACT_EMAIL } from '@/lib/contact';
 import styles from './SiteFooter.module.css';
 
@@ -13,83 +13,70 @@ interface SiteFooterProps {
 
 export async function SiteFooter({ lang, projects }: SiteFooterProps) {
   const dict = await getDictionary(lang);
+  const f = dict.footer;
   const year = new Date().getFullYear();
-  const mailHref = `mailto:${CONTACT_EMAIL}?body=${encodeURIComponent(dict.footer.mail_body)}`;
-  const ctaMailtoHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(dict.footer.contact_cta_subject)}&body=${encodeURIComponent(dict.footer.contact_cta_body)}`;
+  const mailHref = `mailto:${CONTACT_EMAIL}?body=${encodeURIComponent(f.mail_body)}`;
+  const ctaMailtoHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(f.contact_cta_subject)}&body=${encodeURIComponent(f.contact_cta_body)}`;
 
   return (
-    <footer className={styles.footer}>
-      <div className={styles.inner}>
-
-        {/* Col 1: Projects */}
-        <div className={styles.col}>
-          <span className={styles.colHeader}>{dict.footer.projects}</span>
-          <ul className={styles.list}>
-            {projects.map((p) => (
-              <li key={p.meta.slug} className={styles.listItem}>
-                <Link href={`/${lang}/projects/${p.meta.slug}`} className={styles.link}>
-                  {p.content.title.toUpperCase()}
-                </Link>
-                <span className={styles.version}>
-                  {new Date(p.meta.date).getFullYear()}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Col 2: Social */}
-        <div className={styles.col}>
-          <span className={styles.colHeader}>{dict.footer.social}</span>
-          <ul className={styles.list}>
-            <li className={styles.listItem}>
-              <a href="https://github.com/jakub-pelka" className={styles.link}>GITHUB</a>
-            </li>
-            <li className={styles.listItem}>
-              <a href="https://www.linkedin.com/in/jakub-pe%C5%82ka-0961bb27b/" className={styles.link}>LINKEDIN</a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Col 3: Contact */}
-        <div className={styles.col} id="contact">
-          <span className={styles.colHeader}>{dict.footer.contact}</span>
-          <ul className={styles.list}>
-            <li className={styles.contactItem}>
-              <span className={styles.contactLabel}>{dict.footer.mail_label}</span>
-              <a href={mailHref} className={styles.link}>
-                {CONTACT_EMAIL}
-              </a>
-            </li>
-            <li className={styles.contactItem}>
-              <a href={ctaMailtoHref} className={styles.ctaLink}>
-                {dict.footer.contact_cta_label}
-              </a>
-            </li>
-            <li className={styles.contactItem}>
-              <a
-                href="/Jakub_Pełka_CV_AI_Agent_Developer.pdf"
-                download
-                className={styles.cvLink}
-              >
-                {dict.footer.cv_download}
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Col 4: Cube */}
-        <div className={styles.col}>
-          <div className={styles.cubeWrap}>
-            <FooterCube />
+    <footer className="jp-web-footer">
+      <div className="jp-web-footer__inner">
+        <div id="contact" className={styles.contact}>
+          <p className="jp-web-footer__label">{f.label}</p>
+          <h2 className="jp-web-footer__heading">{f.heading}</h2>
+          <a className="jp-web-footer__mail" href={mailHref}>{CONTACT_EMAIL}</a>
+          <div className="jp-web-footer__actions">
+            <a className="jp-web-btn jp-web-btn--solid" href={ctaMailtoHref}>{f.contact_cta_label}</a>
+            <a
+              className="jp-web-btn jp-web-btn--outline"
+              href="/Jakub_Pełka_CV_AI_Agent_Developer.pdf"
+              download
+            >
+              {f.cv_download}
+            </a>
           </div>
         </div>
 
-      </div>
+        <div className="jp-web-footer__cols">
+          <div>
+            <h3 className="jp-web-footer__colhead">{f.projects}</h3>
+            <ul className="jp-web-footer__list jp-web-footer__list--2">
+              {projects.map((p) => (
+                <li key={p.meta.slug}>
+                  <Link href={`/${lang}/projects/${p.meta.slug}`}>
+                    {p.content.title.toUpperCase()}
+                    <span className="jp-web-footer__year">{new Date(p.meta.date).getFullYear()}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 className="jp-web-footer__colhead">{f.social}</h3>
+            <ul className="jp-web-footer__list">
+              <li><a href="https://github.com/jakub-pelka">GITHUB ↗</a></li>
+              <li><a href="https://www.linkedin.com/in/jakub-pe%C5%82ka-0961bb27b/">LINKEDIN ↗</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="jp-web-footer__colhead">{f.where_title}</h3>
+            <p className="jp-web-footer__place">{f.where_text}</p>
+          </div>
+        </div>
 
-      {/* Bottom bar */}
-      <div className={styles.bottom}>
-        <span className={styles.copy}>©{year} JAKUB PEŁKA - coded from scratch in NEXT.JS</span>
+        <div className="jp-web-footer__bar">
+          <p className="jp-web-footer__copy">
+            <span>© {year} JAKUB PEŁKA · {f.copyright}</span>
+            <span className="jp-web-footer__star" aria-hidden="true">*</span>
+          </p>
+          <div className="jp-web-footer__bar-actions">
+            <CopyForAI
+              projects={projects}
+              labels={{ copy: f.copy_for_ai, done: f.copy_for_ai_done, title: f.copy_for_ai_title }}
+            />
+            <a className="jp-web-btn jp-web-btn--quiet" href="#">{f.to_top}</a>
+          </div>
+        </div>
       </div>
     </footer>
   );

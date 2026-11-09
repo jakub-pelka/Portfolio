@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import type { Locale } from '@/i18n/config';
 import styles from './SiteHeader.module.css';
@@ -14,14 +13,21 @@ interface SiteHeaderProps {
     toggle_dark: string;
     toggle_light: string;
   };
-  contactLabel?: string;
-  roleLabel?: string;
+  /** Dictionary `nav` section: role, contact_button, all_projects, *_aria */
+  nav?: {
+    role?: string;
+    contact_button?: string;
+    all_projects?: string;
+    all_projects_aria?: string;
+    home_aria?: string;
+    lang_aria?: string;
+  };
 }
 
-export function SiteHeader({ lang, themeLabels, contactLabel, roleLabel }: SiteHeaderProps) {
+export function SiteHeader({ lang, themeLabels, nav }: SiteHeaderProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [visible, setVisible] = useState(true);
+  const [overHero, setOverHero] = useState(true);
   const lastScrollY = useRef(0);
   const isHome = pathname === `/${lang}` || pathname === '/';
 
@@ -32,6 +38,8 @@ export function SiteHeader({ lang, themeLabels, contactLabel, roleLabel }: SiteH
   useEffect(() => {
     const onScroll = () => {
       const currentY = window.scrollY;
+      // Na stronie głównej nagłówek jest przezroczysty, dopóki leży nad hero.
+      setOverHero(currentY < window.innerHeight - 64);
       const delta = currentY - lastScrollY.current;
 
       if (delta > 8 && currentY > 60) {
@@ -43,45 +51,56 @@ export function SiteHeader({ lang, themeLabels, contactLabel, roleLabel }: SiteH
       lastScrollY.current = currentY;
     };
 
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const contactLabel = nav?.contact_button ?? (lang === 'pl' ? '[ KONTAKT → ]' : '[ CONTACT → ]');
+  const allProjectsLabel = nav?.all_projects ?? (lang === 'pl' ? '[ ← WSZYSTKIE PROJEKTY ]' : '[ ← ALL PROJECTS ]');
+  const allProjectsAria = nav?.all_projects_aria ?? (lang === 'pl' ? 'Wszystkie projekty' : 'All projects');
+
   return (
     <header
-      className={`${styles.header} ${visible ? styles.visible : styles.hidden}`}
+      className={`jp-web-header ${isHome ? 'jp-web-header--home' : 'jp-web-header--project'} ${styles.header} ${visible ? styles.visible : styles.hidden}`}
       data-header-visible={visible ? 'true' : 'false'}
+      data-over-hero={isHome && overHero ? 'true' : undefined}
     >
-      <div className={styles.inner}>
-        {/* Back — visible outside home */}
-        <div className={styles.left}>
-          {isHome && roleLabel && <span className={styles.role}>{roleLabel}</span>}
-          {!isHome && (
-            <Button variant="v3" onClick={() => router.back()}>
-              ← BACK
-            </Button>
+      <div className="jp-web-header__inner">
+        <div className="jp-web-header__left">
+          {isHome ? (
+            nav?.role && <p className="jp-web-header__role">{nav.role}</p>
+          ) : (
+            <Link
+              href={`/${lang}#timeline`}
+              className="jp-web-btn jp-web-btn--link jp-web-header__back"
+              aria-label={allProjectsAria}
+            >
+              <span className="jp-web-header__back-full" aria-hidden="true">{allProjectsLabel}</span>
+              <span className="jp-web-header__back-short" aria-hidden="true">←</span>
+            </Link>
           )}
         </div>
 
-        {/* Logo / home link — hidden on home */}
-        {!isHome ? (
-          <Link href={`/${lang}`} className={styles.logo}>
-            JP
+        {!isHome && (
+          <Link href={`/${lang}`} className="jp-web-header__brand" aria-label={nav?.home_aria ?? 'Home'}>
+            JP<span className="jp-web-header__cursor" aria-hidden="true">_</span>
           </Link>
-        ) : (
-          <span />
         )}
 
-        {/* Lang switcher + Theme toggle */}
-        <div className={styles.right}>
-          {contactLabel && (
-            <Button variant="v3" href="#contact" rawText className={styles.langBtn}>
-              {contactLabel.toUpperCase()}
-            </Button>
-          )}
-          <Button variant="v3" href={switchedPath} rawText className={styles.langBtn}>
+        <div className="jp-web-header__actions">
+          <Link href="#contact" className="jp-web-btn jp-web-btn--outline">
+            {contactLabel}
+          </Link>
+          <Link
+            href={switchedPath}
+            className="jp-web-header__lang"
+            lang={otherLang}
+            hrefLang={otherLang}
+            aria-label={nav?.lang_aria ?? otherLang.toUpperCase()}
+          >
             {otherLang.toUpperCase()}
-          </Button>
+          </Link>
           <ThemeToggle labels={themeLabels} />
         </div>
       </div>

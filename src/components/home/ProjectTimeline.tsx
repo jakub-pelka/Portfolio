@@ -75,9 +75,9 @@ function ProjectEntry({
           <h2 className={styles.projectTitle}>{content.title}</h2>
           <p className={styles.projectDescription}>{content.description}</p>
           {meta.tags.length > 0 && (
-            <ul className={styles.tags}>
+            <ul className="jp-web-tags">
               {meta.tags.slice(0, 5).map((tag) => (
-                <li key={tag} className={styles.tag}>{tag}</li>
+                <li key={tag} className="jp-web-tag">{tag}</li>
               ))}
             </ul>
           )}
@@ -105,11 +105,11 @@ function ProjectEntry({
 
 export function ProjectTimeline({ lang, projects }: { lang: Locale; projects: ProjectWithLocale[] }) {
   return (
-    <section className={styles.timeline} id="timeline">
+    <section className={`jp-web-section ${styles.timeline}`} id="timeline">
       <div className={styles.axis} />
-      <div className={styles.inner}>
+      <div className={`jp-web-section__inner ${styles.inner}`}>
         {projects.map((project: ProjectWithLocale, projectIndex: number) => {
-          const entries = project.content.process.slice(0, 3);
+          const entries = project.content.process.slice(0, 1);
           const flip = projectIndex % 2 !== 0;
 
           return (

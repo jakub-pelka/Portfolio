@@ -4,7 +4,6 @@ import { IBM_Plex_Mono } from 'next/font/google';
 import localFont from 'next/font/local';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { SiteHeader } from '@/components/layout/SiteHeader';
-import { CopyForAI } from '@/components/ui/CopyForAI';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { getAllProjects } from '@/lib/projects/loader';
 import { getDictionary } from '@/i18n/get-dictionary';
@@ -75,9 +74,15 @@ export default async function LangLayout({
       className={`${vt323.variable} ${ibmPlexMono.variable}`}
     >
       <body>
+        {/* Przed pierwszym malowaniem: na stronie głównej bez przewinięcia i bez reduced motion ukryj nagłówek do końca
+            animacji startowej (Hero zdejmuje atrybut). Bez JS nagłówek zostaje widoczny. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=document.documentElement,p=location.pathname.replace(/[/]$/,'');var n=performance.getEntriesByType('navigation')[0];if(/^[/](pl|en)$/.test(p)&&!location.hash&&window.scrollY<2&&!(n&&n.type==='back_forward')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.setAttribute('data-intro','running')}}catch(e){}})()`,
+          }}
+        />
         <ThemeProvider>
-          <SiteHeader lang={lang} themeLabels={dict.theme} contactLabel={dict.nav.contact} roleLabel={dict.nav.role} />
-          <CopyForAI projects={projects} />
+          <SiteHeader lang={lang} themeLabels={dict.theme} nav={dict.nav} />
           {children}
           <SiteFooter lang={lang} projects={projects} />
         </ThemeProvider>

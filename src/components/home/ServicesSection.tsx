@@ -1,11 +1,12 @@
+import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
-import { TerminalCard } from '@/components/mdx/TerminalCard';
 import styles from './ServicesSection.module.css';
 
 interface ServiceItem {
   title: string;
   body: string;
+  example: { name: string; slug: string };
 }
 
 interface ProcessStep {
@@ -17,38 +18,59 @@ interface ProcessStep {
 export async function ServicesSection({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang);
   const s = dict.services;
+  const lastStep = s.process.length - 1;
 
   return (
-    <section className={styles.section} id="services">
-      <div className={styles.intro}>
-        <h2>{s.heading}</h2>
-        <p>{s.intro}</p>
-      </div>
+    <>
+      <section id="services" className={`jp-web-section ${styles.offer}`}>
+        <div className="jp-web-section__inner">
+          <p className="jp-web-section__label">[ {s.heading} ]</p>
+          <h2 className={`jp-web-section__title ${styles.title}`}>
+            {s.title_lead} <span className={styles.accent}>{s.title_accent}</span>
+          </h2>
+          <p className="jp-web-section__lead">{s.lead}</p>
 
-      <div className={styles.grid}>
-        {s.items.map((item: ServiceItem) => (
-          <TerminalCard key={item.title} title={item.title} status="active" dense>
-            <p className={styles.itemBody}>{item.body}</p>
-          </TerminalCard>
-        ))}
-      </div>
-
-      <div className={styles.process}>
-        <span className={styles.processHeading}>{s.process_heading}</span>
-        <div className={styles.processSteps}>
-          {s.process.map((step: ProcessStep) => (
-            <div className={styles.processStep} key={step.step}>
-              <span className={styles.processNum}>{step.step}</span>
-              <span className={styles.processTitle}>{step.title}</span>
-              <span className={styles.processBody}>{step.body}</span>
-            </div>
-          ))}
+          <ol className={styles.rows}>
+            {s.items.map((item: ServiceItem, i: number) => (
+              <li key={item.title} className={styles.row}>
+                <div className={styles.rowHead}>
+                  <span className={styles.rowNum}>{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className={styles.rowTitle}>{item.title}</h3>
+                </div>
+                <p className={styles.rowBody}>{item.body}</p>
+                <Link
+                  href={`/${lang}/projects/${item.example.slug}`}
+                  className={`jp-web-btn jp-web-btn--link ${styles.rowLink}`}
+                >
+                  {s.example_prefix} {item.example.name} →
+                </Link>
+              </li>
+            ))}
+          </ol>
         </div>
-      </div>
+      </section>
 
-      <div className={styles.ctaRow}>
-        <p className={styles.pricingNote}>{s.pricing_note}</p>
-      </div>
-    </section>
+      <section className={`jp-web-section ${styles.process}`}>
+        <div className="jp-web-section__inner">
+          <p className="jp-web-section__label">[ {s.process_heading} ]</p>
+          <ol className={styles.steps}>
+            {s.process.map((step: ProcessStep, i: number) => (
+              <li key={step.step} className={styles.step}>
+                <span
+                  aria-hidden="true"
+                  className={`${styles.diamond} ${i === lastStep ? styles.diamondAccent : ''}`}
+                />
+                <div className={`${styles.stepNum} ${i === lastStep ? styles.stepNumAccent : ''}`}>
+                  {step.step}
+                </div>
+                <div className={styles.stepTitle}>{step.title}</div>
+                <p className={styles.stepBody}>{step.body}</p>
+              </li>
+            ))}
+          </ol>
+          <p className={styles.pricing}>{s.pricing_note}</p>
+        </div>
+      </section>
+    </>
   );
 }

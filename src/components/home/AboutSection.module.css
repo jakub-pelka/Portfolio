@@ -1,60 +1,30 @@
-.section {
-  /* Padding/gap are var()s so the dev tweak panel (DevTweak) can dial them
-     live; the fallbacks are the committed defaults. Vertical padding is
-     trimmed vs. horizontal so the section stays short while filling width. */
-  padding: var(--tweak-section-py, 2.5rem) var(--tweak-section-px, 4rem);
-  border-top: 1px solid var(--color-border);
-  display: flex;
-  flex-direction: column;
-  gap: var(--tweak-section-gap, 5rem);
-  /* Positioning context for .lanyardSlot, which anchors to this section's
-     top border — the divider line the lanyard visually hangs from. */
+section.section {
   position: relative;
+  min-height: 460px;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
+  border-top: var(--hairline) solid var(--border);
 }
 
-.textRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 2rem;
-}
-
+/* Tekst kończy się przed kartą: karta wisi na 85% szerokości, ma ok. 5rem
+   po każdej stronie tej linii. Na szerokich ekranach wygrywa --measure. */
 .text {
-  /* Fixed-width sidebar (.lanyardSlot, flex-shrink:0) + flexible main content
-     is the standard pattern here: .text always gets "whatever's left after
-     the card", so the card's own width/scale can never squeeze or resize it.
-     min-width:0 lets a flex item shrink below its content's intrinsic width
-     (the flexbox default is auto, which would otherwise refuse to shrink and
-     overflow the row instead). */
-  flex: 1 1 auto;
-  min-width: 0;
-  /* The card hangs at --tweak-lanyard-x (85vw) and is ~5rem wide on each side
-     of that line; the text starts 4rem from the left edge. Cap the width so
-     the text ends before the card on mid-size screens (769–~1100px) instead of
-     running underneath it. On wide screens the 48rem cap still wins. */
-  max-width: min(48rem, calc(85vw - 9rem));
-  /* No z-index here on purpose — the card (PortfolioLanyard, z-index:1) is
-     meant to render as a physical object hanging in FRONT of this section's
-     content, text included, not tucked behind it. */
+  max-width: min(var(--measure), calc(85vw - 9rem));
 }
 
-/* Empty position reference for PortfolioLanyard (see AboutSection.tsx) — the
-   real card lives in PortfolioLanyard.tsx and only reads this box's rect.
-   Absolutely positioned so it reserves NO layout space: the card's box is
-   ~880px tall, and as a flex item that height pushed everything below the bio
-   (the tech grid) down by roughly that much for no visual reason.
-   X reuses --tweak-lanyard-x/the same left% + translateX(-50%) centering
-   Hero.module.css's .lanyardSlot uses (rather than an independent variable),
-   so the card lands at the same horizontal spot in both homes by construction
-   — .section and .hero are both full-width blocks with the same default
-   padding (--tweak-section-px/--space-4, both 4rem), so a % of one's padding
-   box matches the other's almost exactly.
-   Y is anchored to the section's top border — the divider line the lanyard
-   hangs from — so --tweak-about-lanyard-y is measured from that line and is
-   independent from Hero's own Y (a %, measured from a different reference).
-   The default is negative (the box sits mostly above the line) so the card
-   lands at a comfortable height next to the bio text; PortfolioLanyard.tsx
-   clips off whatever part of the box pushes above the line itself, so the
-   strap never runs into the section above no matter how negative this gets. */
+.text b {
+  color: var(--ink);
+}
+
+.text p + p {
+  margin-top: var(--space-1_5);
+}
+
+/* Pusty punkt odniesienia dla PortfolioLanyard: nie zajmuje miejsca w układzie.
+   Pozioma pozycja: --tweak-lanyard-x (85%). Pionowa: góra karty leży ok. 59%
+   szerokości slotu pod jego górą, więc stałe -232 px podnosi ją ku linii;
+   poniżej ok. 1085 px szerokości trzymamy górę karty 60 px pod linią.
+   PortfolioLanyard przycina (clip) to, co wystaje nad linię sekcji. */
 .lanyardSlot {
   position: absolute;
   top: 0;
@@ -62,91 +32,20 @@
   --slot-width: calc(clamp(360px, 38vw, 620px) * var(--tweak-lanyard-scale, 1.2) * var(--tweak-about-lanyard-scale, 1));
   width: var(--slot-width);
   aspect-ratio: 3 / 4;
-  /* The card's top sits at ~59% of the slot's width below the slot's top, so a
-     fixed -232px lifts it toward the line as the slot shrinks. Below ~1085px
-     wide, hold the card top 60px under the line instead. */
   transform: translate(-50%, var(--tweak-about-lanyard-y, max(-232px, calc(60px - var(--slot-width) * 0.59))));
   pointer-events: none;
 }
 
 @media (max-width: 768px) {
+  section.section {
+    min-height: 0;
+  }
+
   .lanyardSlot {
     display: none;
   }
 
-  /* No card on mobile — the text uses the full width again. */
   .text {
-    max-width: 48rem;
-  }
-}
-
-.text h2 {
-  font-family: var(--font-ibm-plex-mono);
-  font-weight: bold;
-  font-size: var(--text-title);
-  letter-spacing: -0.03em;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-}
-
-.text p {
-  font-family: var(--font-ibm-plex-mono);
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--color-text);
-}
-
-.text p + p {
-  margin-top: 0.75rem;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--tweak-about-grid-gap, 1rem);
-}
-
-/* ── Inline tech rows: label + tags on one line (short cards, filled width) ── */
-
-.techRow {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-}
-
-.techLabel {
-  flex: 0 0 4.5rem;
-  font-family: var(--font-vt323);
-  font-size: 0.9rem;
-  letter-spacing: 0.04em;
-  opacity: 0.5;
-  text-transform: uppercase;
-}
-
-.techTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-@media (max-width: 768px) {
-  .section {
-    padding: 2rem;
-  }
-
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-  }
-
-  .techLabel {
-    flex-basis: 3.5rem;
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .grid {
-    grid-template-columns: 1fr;
+    max-width: none;
   }
 }

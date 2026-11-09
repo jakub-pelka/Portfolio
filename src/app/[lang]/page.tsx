@@ -5,6 +5,7 @@ import { Hero } from '@/components/home/Hero';
 import { ProjectTimeline } from '@/components/home/ProjectTimeline';
 import { ServicesSection } from '@/components/home/ServicesSection';
 import { AboutSection } from '@/components/home/AboutSection';
+import { SkillsSection } from '@/components/home/SkillsSection';
 import { PortfolioLanyard } from '@/components/home/PortfolioLanyard';
 import { DevTweak } from '@/components/dev/DevTweak';
 import { getAllProjects } from '@/lib/projects/loader';
@@ -80,15 +81,18 @@ export default async function Home({
   return (
     <main style={{ position: 'relative' }}>
       <Hero dict={dict} />
+      <AboutSection label={dict.about.heading}>
+        <p
+          className="jp-web-section__lead"
+          dangerouslySetInnerHTML={{ __html: dict.about.p1 }}
+        />
+        <p className="jp-web-section__lead">{dict.about.p2}</p>
+      </AboutSection>
+      <SkillsSection lang={lang} />
       <ProjectTimeline lang={lang} projects={projects} />
       <ServicesSection lang={lang} />
-      <AboutSection>
-        <h2>{dict.about.heading}</h2>
-        <p dangerouslySetInnerHTML={{ __html: dict.about.p1 }} />
-        <p>{dict.about.p2}</p>
-      </AboutSection>
-      {/* Single, permanently-mounted lanyard card — see PortfolioLanyard.tsx
-          for why this lives here rather than inside Hero/AboutSection. */}
+      {/* Jedna, na stałe zamontowana karta na smyczy: spoczywa w slocie
+          #about-lanyard-slot (zob. PortfolioLanyard.tsx). */}
       <PortfolioLanyard lang={lang} />
       <DevTweak />
     </main>

@@ -51,7 +51,7 @@ export function ThemeToggle({ labels }: ThemeToggleProps = {}) {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
-  if (!mounted) return <div style={{ width: 22, height: 22 }} />;
+  if (!mounted) return <div className="jp-web-header__theme" aria-hidden="true" />;
 
   const isDark = resolvedTheme === 'dark';
   const label = isDark
@@ -63,25 +63,7 @@ export function ThemeToggle({ labels }: ThemeToggleProps = {}) {
       type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-label={label}
-      style={{
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        color: 'currentColor',
-        padding: '0.25rem',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        opacity: 0.5,
-        transition: 'opacity 150ms ease',
-        // 44x44 hit area, but layout footprint stays 22x22
-        margin: -11,
-        width: 44,
-        height: 44,
-        overflow: 'hidden',
-      }}
-      onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-      onMouseLeave={e => (e.currentTarget.style.opacity = '0.5')}
+      className="jp-web-header__theme"
     >
       <AnimatePresence mode="wait" custom={isDark}>
         <motion.div

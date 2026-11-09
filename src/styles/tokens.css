@@ -1,18 +1,37 @@
 /* src/styles/tokens.css */
 
 :root {
-  /* === Colors (Light Mode by default) === */
-  --color-bg: #F6F5F0;
-  --color-bg-card: #F6F5F0;
+  /* === Colors: tokeny systemu "Jakub Pelka" (jasny) === */
+  --bg: #f6f5f0;
+  --surface-card: #efeeea;
+  --ink: #1c1c1c;
+  --ink-muted: #5d5d5c;
+  --ink-subtle: #6b6b69;
+  --ink-faint: #9f9e9b; /* tylko dekoracja, nie tekst */
+  --border: #d5d4d0;
+  --accent: #55aaaa;
+  --accent-text: #287373;
+  --on-accent: #1c1c1c;
+  --term-bg: #1c1c1c;
+  --term-ink: #f6f5f0;
+  --term-muted: #b5b4b0;
+  --term-accent: #55aaaa;
+  --term-border: #1c1c1c;
+
+  /* === Aliasy starych nazw (do czasu migracji komponentow) === */
+  --color-bg: var(--bg);
+  --color-bg-card: var(--bg);
   --color-bg-secondary: rgba(28, 28, 28, 0.03);
-  --color-text: #1C1C1C;
-  --color-accent: #55AAAA;
-  --color-accent-text: #286B6B;
-  --color-border: rgba(28, 28, 28, 0.15);
-  
+  --color-text: var(--ink);
+  --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
+  --color-border: var(--border);
+
   /* === Typography === */
   --font-vt323: 'VT323', monospace;
   --font-ibm-plex-mono: 'IBM Plex Mono', monospace;
+  --font-mono: var(--font-ibm-plex-mono);
+  --font-pixel: var(--font-vt323); /* VT323: size-adjust 130% w @font-face */
 
   /* === Spacing Scale === */
   --space-0_5: 0.5rem;  /* drobne paddingi, micro spacing między tagami, mikro marginesy */
@@ -23,6 +42,8 @@
   --space-2: 2rem;      /* padding w Base Card, odstęp między komorami layoutu */
   --space-3: 3rem;      /* duży spacing w Hero / sekcje główne */
   --space-4: 4rem;      /* bardzo duże odstępy między głównymi sekcjami / full-screen spacing */
+  --space-5: 96px;
+  --space-6: 128px;
 
   /* === Fluid Typography (clamp) === */
   --text-hero: clamp(2.5rem, 6vw, 5rem);
@@ -31,14 +52,27 @@
   --text-label: clamp(0.75rem, 1.5vw, 0.875rem);
   --text-micro: clamp(0.625rem, 1vw, 0.75rem);
 
+  /* === Web type scale === */
+  --web-display: clamp(64px, 12vw, 120px);
+  --web-title: clamp(40px, 6vw, 64px);
+  --web-statement: clamp(28px, 4vw, 40px);
+  --web-lead: clamp(18px, 2vw, 20px);
+  --web-label: clamp(18px, 2vw, 20px);
+
   /* === UI Rules === */
-  --border-radius: 4px; /* 2-4px per spec */
+  --border-radius: 0;
+  --radius-none: 0;
+  --hairline: 1px;
   --border-width: 1px;
   --divider-opacity: 0.2;
 
   /* === Layout === */
   --max-width: 1200px;
-  --page-margin: clamp(1rem, 4vw, 2rem);
+  --page-max: 1280px;
+  --measure: 760px;
+  --page-margin: 48px;
+  --section-y: 160px;
+  --target-min: 44px;
 
   /* === Z-Index === */
   --z-background: 0;
@@ -54,24 +88,41 @@
   --transition-steps: steps(4, end);
 }
 
+/* Telefon: jeden próg 768px */
+@media (max-width: 767px) {
+  :root {
+    --page-margin: 20px;
+    --section-y: var(--space-5);
+  }
+}
+
 /* Dark mode override */
 [data-theme='dark'] {
-  --color-bg: #1C1C1C;
-  --color-bg-card: #1C1C1C;
+  --bg: #1c1c1c;
+  --surface-card: #272727;
+  --ink: #f6f5f0;
+  --ink-muted: #b5b4b0;
+  --ink-subtle: #9f9e9b;
+  --ink-faint: #737371;
+  --border: #3d3d3c;
+  --accent-text: #55aaaa;
+  --term-bg: #272727;
+  --term-border: #3d3d3c;
   --color-bg-secondary: rgba(246, 245, 240, 0.05);
-  --color-text: #F6F5F0;
-  --color-border: rgba(246, 245, 240, 0.15);
-  --color-accent-text: #55AAAA;
-  /* --color-accent remains #55AAAA */
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-bg: #1C1C1C;
-    --color-bg-card: #1C1C1C;
+    --bg: #1c1c1c;
+    --surface-card: #272727;
+    --ink: #f6f5f0;
+    --ink-muted: #b5b4b0;
+    --ink-subtle: #9f9e9b;
+    --ink-faint: #737371;
+    --border: #3d3d3c;
+    --accent-text: #55aaaa;
+    --term-bg: #272727;
+    --term-border: #3d3d3c;
     --color-bg-secondary: rgba(246, 245, 240, 0.05);
-    --color-text: #F6F5F0;
-    --color-border: rgba(246, 245, 240, 0.15);
-    --color-accent-text: #55AAAA;
   }
 }

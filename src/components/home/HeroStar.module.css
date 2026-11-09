@@ -1,0 +1,26 @@
+/* Warstwa gwiazdki ASCII pod napisami hero. Nie przechwytuje kliknięć. */
+.host {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: var(--z-background);
+}
+
+/* Element tworzony przez AsciiEffect (div > table). Kolor znaków = --ink, więc działa w obu motywach. */
+.host > div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  line-height: 0;
+  font-size: 0;
+  color: var(--ink);
+  will-change: transform;
+}
+
+.host table {
+  display: block;
+}

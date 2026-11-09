@@ -1,118 +1,101 @@
-.hero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-  padding: var(--space-4);
-  background-color: var(--color-bg);
-  /* The reference image shows a border or a card-like effect */
-  /* Let's keep it clean as per design system but maybe add a subtle border if it's the global container */
-}
+/*
+  Hero: gwiazdka ASCII (HeroStar) pod napisami. Na desktopie napisy leżą na kadrze 800x600 (1u = 1/800 szerokości kadru),
+  wyśrodkowanym w hero; ten sam kadr liczy gwiazdkę w HeroStar.tsx. Na telefonie kadr = cały ekran, napisy w kolumnie.
+  Napisy mają obwódkę w kolorze tła (--bg), która wycina znaki gwiazdki pod literami; działa w obu motywach.
 
-/* Empty placeholder for PortfolioLanyard (see Hero.tsx) — reserves the exact
-   spot/size the card used to occupy here. Purely a position reference now;
-   nothing renders inside it, so no z-index or pointer-events needed. */
-.lanyardSlot {
-  position: absolute;
-  top: 0;
-  left: var(--tweak-lanyard-x, 85%);
-  transform: translate(-50%, var(--tweak-lanyard-y, -20%));
-  width: calc(clamp(360px, 38vw, 620px) * var(--tweak-lanyard-scale, 1.2));
-  aspect-ratio: 3 / 4;
-}
-
-@media (max-width: 768px) {
-  .lanyardSlot {
-    display: none;
-  }
-}
-
-/* 
-  Hierarchia w Hero:
-  1. VT323 → "Hey"
+  Hierarchia fontów:
+  1. VT323 → "Hey" (face ma size-adjust 130%, stąd mnożnik 0.385 = 0.5 / 1.3)
   2. IBM Plex Mono Italic → "It's"
   3. IBM Plex Mono Bold → "Jakub"
   4. IBM Plex Mono Regular → "Pełka"
 */
 
-.star {
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  width: 100%;
+  overflow: clip;
+  background-color: var(--color-bg);
+}
+
+/* Kontener rozmiarowy: jednostki cqw/cqh dają --u bez JS */
+.stage {
   position: absolute;
-  left: clamp(2rem, 15vw, 20vw);
-  top: clamp(8rem, 30vh, 40vh);
-  font-family: var(--font-ibm-plex-mono);
-  font-weight: 700;
-  font-size: var(--text-title); /* Wg designu moze byc ciut wieksze w rzczywistosci, ale niech bedzie title */
-  color: var(--color-text);
-  line-height: 1;
-  text-decoration: none;
-  cursor: pointer;
-  transition: opacity 200ms ease;
-}
-
-/* Powiększony obszar klikalny bez wpływu na layout */
-.star::after {
-  content: '';
-  position: absolute;
-  inset: -12px;
-}
-
-.star:hover {
-  opacity: 0.5;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  /* Adjusting centering slightly off to match the optical center of the block */
-  transform: translateX(-2vw);
+  inset: 0;
+  container-type: size;
+  pointer-events: none;
   z-index: var(--z-content);
 }
 
-.hey {
-  font-family: var(--font-vt323);
-  font-size: var(--text-title); /* Nie text-hero, to jest mikro nagiowek wg design system: "Mikro nagłówki (np. "Hey")" */
-  line-height: 1;
-  margin-bottom: var(--space-1);
-  /* POSITIONING:
-     'margin-left' is the target offset over "Jakub". 
-  */
-  margin-left: clamp(2rem, 4vw, 5vw);
-  
-  /* Initial state for GSAP */
-  opacity: 0;
+.stageBox {
+  --u: min(calc(100cqw / 800), calc(100cqh / 600), 1.8px);
+  --hero: var(--web-display);
+  position: absolute;
+  left: calc((100cqw - 800 * var(--u)) / 2);
+  top: calc((100cqh - 600 * var(--u)) / 2);
+  width: calc(800 * var(--u));
+  height: calc(600 * var(--u));
 }
 
+.content {
+  position: absolute;
+  left: calc(357 * var(--u));
+  top: calc(284 * var(--u));
+}
+
+/* Obwódka wycinająca gwiazdkę pod literami */
+.hey,
+.its,
+.firstName,
+.lastName,
+.portfolio {
+  -webkit-text-stroke: 0.16em var(--bg);
+  paint-order: stroke fill;
+}
+
+.hey,
+.its {
+  -webkit-text-stroke-width: 0.2em;
+}
+
+.hey {
+  position: absolute;
+  left: calc(var(--hero) * 1.6);
+  bottom: 100%;
+  margin-bottom: calc(var(--hero) * 0.04);
+  font-family: var(--font-vt323);
+  font-size: calc(var(--hero) * 0.385);
+  line-height: 1;
+  white-space: nowrap;
+  transform-origin: bottom center;
+  /* stan początkowy dla GSAP */
+  opacity: 0;
+}
 
 .nameContainer {
   display: flex;
   align-items: baseline;
-  gap: var(--space-15); /* wiekszy odstep miedzy It's a Jakub */
-  /* Prevent flashing before JS takes over */
+  gap: calc(var(--hero) * 0.3);
+  white-space: nowrap;
+  /* zapobiega mignięciu przed startem JS */
   opacity: 0;
 }
 
 .its {
   font-family: var(--font-ibm-plex-mono);
   font-style: italic;
-  font-size: var(--text-title);
+  font-size: calc(var(--hero) * 0.5);
   line-height: 1;
-  /* 'It's' seems to be aligned somewhere around the vertical middle of 'Jakub' butbaseline alignment is standard */
 }
 
-/* Tego overflow: hidden potrzebujemy na każdym elemencie-rodzicu lini lub znaku dla efektu text-maskingu */
+/* overflow: hidden tworzy maskę wjazdu liter; zapas wokół liter, żeby maska nie przycinała obwódki */
 .maskWrapper {
   overflow: hidden;
   display: inline-flex;
   vertical-align: top;
-  /* Adjust bounds to prevent clipping on some bold/italic glyphs like 'b' at the edge */
-  padding-right: 0.15em;
-  margin-right: -0.15em;
-  padding-bottom: 0.1em;
-  margin-bottom: -0.1em;
+  padding: 0.14em 0.22em 0.2em 0.14em;
+  margin: -0.14em -0.22em -0.2em -0.14em;
 }
 
 .nameGroup {
@@ -124,75 +107,84 @@
 .firstName {
   font-family: var(--font-ibm-plex-mono);
   font-weight: 700;
-  font-size: var(--text-hero);
-  line-height: 0.85; /* Tight line height */
-  letter-spacing: -0.06em; /* -8% per spec for IBM Plex Mono large sizes */
+  font-size: var(--hero);
+  line-height: 0.85;
+  letter-spacing: -0.06em;
   margin: 0;
 }
 
 .lastName {
   font-family: var(--font-ibm-plex-mono);
   font-weight: 400;
-  font-size: calc(var(--text-hero) * 0.75);
+  font-size: calc(var(--hero) * 0.75);
   line-height: 0.85;
   letter-spacing: -0.06em;
-  margin: 0;
-  margin-top: var(--space-05);
-  align-self: flex-end; /* Pełka is right-aligned to Jakub in the reference */
-  /* In the reference image, it seems a bit smaller or just thinner */
+  margin: calc(var(--hero) * 0.06) 0 0;
+  align-self: flex-end; /* Pełka wyrównana do prawej krawędzi Jakub */
+}
+
+.portfolio:focus-visible,
+.arrowDown:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
 }
 
 .bottomTokens {
   position: absolute;
-  bottom: var(--space-4);
+  left: 0;
+  right: 0;
+  bottom: max(0.5rem, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-1);
+  gap: 0;
   z-index: var(--z-content);
 }
 
-.portfolio {
-  /* reset domyślnych stylów <button>, wygląd jak dawny <span> */
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  color: var(--color-text);
-  cursor: pointer;
-  font-family: var(--font-vt323);
-  font-size: var(--text-label);
-  text-transform: none; /* keep original capitalization */
-  letter-spacing: 0.05em;
-}
-
-.portfolio:focus-visible {
-  outline: 1px solid var(--color-accent);
-  outline-offset: 4px;
-}
-
+.portfolio,
 .arrowDown {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: var(--target-min);
+  min-height: var(--target-min);
+  background: none;
+  border: none;
+  margin: 0;
   color: var(--color-text);
-  /* A nice sharp pixel-art looking arrow or just crisp svg */
+  cursor: pointer;
+  visibility: hidden; /* odsłania GSAP (autoAlpha) */
+}
+
+.portfolio {
+  padding: 0 var(--space-1);
+  font: inherit;
+  font-family: var(--font-vt323);
+  font-size: var(--text-label);
+  text-transform: none;
+  letter-spacing: 0.05em;
+  -webkit-text-stroke-width: 0.35em;
+}
+
+.arrowSvg {
+  display: block;
+  overflow: visible;
+}
+
+.arrowSvg path {
+  stroke: var(--bg);
+  stroke-width: 6px;
+  stroke-linejoin: miter;
+  paint-order: stroke;
+}
+
+.bounce .arrowSvg {
   animation: bounce 2s infinite ease-in-out;
 }
 
-.arrowDown:focus-visible {
-  outline: 1px solid var(--color-accent);
-  outline-offset: 4px;
-}
-
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -201,35 +193,39 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .arrowDown {
+  .bounce .arrowSvg {
     animation: none;
   }
 }
 
-/* Mobile Adjustments */
-@media (max-width: 768px) {
-  .star {
-    left: var(--space-2);
-    top: 25vh;
+/* Telefon: kadr = cały ekran, napisy w kolumnie */
+@media (max-width: 767px) {
+  .stageBox {
+    --u: calc(100cqw / 800);
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
   }
-  
+
   .content {
-    transform: none;
-    align-items: center; /* Wg spec na mobile wszystko sie stackuje/wyrownuje do srodka lub krawedzi */
+    left: var(--page-margin);
+    top: 50%;
   }
 
   .hey {
-    margin-left: 0;
-    align-self: flex-start;
+    position: static;
+    margin: 0 0 calc(var(--hero) * 0.04);
   }
 
   .nameContainer {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-05);
+    gap: calc(var(--hero) * 0.1);
   }
-  
+
   .lastName {
-    align-self: flex-start; /* lub right zaleznie od estetyki na mobile */
+    align-self: flex-start;
   }
+
 }
