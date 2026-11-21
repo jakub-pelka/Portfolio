@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "bash scripts/sync-assets.sh",
     "dev": "next dev",
     "prebuild": "bash scripts/sync-assets.sh",
     "build": "next build",

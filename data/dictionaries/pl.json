@@ -177,5 +177,11 @@
         ]
       }
     ]
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Nie ma takiej strony",
+    "description": "Ten adres nie prowadzi donikąd — mógł się zmienić albo go nigdy nie było.",
+    "cta_home": "STRONA GŁÓWNA →"
   }
 }

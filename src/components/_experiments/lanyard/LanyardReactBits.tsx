@@ -409,7 +409,7 @@ function Band({
     ctx.drawImage(baseImg, 0, 0, W, H);
 
     const NAME = 'Jakub Pełka';
-    const ROLE = 'FULL-STACK DEVELOPER';
+    const ROLE = 'FULL-STACK & AI DEVELOPER';
     const FRONT_PROMPT = lang === 'en'
       ? { title: 'CLICK ME', sub: '[ about me ↓ ]' }
       : { title: 'KLIKNIJ MNIE', sub: '[ o mnie ↓ ]' };
@@ -540,8 +540,14 @@ function Band({
 
         // role — bigger and noticeably more opaque than before (was 0.5,
         // easy to lose against the cream card at the card's real render size)
-        const roleSize = Math.round(ih * 0.046);
+        let roleSize = Math.round(ih * 0.046);
         ctx.font = `500 ${roleSize}px "IBM Plex Mono", monospace`;
+        // Shrink a long role so it never runs past the photo's width.
+        const roleWidth = ctx.measureText(ROLE).width;
+        if (roleWidth > photoW) {
+          roleSize = Math.floor(roleSize * photoW / roleWidth);
+          ctx.font = `500 ${roleSize}px "IBM Plex Mono", monospace`;
+        }
         ctx.fillStyle = CARD_SHADOW;
         ctx.globalAlpha = 0.7;
         ctx.fillText(ROLE, photoX, nameY + nameSize * 1.05 + roleSize * 1.15);

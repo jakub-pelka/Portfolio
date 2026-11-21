@@ -177,5 +177,11 @@
         ]
       }
     ]
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Page not found",
+    "description": "This address leads nowhere — it may have moved, or never existed.",
+    "cta_home": "HOME →"
   }
 }

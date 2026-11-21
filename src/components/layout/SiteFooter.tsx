@@ -32,7 +32,7 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
             <a className="jp-web-btn jp-web-btn--solid" href={ctaMailtoHref}>{f.contact_cta_label}</a>
             <a
               className="jp-web-btn jp-web-btn--outline"
-              href="/Jakub_Pełka_CV_AI_Agent_Developer.pdf"
+              href={`/Jakub_Pelka_CV_Fullstack_AI_${lang === 'pl' ? 'PL' : 'EN'}.pdf`}
               download
             >
               {f.cv_download}

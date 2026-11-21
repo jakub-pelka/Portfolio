@@ -49,3 +49,7 @@ next-env.d.ts
 # committed and no-ops when these are absent — see its header comment).
 src/components/dev/DevTweakPanel.tsx
 src/components/dev/DevTweakPanel.module.css
+
+# Project images: copied from content/projects/*/assets by scripts/sync-assets.sh
+# before dev and build, so the copies are not kept in git.
+/public/projects/
