@@ -76,7 +76,7 @@
   left: calc(var(--hero) * 1.6);
   bottom: 100%;
   margin-bottom: calc(var(--hero) * 0.04);
-  font-family: var(--font-vt323);
+  font-family: var(--font-pixel);
   font-size: calc(var(--hero) * 0.385);
   line-height: 1;
   white-space: nowrap;
@@ -187,7 +187,7 @@
 .portfolio {
   padding: 0 var(--space-1);
   font: inherit;
-  font-family: var(--font-vt323);
+  font-family: var(--font-pixel);
   font-size: var(--text-label);
   text-transform: none;
   letter-spacing: 0.05em;

@@ -5,7 +5,6 @@ import matter from 'gray-matter';
 import type { Locale } from '@/i18n/config';
 import type {
   ProjectMeta,
-  ProjectConfig,
   ProjectContent,
   ProjectWithLocale,
 } from '@/lib/types/project';
@@ -46,17 +45,6 @@ async function getProjectMeta(slug: string): Promise<ProjectMeta> {
 }
 
 /**
- * Import and return config.ts for a project
- */
-async function getProjectConfig(slug: string): Promise<ProjectConfig> {
-  assertSlug(slug);
-
-  // Dynamic import for TypeScript config file
-  const configModule = await import(`@/../content/projects/${slug}/config.ts`);
-  return configModule.projectConfig;
-}
-
-/**
  * Read and parse MDX file for a specific locale
  */
 async function getProjectContent(
@@ -82,22 +70,20 @@ async function getProjectContent(
 /**
  * Get complete project data for a specific locale
  */
-export async function getProject(
+export const getProject = cache(async (
   slug: string,
   locale: Locale
-): Promise<ProjectWithLocale> {
-  const [meta, config, content] = await Promise.all([
+): Promise<ProjectWithLocale> => {
+  const [meta, content] = await Promise.all([
     getProjectMeta(slug),
-    getProjectConfig(slug),
     getProjectContent(slug, locale),
   ]);
 
   return {
     meta,
-    config,
     content,
   };
-}
+});
 
 /**
  * Get all projects for a specific locale
@@ -126,42 +112,3 @@ export const getAllProjects = cache(async (
     return new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime();
   });
 });
-
-/**
- * Get projects by status
- */
-export async function getProjectsByStatus(
-  locale: Locale,
-  status: ProjectMeta['status']
-): Promise<ProjectWithLocale[]> {
-  const allProjects = await getAllProjects(locale);
-  return allProjects.filter((project) => project.meta.status === status);
-}
-
-/**
- * Get projects by tag
- */
-export async function getProjectsByTag(
-  locale: Locale,
-  tag: string
-): Promise<ProjectWithLocale[]> {
-  const allProjects = await getAllProjects(locale);
-  return allProjects.filter((project) =>
-    project.meta.tags.includes(tag)
-  );
-}
-
-/**
- * Get all unique tags from all projects
- */
-export async function getAllTags(): Promise<string[]> {
-  const slugs = await getAllProjectSlugs();
-  const allTags = new Set<string>();
-
-  for (const slug of slugs) {
-    const meta = await getProjectMeta(slug);
-    meta.tags.forEach((tag) => allTags.add(tag));
-  }
-
-  return Array.from(allTags).sort();
-}

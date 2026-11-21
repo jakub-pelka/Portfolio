@@ -3,6 +3,7 @@ import type { Locale } from '@/i18n/config';
 import type { ProjectWithLocale } from '@/lib/types/project';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { CopyForAI } from '@/components/ui/CopyForAI';
+import { buildCopyMarkdown } from '@/lib/copy-for-ai';
 import { CONTACT_EMAIL } from '@/lib/contact';
 import { Parallax } from '@/components/ui/Parallax';
 import styles from './SiteFooter.module.css';
@@ -74,7 +75,7 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
           </p>
           <div className="jp-web-footer__bar-actions">
             <CopyForAI
-              projects={projects}
+              markdown={buildCopyMarkdown(projects, dict)}
               labels={{ copy: f.copy_for_ai, done: f.copy_for_ai_done, title: f.copy_for_ai_title }}
             />
             <a className="jp-web-btn jp-web-btn--quiet" href="#">{f.to_top}</a>

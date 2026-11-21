@@ -15,7 +15,10 @@ const HeroStar = dynamic(() => import('./HeroStar').then((m) => m.HeroStar), { s
 interface HeroProps {
   dict: {
     hero: {
+      greeting: string;
       intro: string;
+      name_first: string;
+      name_last: string;
       cta_projects: string;
       [key: string]: unknown;
     };
@@ -119,6 +122,31 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       }, 0);
     };
 
+    // Stan końcowy bez animacji: wszystko, czego inline script nie uznał za wejście na stronę
+    // (reduced motion, przewinięcie, hash, „wstecz”) oraz nawigacja kliencka
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const skipIntro = !introEligible;
+
+    loopAllowed.current = !reduced;
+
+    if (skipIntro) {
+      gsap.set(hey, { opacity: 1, xPercent: 0, skewX: -15, transformOrigin: 'bottom center' });
+      gsap.set(nameContainer, { opacity: 1 });
+      gsap.set([portfolio, arrow], { autoAlpha: 1 });
+      if (!reduced) arrow.classList.add(styles.bounce);
+      clockT.current = INTRO_DURATION;
+      finished.current = true;
+      root.dataset.intro = 'done';
+      // gwiazdka (jeśli już gotowa) rysuje stan końcowy; pętla tylko bez reduced motion
+      starHandle.current?.render(INTRO_DURATION);
+      if (!reduced) starHandle.current?.startLoop(INTRO_DURATION);
+      return () => {
+        starHandle.current?.stopLoop();
+        delete root.dataset.intro;
+        leave();
+      };
+    }
+
     // Podział napisów na litery (SplitType) — bez zmian względem poprzedniej wersji
     const splitIts = new SplitType(itsRef.current, { types: 'chars' });
     const splitFirst = new SplitType(firstNameRef.current, { types: 'chars' });
@@ -135,33 +163,6 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       splitFirst.revert();
       splitLast.revert();
     };
-
-    // Stan końcowy bez animacji: wszystko, czego inline script nie uznał za wejście na stronę
-    // (reduced motion, przewinięcie, hash, „wstecz”) oraz nawigacja kliencka
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const skipIntro = !introEligible;
-
-    loopAllowed.current = !reduced;
-
-    if (skipIntro) {
-      gsap.set(hey, { opacity: 1, xPercent: 0, skewX: -15, transformOrigin: 'bottom center' });
-      gsap.set(nameContainer, { opacity: 1 });
-      gsap.set(allChars, { yPercent: 0, opacity: 1 });
-      gsap.set([portfolio, arrow], { autoAlpha: 1 });
-      if (!reduced) arrow.classList.add(styles.bounce);
-      clockT.current = INTRO_DURATION;
-      finished.current = true;
-      root.dataset.intro = 'done';
-      // gwiazdka (jeśli już gotowa) rysuje stan końcowy; pętla tylko bez reduced motion
-      starHandle.current?.render(INTRO_DURATION);
-      if (!reduced) starHandle.current?.startLoop(INTRO_DURATION);
-      return () => {
-        starHandle.current?.stopLoop();
-        delete root.dataset.intro;
-        split();
-        leave();
-      };
-    }
 
     // ---- oś czasu zgodna z prototypem (DUR = 6 s, napisy od T = 2,2 s) ----
     root.dataset.intro = 'running';
@@ -193,7 +194,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
         ease: 'none',
         onUpdate: () => {
           clockT.current = clock.t;
-          starHandle.current?.render(clock.t);
+          starHandle.current?.render(clock.t, true);
         },
       },
       0,
@@ -307,21 +308,21 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
         <div className={styles.stageBox}>
           <div className={styles.content}>
             <div className={styles.hey} ref={heyRef}>
-              Hey
+              {dict.hero.greeting}
             </div>
             <div className={styles.nameContainer} ref={nameContainerRef}>
               <span className={`${styles.its} ${styles.maskWrapper}`}>
-                <span ref={itsRef}>{dict.hero.intro}</span>
+                <span ref={itsRef} aria-label={dict.hero.intro}>{dict.hero.intro}</span>
               </span>
               <div className={styles.nameGroup}>
                 <div className={styles.maskWrapper}>
-                  <h1 className={styles.firstName} ref={firstNameRef}>
-                    Jakub
+                  <h1 className={styles.firstName} ref={firstNameRef} aria-label={dict.hero.name_first}>
+                    {dict.hero.name_first}
                   </h1>
                 </div>
                 <div className={styles.maskWrapper}>
-                  <h2 className={styles.lastName} ref={lastNameRef}>
-                    Pełka
+                  <h2 className={styles.lastName} ref={lastNameRef} aria-label={dict.hero.name_last}>
+                    {dict.hero.name_last}
                   </h2>
                 </div>
               </div>

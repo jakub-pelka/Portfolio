@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import { useSyncExternalStore } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import styles from './ThemeToggle.module.css';
 
 const emptySubscribe = () => () => {};
 
@@ -29,24 +29,6 @@ const MoonIcon = () => (
   </svg>
 );
 
-const iconVariants = {
-  enter: (isDark: boolean) => ({
-    opacity: 0,
-    rotate: isDark ? -90 : 90,
-    scale: 0.5,
-  }),
-  center: {
-    opacity: 1,
-    rotate: 0,
-    scale: 1,
-  },
-  exit: (isDark: boolean) => ({
-    opacity: 0,
-    rotate: isDark ? 90 : -90,
-    scale: 0.5,
-  }),
-};
-
 export function ThemeToggle({ labels }: ThemeToggleProps = {}) {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
@@ -65,20 +47,12 @@ export function ThemeToggle({ labels }: ThemeToggleProps = {}) {
       aria-label={label}
       className="jp-web-header__theme"
     >
-      <AnimatePresence mode="wait" custom={isDark}>
-        <motion.div
-          key={isDark ? 'moon' : 'sun'}
-          custom={isDark}
-          variants={iconVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          {isDark ? <MoonIcon /> : <SunIcon />}
-        </motion.div>
-      </AnimatePresence>
+      <span
+        key={isDark ? 'moon' : 'sun'}
+        className={`${styles.icon} ${isDark ? styles.fromDark : styles.fromLight}`}
+      >
+        {isDark ? <MoonIcon /> : <SunIcon />}
+      </span>
     </button>
   );
 }

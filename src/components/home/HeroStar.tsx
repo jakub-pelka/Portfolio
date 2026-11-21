@@ -101,6 +101,12 @@ const TILT_DUR = 2.4;
 const PHASE_DEG = 0;
 /** pętla bezczynna rysuje co ~33 ms (30 kl/s) — obrót trwa 25 s, więcej nie ma sensu */
 const LOOP_FRAME_MS = 33;
+/** do tego czasu (s) intro gwiazdka stoi w miejscu i nie obraca się */
+const INTRO_STATIC_END = 1.0;
+/** od tego czasu (s) ruch (pozycja/skala) jest skończony; zostaje wolny obrót */
+const INTRO_MOTION_END = 3.4;
+/** krok rozmiaru siatki znaków (parzysty), żeby nie przebudowywać tabeli przy każdej zmianie skali */
+const N_STEP = 16;
 
 const clamp01 = (x: number) => (x < 0 ? 0 : x > 1 ? 1 : x);
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
@@ -186,13 +192,31 @@ export function HeroStar({ onReady }: HeroStarProps) {
         invert: true,
         resolution: res,
       });
+      if (process.env.NODE_ENV !== 'production') {
+        const w = window as unknown as { __heroBuilds?: number };
+        w.__heroBuilds = (w.__heroBuilds ?? 0) + 1;
+      }
       host!.replaceChildren();
       asciiDiv = effect.domElement as HTMLDivElement;
       host!.appendChild(asciiDiv);
       curN = 0;
     }
 
-    function renderStar(t: number) {
+    // Intro: dla t <= 1 s (gwiazdka stoi, nic się nie zmienia) rysujemy raz; po t > 3,4 s
+    // (koniec ruchu, zostaje tylko wolny obrót) nie częściej niż krok pętli bezczynnej.
+    let drewStatic = false;
+    let lastIntroDraw = 0;
+    function renderStar(t: number, throttle = false) {
+      if (throttle) {
+        if (t <= INTRO_STATIC_END) {
+          if (drewStatic) return;
+        } else if (t > INTRO_MOTION_END) {
+          const now = performance.now();
+          if (now - lastIntroDraw < LOOP_FRAME_MS - 2) return;
+          lastIntroDraw = now;
+        }
+      }
+      drewStatic = t <= INTRO_STATIC_END;
       lastT = t;
       const e = powInOut(prog(t, 1.0, 2.4), 4); // power3.inOut
       const { start, end, sceneW } = layout;
@@ -201,16 +225,23 @@ export function HeroStar({ onReady }: HeroStarProps) {
       const cy = lerp(start.cy, end.cy, e);
       const oy = cy + BB_CY * p; // początek układu leży poniżej środka obrysu
       // mała gwiazdka dostaje drobniejszą siatkę znaków (x2 na starcie), do bazowej dochodzi razem ze skalą
-      const wantRes = Math.min(0.6, Math.round(wantedRes(sceneW) * (1 + (1 - e)) * 50) / 50);
+      // (kwantyzacja co 0,04: ~5 przebudów efektu zamiast ~10)
+      const wantRes = Math.min(0.6, Math.round(wantedRes(sceneW) * (1 + (1 - e)) * 25) / 25);
       if (wantRes !== res || !effect) {
         res = wantRes;
         buildEffect();
       }
       if (!effect || !asciiDiv) return;
-      const n = Math.max(8, 2 * Math.round((p * VIS0 * PAD * res) / 2));
+      // Rozmiar siatki rośnie skokowo (krok N_STEP, w górę), a skala modelu i tak jest dopasowana
+      // dokładnie przez FOV kamery poniżej — zamiast zmiany co 2 znaki (~60 razy w trakcie zoomu).
+      const n = Math.max(N_STEP, N_STEP * Math.ceil((p * VIS0 * PAD * res) / N_STEP));
       const E = n / res;
       if (n !== curN) {
         curN = n;
+        if (process.env.NODE_ENV !== 'production') {
+          const w = window as unknown as { __heroResizes?: number };
+          w.__heroResizes = (w.__heroResizes ?? 0) + 1;
+        }
         effect.setSize(E, E);
         const tb = asciiDiv.querySelector('table');
         asciiDiv.style.width = E + 'px';
@@ -274,8 +305,8 @@ export function HeroStar({ onReady }: HeroStarProps) {
     }
 
     const handle: StarHandle = {
-      render: (t) => {
-        renderStar(t);
+      render: (t, throttle) => {
+        renderStar(t, throttle);
       },
       startLoop: (t) => {
         loopT = t;

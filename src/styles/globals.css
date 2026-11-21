@@ -7,15 +7,22 @@
   margin: 0;
 }
 
-/* Płynne przejście kolorów przy zmianie motywu — tylko elementy tekstowe i tła, nie canvas/svg/animacje */
-body {
-  transition: background-color 400ms ease, color 400ms ease;
-}
-
+/* Płynne przejście kolorów przy zmianie motywu (400 ms) — tylko elementy tekstowe i tła, nie canvas/svg/animacje.
+   Jeden spójny zestaw; przy reduced-motion wyłączony. */
+body,
 main, header, footer, section, article, nav, aside,
 h1, h2, h3, h4, h5, h6, p, span, a, li, ul, ol,
 div:not([class*="gsap"]):not([data-snap-section]) {
   transition: background-color 400ms ease, color 400ms ease, border-color 400ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  main, header, footer, section, article, nav, aside,
+  h1, h2, h3, h4, h5, h6, p, span, a, li, ul, ol,
+  div:not([class*="gsap"]):not([data-snap-section]) {
+    transition: none;
+  }
 }
 
 /* Font utility classes — VT323 scaling is handled by size-adjust: 130% in @font-face */
@@ -24,7 +31,7 @@ div:not([class*="gsap"]):not([data-snap-section]) {
 }
 
 .font-vt {
-  font-family: var(--font-vt323);
+  font-family: var(--font-pixel);
 }
 
 html,
@@ -41,8 +48,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
-  transition: background-color var(--transition-duration) var(--transition-timing), 
-              color var(--transition-duration) var(--transition-timing);
 }
 
 a {
@@ -77,7 +82,7 @@ button {
 .text-title { font-size: var(--text-title); font-weight: bold; }
 .text-body { font-size: var(--text-body); }
 .text-label { font-size: var(--text-label); font-family: var(--font-ibm-plex-mono); text-transform: uppercase; }
-.text-micro { font-size: var(--text-micro); font-family: var(--font-vt323); }
+.text-micro { font-size: var(--text-micro); font-family: var(--font-pixel); }
 
 /* Accent rule for markers */
 .accent {
@@ -246,7 +251,7 @@ button {
 }
 
 .link-system {
-  font-family: var(--font-vt323);
+  font-family: var(--font-pixel);
   color: inherit;
   text-decoration: none;
   border-bottom: 1px solid currentColor;

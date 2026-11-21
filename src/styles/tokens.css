@@ -31,7 +31,7 @@
   --font-vt323: 'VT323', monospace;
   --font-ibm-plex-mono: 'IBM Plex Mono', monospace;
   --font-mono: var(--font-ibm-plex-mono);
-  --font-pixel: var(--font-vt323); /* VT323: size-adjust 130% w @font-face */
+  --font-pixel: var(--font-vt323-ext), var(--font-vt323); /* VT323: size-adjust 130% w @font-face; ext = latin-ext (unicode-range) */
 
   /* === Spacing Scale === */
   --space-0_5: 0.5rem;  /* drobne paddingi, micro spacing między tagami, mikro marginesy */

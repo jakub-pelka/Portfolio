@@ -5,23 +5,18 @@ import type { ProjectWithLocale, ProcessEntry } from '@/lib/types/project';
 import { Parallax } from '@/components/ui/Parallax';
 import styles from './ProjectTimeline.module.css';
 
-const TYPE_LABELS: Record<ProcessEntry['type'], string> = {
-  decision: 'DECISION',
-  problem: 'PROBLEM',
-  insight: 'INSIGHT',
-  milestone: 'MILESTONE',
-};
-
 function ProcessLog({
   entry,
   slug,
   lang,
   index,
+  typeLabels,
 }: {
   entry: ProcessEntry;
   slug: string;
   lang: Locale;
   index: number;
+  typeLabels: Record<string, string>;
 }) {
   const isRight = index % 2 === 0;
   const href = entry.anchor
@@ -33,7 +28,7 @@ function ProcessLog({
       <div className={styles.processLogDot} />
       <Link href={href} className={styles.processLogContent}>
         <span className={styles.processLogType} data-type={entry.type}>
-          [{TYPE_LABELS[entry.type]}]
+          [{typeLabels[entry.type] ?? entry.type.toUpperCase()}]
         </span>
         <span className={styles.processLogTitle}>{entry.title}</span>
         <span className={styles.processLogText}>{entry.content}</span>
@@ -45,6 +40,7 @@ function ProcessLog({
 export interface TimelineLabels {
   see_more: string;
   status: Record<string, string>;
+  process_types: Record<string, string>;
 }
 
 function ProjectEntry({
@@ -103,6 +99,8 @@ function ProjectEntry({
             alt={content.title}
             width={640}
             height={420}
+            // ≤767 px miniatura zajmuje szerokość kolumny (do 640 px), powyżej ~288–480 px
+            sizes="(max-width: 767px) 100vw, (max-width: 1100px) 45vw, 480px"
             className={styles.thumbnail}
           />
         </Link>
@@ -141,6 +139,7 @@ export function ProjectTimeline({
                   slug={project.meta.slug}
                   lang={lang}
                   index={flip ? i + 1 : i}
+                  typeLabels={labels.process_types}
                 />
               ))}
             </div>

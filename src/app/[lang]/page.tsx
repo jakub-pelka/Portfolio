@@ -82,10 +82,11 @@ export default async function Home({
     <main style={{ position: 'relative' }}>
       <Hero dict={dict} />
       <AboutSection label={dict.about.heading}>
-        <p
-          className="jp-web-section__lead"
-          dangerouslySetInnerHTML={{ __html: dict.about.p1 }}
-        />
+        <p className="jp-web-section__lead">
+          {dict.about.p1_before}
+          <b>{dict.about.p1_bold}</b>
+          {dict.about.p1_after}
+        </p>
         <p className="jp-web-section__lead">{dict.about.p2}</p>
       </AboutSection>
       <SkillsSection lang={lang} />

@@ -14,6 +14,10 @@ const LanyardReactBits = dynamic(
 // z animacją hero.
 const MOUNT_DELAY_MS = 2250;
 
+// Poniżej tego progu slot jest ukryty (display:none), więc karty nie montujemy.
+// Zgodne z @media (max-width: 767px) w AboutSection/PortfolioLanyard.module.css.
+const DESKTOP_QUERY = '(min-width: 768px)';
+
 // Jedna, na stałe zamontowana instancja karty na smyczy. AboutSection renderuje
 // pusty slot (#about-lanyard-slot), który służy tylko za punkt odniesienia.
 // Karta jest position:absolute względem <main> i przewija się razem ze stroną,
@@ -27,9 +31,28 @@ export function PortfolioLanyard({ lang }: { lang: string }) {
   const aboutClipRef = useRef(0);
   const mountRef = useRef<HTMLDivElement>(null);
 
+  // Karta jest montowana tylko na szerokich ekranach (i reaguje na zmianę, np.
+  // obrót tabletu); na telefonie nie pobieramy ani modelu, ani Rapiera.
   useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), MOUNT_DELAY_MS);
-    return () => clearTimeout(timer);
+    const mql = window.matchMedia(DESKTOP_QUERY);
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const sync = () => {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+      if (mql.matches) {
+        timer = setTimeout(() => setMounted(true), MOUNT_DELAY_MS);
+      } else {
+        setMounted(false);
+      }
+    };
+    sync();
+    mql.addEventListener('change', sync);
+    return () => {
+      mql.removeEventListener('change', sync);
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {

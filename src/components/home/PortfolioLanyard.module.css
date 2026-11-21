@@ -9,7 +9,7 @@
 }
 
 /* Zgodnie z progiem slotu w AboutSection: na małych ekranach karty nie ma. */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .mount {
     display: none;
   }

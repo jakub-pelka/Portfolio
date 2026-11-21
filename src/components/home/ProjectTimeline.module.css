@@ -200,12 +200,6 @@ section.timeline {
   display: block;
   object-fit: cover;
   aspect-ratio: 3 / 2;
-  opacity: 0.85;
-  transition: opacity 200ms ease;
-}
-
-.thumbnail:hover {
-  opacity: 1;
 }
 
 /* ── Process log entries ── */
@@ -286,7 +280,7 @@ section.timeline {
 
 /* ── Mobile: single column ── */
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .timeline {
     padding-bottom: var(--section-y);
   }
@@ -327,7 +321,6 @@ section.timeline {
   .thumbnail {
     max-width: 100%;
     height: auto;
-    opacity: 1;
   }
 
   .processLog {
