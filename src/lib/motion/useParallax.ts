@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, type RefObject } from 'react';
+import { usePathname } from 'next/navigation';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -42,6 +43,18 @@ function hookRefresh() {
   // ale fonty (display: swap) potrafią dojechać później
   document.fonts?.ready.then(refresh).catch(() => {});
   if (document.readyState !== 'complete') window.addEventListener('load', refresh, { once: true });
+  // wysokość dokumentu zmienia się też po nawigacji klienckiej (stopka żyje w layoucie) i po doładowaniu treści
+  if (typeof ResizeObserver !== 'undefined') {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let lastHeight = document.documentElement.scrollHeight;
+    new ResizeObserver(() => {
+      const h = document.documentElement.scrollHeight;
+      if (h === lastHeight) return;
+      lastHeight = h;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(refresh, 150);
+    }).observe(document.body);
+  }
 }
 
 /**
@@ -53,6 +66,14 @@ export function useParallax(
   inner: RefObject<HTMLElement | null>,
   { mode = 'pass', distance = 0, speed, mobileFactor = 0.5, revealPercent = 30 }: ParallaxOptions,
 ) {
+  const pathname = usePathname();
+
+  // zmiana trasy: nowa strona ma inną wysokość, więc przelicz pozycje po wyrenderowaniu
+  useEffect(() => {
+    const id = window.setTimeout(() => ScrollTrigger.refresh(), 120);
+    return () => window.clearTimeout(id);
+  }, [pathname]);
+
   useEffect(() => {
     const outerEl = outer.current;
     const innerEl = inner.current;

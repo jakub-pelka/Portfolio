@@ -23,6 +23,15 @@ interface HeroProps {
   scrollLabel?: string;
 }
 
+/**
+ * Intro startuje tylko przy wejściu na stronę (pełne ładowanie), gdy inline script w layoucie ustawił
+ * html[data-intro="running"] (bez przewinięcia, hasha, „wstecz”, reduced motion). Decyzję zapamiętujemy na
+ * czas życia strony; kolejne montowania (nawigacja kliencka, np. klik w logo) dostają stan końcowy od razu.
+ * Strict Mode montuje efekt dwa razy w tej samej turze, więc reset jest opóźniony i anulowany przy ponownym starcie.
+ */
+let entryEligible: boolean | null = null;
+let entryResetTimer: number | null = null;
+
 /** Maksymalny czas oczekiwania na gwiazdkę przed startem osi czasu (gdy np. wolna sieć). */
 const STAR_WAIT_MS = 2000;
 
@@ -94,6 +103,22 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
     const root = document.documentElement;
     const T = INTRO_TEXT_START;
 
+    if (entryResetTimer !== null) {
+      window.clearTimeout(entryResetTimer);
+      entryResetTimer = null;
+    }
+    if (entryEligible === null) entryEligible = root.dataset.intro === 'running';
+    const introEligible = entryEligible;
+    // znacznik dla CSS: JS działa, awaryjne odsłonięcie napisów (Hero.module.css) nie jest potrzebne
+    root.dataset.heroReady = '';
+    const leave = () => {
+      delete root.dataset.heroReady;
+      entryResetTimer = window.setTimeout(() => {
+        entryEligible = false;
+        entryResetTimer = null;
+      }, 0);
+    };
+
     // Podział napisów na litery (SplitType) — bez zmian względem poprzedniej wersji
     const splitIts = new SplitType(itsRef.current, { types: 'chars' });
     const splitFirst = new SplitType(firstNameRef.current, { types: 'chars' });
@@ -111,14 +136,10 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       splitLast.revert();
     };
 
-    // Stan końcowy bez animacji: reduced motion, powrót na stronę z przewinięciem, hash (#timeline, #contact), „wstecz”
+    // Stan końcowy bez animacji: wszystko, czego inline script nie uznał za wejście na stronę
+    // (reduced motion, przewinięcie, hash, „wstecz”) oraz nawigacja kliencka
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-    const skipIntro =
-      reduced ||
-      window.scrollY > window.innerHeight * 0.3 ||
-      window.location.hash !== '' ||
-      nav?.type === 'back_forward';
+    const skipIntro = !introEligible;
 
     loopAllowed.current = !reduced;
 
@@ -138,6 +159,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
         starHandle.current?.stopLoop();
         delete root.dataset.intro;
         split();
+        leave();
       };
     }
 
@@ -271,6 +293,7 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
       starHandle.current?.stopLoop();
       delete root.dataset.intro;
       split();
+      leave();
     };
   }, []);
 

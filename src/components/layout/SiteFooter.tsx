@@ -22,9 +22,9 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
   return (
     <footer className={`jp-web-footer ${styles.footer}`}>
       {/* Odsłanianie: zawartość wsuwa się pod górną krawędź stopki (efekt wyłączony przy reduced motion i gdy stopka jest wyższa niż okno) */}
-      <Parallax mode="reveal" revealPercent={30} mobileFactor={1}>
+      <Parallax id="contact" className={styles.anchor} mode="reveal" revealPercent={30} mobileFactor={1}>
       <div className="jp-web-footer__inner">
-        <div id="contact" className={styles.contact}>
+        <div className={styles.contact}>
           <p className="jp-web-footer__label">{f.label}</p>
           <h2 className="jp-web-footer__heading">{f.heading}</h2>
           <a className="jp-web-footer__mail" href={mailHref}>{CONTACT_EMAIL}</a>
@@ -57,8 +57,8 @@ export async function SiteFooter({ lang, projects }: SiteFooterProps) {
           <div>
             <h3 className="jp-web-footer__colhead">{f.social}</h3>
             <ul className="jp-web-footer__list">
-              <li><a href="https://github.com/jakub-pelka">GITHUB ↗</a></li>
-              <li><a href="https://www.linkedin.com/in/jakub-pe%C5%82ka-0961bb27b/">LINKEDIN ↗</a></li>
+              <li><a href="https://github.com/jakub-pelka" target="_blank" rel="noopener noreferrer">GITHUB ↗</a></li>
+              <li><a href="https://www.linkedin.com/in/jakub-pe%C5%82ka-0961bb27b/" target="_blank" rel="noopener noreferrer">LINKEDIN ↗</a></li>
             </ul>
           </div>
           <div>

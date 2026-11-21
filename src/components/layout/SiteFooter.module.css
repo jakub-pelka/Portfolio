@@ -4,6 +4,9 @@
 .footer {
   overflow: clip;
 }
+.anchor {
+  scroll-margin-top: var(--space-2);
+}
 .contact {
   scroll-margin-top: var(--space-2);
 }

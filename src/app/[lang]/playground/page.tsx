@@ -1,4 +1,4 @@
-import type { Locale } from '@/i18n/config';
+import { assertLocale } from '@/i18n/guard';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { MiniScrollB } from '@/components/_experiments/MiniScrollB';
 import { MiniScrollC } from '@/components/_experiments/MiniScrollC';
@@ -20,7 +20,9 @@ export default async function PlaygroundPage({
 }: {
   params: Promise<{ lang: string }>;
 }) {
-  const { lang } = await params as { lang: Locale };
+  const { lang: rawLang } = await params;
+  assertLocale(rawLang);
+  const lang = rawLang;
   const dict = await getDictionary(lang);
 
   return (

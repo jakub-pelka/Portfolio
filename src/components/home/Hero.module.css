@@ -85,6 +85,22 @@
   opacity: 0;
 }
 
+/* Awaryjnie (JS się nie wykonał: Hero nie ustawił html[data-hero-ready]) napisy odsłaniają się same po 6 s.
+   Gdy JS działa, atrybut istnieje i reguła nie obowiązuje, więc nie koliduje z GSAP. */
+:global(html:not([data-hero-ready])) .hey,
+:global(html:not([data-hero-ready])) .nameContainer,
+:global(html:not([data-hero-ready])) .portfolio,
+:global(html:not([data-hero-ready])) .arrowDown {
+  animation: heroFailsafe 0.3s linear 6s forwards;
+}
+
+@keyframes heroFailsafe {
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .nameContainer {
   display: flex;
   align-items: baseline;

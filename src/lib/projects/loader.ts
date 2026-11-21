@@ -30,7 +30,16 @@ export async function getAllProjectSlugs(): Promise<string[]> {
 /**
  * Read and parse meta.json for a project
  */
+const SLUG_RE = /^[a-z0-9-]+$/;
+
+function assertSlug(slug: string): void {
+  if (!SLUG_RE.test(slug)) {
+    throw new Error(`Invalid project slug: ${slug}`);
+  }
+}
+
 async function getProjectMeta(slug: string): Promise<ProjectMeta> {
+  assertSlug(slug);
   const metaPath = path.join(PROJECTS_DIR, slug, 'meta.json');
   const metaContent = await fs.readFile(metaPath, 'utf-8');
   return JSON.parse(metaContent);
@@ -40,7 +49,7 @@ async function getProjectMeta(slug: string): Promise<ProjectMeta> {
  * Import and return config.ts for a project
  */
 async function getProjectConfig(slug: string): Promise<ProjectConfig> {
-  const configPath = path.join(PROJECTS_DIR, slug, 'config.ts');
+  assertSlug(slug);
 
   // Dynamic import for TypeScript config file
   const configModule = await import(`@/../content/projects/${slug}/config.ts`);
@@ -54,6 +63,7 @@ async function getProjectContent(
   slug: string,
   locale: Locale
 ): Promise<ProjectContent> {
+  assertSlug(slug);
   const mdxPath = path.join(PROJECTS_DIR, slug, `${locale}.mdx`);
   const mdxContent = await fs.readFile(mdxPath, 'utf-8');
 

@@ -30,10 +30,8 @@ export function proxy(request: NextRequest) {
 
   // Redirect to locale-prefixed path
   const locale = getLocale(request);
-  const redirectUrl = new URL(
-    `/${locale}${pathname === '/' ? '' : pathname}`,
-    request.url
-  );
+  const redirectUrl = request.nextUrl.clone();
+  redirectUrl.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
   return NextResponse.redirect(redirectUrl);
 }
 
