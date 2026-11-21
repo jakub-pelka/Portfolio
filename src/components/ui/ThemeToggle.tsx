@@ -1,8 +1,17 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+
+const emptySubscribe = () => () => {};
+
+interface ThemeToggleProps {
+  labels?: {
+    toggle_dark: string;
+    toggle_light: string;
+  };
+}
 
 const SunIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter">
@@ -38,20 +47,22 @@ const iconVariants = {
   }),
 };
 
-export function ThemeToggle() {
+export function ThemeToggle({ labels }: ThemeToggleProps = {}) {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   if (!mounted) return <div style={{ width: 22, height: 22 }} />;
 
   const isDark = resolvedTheme === 'dark';
+  const label = isDark
+    ? (labels?.toggle_light ?? 'Switch to light mode')
+    : (labels?.toggle_dark ?? 'Switch to dark mode');
 
   return (
     <button
+      type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={label}
       style={{
         background: 'none',
         border: 'none',
@@ -63,8 +74,10 @@ export function ThemeToggle() {
         justifyContent: 'center',
         opacity: 0.5,
         transition: 'opacity 150ms ease',
-        width: 22,
-        height: 22,
+        // 44x44 hit area, but layout footprint stays 22x22
+        margin: -11,
+        width: 44,
+        height: 44,
         overflow: 'hidden',
       }}
       onMouseEnter={e => (e.currentTarget.style.opacity = '1')}

@@ -316,6 +316,7 @@
   margin: 0 auto;
   padding: var(--space-4) var(--page-margin);
   padding-top: 6rem; /* clear fixed header (~3.5rem) + breathing room */
+  padding-bottom: 6rem; /* extra bottom padding so floating CopyForAI never sits on text */
 }
 
 .hero {

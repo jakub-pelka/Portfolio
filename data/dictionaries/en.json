@@ -2,15 +2,15 @@
   "nav": {
     "projects": "Projects",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "role": "Full-stack & AI Developer"
   },
   "hero": {
     "greeting": "Hey",
     "intro": "It's",
     "name_first": "Jakub",
     "name_last": "Pełka",
-    "cta_projects": "See what I've built",
-    "cta_contact": "[ CONTACT → ]"
+    "cta_projects": "See what I've built"
   },
   "projects": {
     "title": "Projects",
@@ -54,17 +54,14 @@
       { "step": "03", "title": "BUILD", "body": "Regular updates while it's being built, not radio silence for a month." },
       { "step": "04", "title": "HANDOFF", "body": "Code, access and docs — yours to keep, no lock-in." }
     ],
-    "pricing_note": "Quote depends on project scope. Reach out — that's the first step.",
-    "cta_label": "[ SCHEDULE A CALL → ]",
-    "cta_subject": "Project inquiry",
-    "cta_body": "Hi Jakub,\n\nI'd like to talk about a project:\n- What you want to build:\n- Rough timeline:\n\nThanks!"
+    "pricing_note": "Quote depends on project scope. Reach out — that's the first step."
   },
   "footer": {
     "projects": "PROJECT INDEX",
     "social": "SOCIAL",
     "contact": "CONTACT",
     "mail_label": "EMAIL",
-    "mail_body": "I'm reaching out because ",
+    "mail_body": "Hi Jakub, I'm reaching out because ",
     "cv_download": "[ DOWNLOAD CV ]",
     "contact_cta_label": "[ GET A QUOTE ]",
     "contact_cta_subject": "Project inquiry",

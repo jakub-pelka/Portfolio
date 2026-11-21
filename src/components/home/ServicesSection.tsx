@@ -3,8 +3,6 @@ import { getDictionary } from '@/i18n/get-dictionary';
 import { TerminalCard } from '@/components/mdx/TerminalCard';
 import styles from './ServicesSection.module.css';
 
-const CONTACT_EMAIL = 'jakubpelkapraca@gmail.com';
-
 interface ServiceItem {
   title: string;
   body: string;
@@ -19,8 +17,6 @@ interface ProcessStep {
 export async function ServicesSection({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang);
   const s = dict.services;
-
-  const mailtoHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(s.cta_subject)}&body=${encodeURIComponent(s.cta_body)}`;
 
   return (
     <section className={styles.section} id="services">
@@ -52,9 +48,6 @@ export async function ServicesSection({ lang }: { lang: Locale }) {
 
       <div className={styles.ctaRow}>
         <p className={styles.pricingNote}>{s.pricing_note}</p>
-        <a href={mailtoHref} className={styles.ctaButton}>
-          {s.cta_label}
-        </a>
       </div>
     </section>
   );

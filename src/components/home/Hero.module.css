@@ -52,6 +52,13 @@
   transition: opacity 200ms ease;
 }
 
+/* Powiększony obszar klikalny bez wpływu na layout */
+.star::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+}
+
 .star:hover {
   opacity: 0.5;
 }
@@ -146,16 +153,42 @@
 }
 
 .portfolio {
+  /* reset domyślnych stylów <button>, wygląd jak dawny <span> */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: var(--color-text);
+  cursor: pointer;
   font-family: var(--font-vt323);
   font-size: var(--text-label);
   text-transform: none; /* keep original capitalization */
   letter-spacing: 0.05em;
 }
 
+.portfolio:focus-visible {
+  outline: 1px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
 .arrowDown {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--color-text);
   /* A nice sharp pixel-art looking arrow or just crisp svg */
   animation: bounce 2s infinite ease-in-out;
+}
+
+.arrowDown:focus-visible {
+  outline: 1px solid var(--color-accent);
+  outline-offset: 4px;
 }
 
 @keyframes bounce {
@@ -164,6 +197,12 @@
   }
   50% {
     transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrowDown {
+    animation: none;
   }
 }
 

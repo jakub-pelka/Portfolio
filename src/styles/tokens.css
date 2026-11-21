@@ -7,6 +7,7 @@
   --color-bg-secondary: rgba(28, 28, 28, 0.03);
   --color-text: #1C1C1C;
   --color-accent: #55AAAA;
+  --color-accent-text: #286B6B;
   --color-border: rgba(28, 28, 28, 0.15);
   
   /* === Typography === */
@@ -60,6 +61,7 @@
   --color-bg-secondary: rgba(246, 245, 240, 0.05);
   --color-text: #F6F5F0;
   --color-border: rgba(246, 245, 240, 0.15);
+  --color-accent-text: #55AAAA;
   /* --color-accent remains #55AAAA */
 }
 
@@ -70,5 +72,6 @@
     --color-bg-secondary: rgba(246, 245, 240, 0.05);
     --color-text: #F6F5F0;
     --color-border: rgba(246, 245, 240, 0.15);
+    --color-accent-text: #55AAAA;
   }
 }

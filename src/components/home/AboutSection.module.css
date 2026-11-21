@@ -27,7 +27,11 @@
      overflow the row instead). */
   flex: 1 1 auto;
   min-width: 0;
-  max-width: 48rem;
+  /* The card hangs at --tweak-lanyard-x (85vw) and is ~5rem wide on each side
+     of that line; the text starts 4rem from the left edge. Cap the width so
+     the text ends before the card on mid-size screens (769–~1100px) instead of
+     running underneath it. On wide screens the 48rem cap still wins. */
+  max-width: min(48rem, calc(85vw - 9rem));
   /* No z-index here on purpose — the card (PortfolioLanyard, z-index:1) is
      meant to render as a physical object hanging in FRONT of this section's
      content, text included, not tucked behind it. */
@@ -55,15 +59,24 @@
   position: absolute;
   top: 0;
   left: var(--tweak-lanyard-x, 85%);
-  width: calc(clamp(360px, 38vw, 620px) * var(--tweak-lanyard-scale, 1.2) * var(--tweak-about-lanyard-scale, 1));
+  --slot-width: calc(clamp(360px, 38vw, 620px) * var(--tweak-lanyard-scale, 1.2) * var(--tweak-about-lanyard-scale, 1));
+  width: var(--slot-width);
   aspect-ratio: 3 / 4;
-  transform: translate(-50%, var(--tweak-about-lanyard-y, -232px));
+  /* The card's top sits at ~59% of the slot's width below the slot's top, so a
+     fixed -232px lifts it toward the line as the slot shrinks. Below ~1085px
+     wide, hold the card top 60px under the line instead. */
+  transform: translate(-50%, var(--tweak-about-lanyard-y, max(-232px, calc(60px - var(--slot-width) * 0.59))));
   pointer-events: none;
 }
 
 @media (max-width: 768px) {
   .lanyardSlot {
     display: none;
+  }
+
+  /* No card on mobile — the text uses the full width again. */
+  .text {
+    max-width: 48rem;
   }
 }
 

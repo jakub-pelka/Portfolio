@@ -37,6 +37,7 @@ export function AboutSection({ children }: AboutSectionProps) {
           <TechRow label="LANG"><Tag>TypeScript</Tag><Tag>Python</Tag></TechRow>
           <TechRow label="STYLE"><Tag>Vanilla CSS</Tag><Tag>Tailwind CSS</Tag></TechRow>
           <TechRow label="ANIM"><Tag>Framer Motion</Tag><Tag>GSAP</Tag><Tag>Three.js</Tag></TechRow>
+          <TechRow label="CONTENT"><Tag>MDX</Tag></TechRow>
         </TerminalCard>
         <TerminalCard title="BACKEND" status="active" dense>
           <TechRow label="RUNTIME"><Tag>Node.js</Tag><Tag>Rust</Tag></TechRow>
@@ -47,7 +48,6 @@ export function AboutSection({ children }: AboutSectionProps) {
         <TerminalCard title="AI" status="active" dense>
           <TechRow label="LLM"><Tag>Claude API</Tag><Tag>OpenAI API</Tag></TechRow>
           <TechRow label="VISION"><Tag>Gemini Vision</Tag></TechRow>
-          <TechRow label="CONTENT"><Tag>MDX</Tag></TechRow>
         </TerminalCard>
       </div>
     </section>

@@ -5,8 +5,8 @@ export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
 const TAGLINE: Record<Locale, string> = {
-  pl: 'Fakty i proces za każdym projektem.',
-  en: 'The facts and the process behind every project.',
+  pl: 'Full-stack & AI Developer · strony, aplikacje i automatyzacje AI',
+  en: 'Full-stack & AI Developer · websites, web apps & AI automations',
 };
 
 export default async function Image({

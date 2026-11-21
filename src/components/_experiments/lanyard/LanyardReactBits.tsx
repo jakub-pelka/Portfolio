@@ -411,8 +411,8 @@ function Band({
     const NAME = 'Jakub Pełka';
     const ROLE = 'FULL-STACK DEVELOPER';
     const FRONT_PROMPT = lang === 'en'
-      ? { title: 'CLICK ME', sub: '[ flip card ]' }
-      : { title: 'KLIKNIJ MNIE', sub: '[ obróć kartę ]' };
+      ? { title: 'CLICK ME', sub: '[ about me ↓ ]' }
+      : { title: 'KLIKNIJ MNIE', sub: '[ o mnie ↓ ]' };
 
     // The card.glb "card" mesh's true bounds, measured directly from its
     // POSITION accessor: width 0.7164, height 1.0000 (mesh units), rounded

@@ -262,6 +262,7 @@ export function PortfolioLanyard({ lang }: { lang: string }) {
     <div
       ref={mountRef}
       className={styles.mount}
+      aria-hidden="true"
       style={{
         // The transit holds Hero's exact screen position, so it keeps Hero's
         // crop too — the cut line stays put at the top of the viewport. In

@@ -7,7 +7,19 @@ import SplitType from 'split-type';
 import styles from './Hero.module.css';
 
 
-export function Hero({ scrollLabel }: { scrollLabel: string }) {
+interface HeroProps {
+  dict: {
+    hero: {
+      intro: string;
+      cta_projects: string;
+      [key: string]: unknown;
+    };
+  };
+  scrollLabel?: string;
+}
+
+export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
+  const scrollLabel = propScrollLabel ?? dict.hero.cta_projects;
   const pathname = usePathname();
   const lang = pathname.split('/')[1] || 'pl';
   const heyRef = useRef<HTMLDivElement>(null);
@@ -16,8 +28,8 @@ export function Hero({ scrollLabel }: { scrollLabel: string }) {
   const firstNameRef = useRef<HTMLHeadingElement>(null);
   const lastNameRef = useRef<HTMLHeadingElement>(null);
   const starRef = useRef<HTMLAnchorElement>(null);
-  const portfolioRef = useRef<HTMLSpanElement>(null);
-  const arrowRef = useRef<HTMLDivElement>(null);
+  const portfolioRef = useRef<HTMLButtonElement>(null);
+  const arrowRef = useRef<HTMLButtonElement>(null);
 
   function scrollToTimeline() {
     document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -32,9 +44,10 @@ export function Hero({ scrollLabel }: { scrollLabel: string }) {
     const splitFirst = new SplitType(firstNameRef.current, { types: 'chars' });
     const splitLast = new SplitType(lastNameRef.current, { types: 'chars' });
 
-    // Jeśli user wrócił na stronę i jest już poniżej Hero — pokaż końcowy stan bez animacji
+    // Jeśli user ma włączone prefers-reduced-motion lub wrócił na stronę i jest już poniżej Hero — pokaż końcowy stan bez animacji
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isScrolledPast = window.scrollY > window.innerHeight * 0.3;
-    if (isScrolledPast) {
+    if (isScrolledPast || prefersReducedMotion) {
       gsap.set(heyRef.current, { opacity: 1, x: 0, y: 0, skewX: -15, transformOrigin: 'bottom center' });
       gsap.set(nameContainerRef.current, { opacity: 1 });
       gsap.set([...(splitIts.chars || []), ...(splitFirst.chars || []), ...(splitLast.chars || [])], { yPercent: 0, opacity: 1 });
@@ -199,7 +212,7 @@ export function Hero({ scrollLabel }: { scrollLabel: string }) {
         <div className={styles.hey} ref={heyRef}>Hey</div>
         <div className={styles.nameContainer} ref={nameContainerRef}>
           <span className={`${styles.its} ${styles.maskWrapper}`}>
-            <span ref={itsRef}>It's</span>
+            <span ref={itsRef}>{dict.hero.intro}</span>
           </span>
           <div className={styles.nameGroup}>
             <div className={styles.maskWrapper}>
@@ -212,19 +225,20 @@ export function Hero({ scrollLabel }: { scrollLabel: string }) {
         </div>
       </div>
       <div className={styles.bottomTokens}>
-        <span
+        <button
+          type="button"
           className={styles.portfolio}
           ref={portfolioRef}
           onClick={scrollToTimeline}
-          style={{ cursor: 'pointer' }}
         >
           {scrollLabel}
-        </span>
-        <div
+        </button>
+        <button
+          type="button"
           className={styles.arrowDown}
           ref={arrowRef}
           onClick={scrollToTimeline}
-          style={{ cursor: 'pointer' }}
+          aria-label={scrollLabel}
         >
           <svg width="21" height="12" viewBox="0 0 21 12" fill="currentColor">
             <rect x="0" y="0" width="3" height="3" />
@@ -235,7 +249,7 @@ export function Hero({ scrollLabel }: { scrollLabel: string }) {
             <rect x="15" y="3" width="3" height="3" />
             <rect x="18" y="0" width="3" height="3" />
           </svg>
-        </div>
+        </button>
       </div>
     </section>
   );
