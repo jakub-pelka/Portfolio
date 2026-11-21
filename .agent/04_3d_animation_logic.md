@@ -56,3 +56,15 @@ Ten dokument opisuje specyfikację i logikę działania wydajnej, jednorazowej a
 1. **Wydajność**: Brak niepotrzebnych obliczeń (0% idle overhead).
 2. **Determinism**: Zawsze ten sam stan końcowy.
 3. **UX**: Płynny start bez tzw. "layout shift".
+
+---
+
+## Wyjątek: gwiazdka ASCII w hero (`HeroStar.tsx`)
+
+Animacja startowa jest jednorazowa (oś 6 s, `heroIntroConfig.ts`), ale gwiazdka dalej się obraca (pętla bezczynna), więc "Kill the Loop" obowiązuje warunkowo:
+
+- Pętla rysuje tylko, gdy hero jest w viewport (`IntersectionObserver`) i karta jest na pierwszym planie (`visibilityState`). Czas liczy się dalej od miejsca pauzy (bez skoku).
+- Pętla bezczynna rysuje ok. 30 kl/s. Przy `prefers-reduced-motion` gwiazdka stoi (jedna klatka dla t = 6 s).
+- Wejście ze stanem końcowym (reduced motion, przewinięcie, hash, "wstecz"): od razu t = 6 s.
+- Oś czasu napisów (GSAP) i gwiazdki to jedna funkcja czasu t; `html[data-intro]` ukrywa nagłówek strony do t = 2,2 s (domyślnie widoczny, awaryjny reveal po 8 s w CSS).
+- Dev: `window.__heroIntro.seek(t)` przewija oś, `window.__heroFrames` liczy klatki gwiazdki.

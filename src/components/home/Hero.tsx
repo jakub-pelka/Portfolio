@@ -1,16 +1,24 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { useCallback, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
+import { Parallax } from '@/components/ui/Parallax';
+import { INTRO_DURATION, INTRO_TEXT_START, type StarHandle } from './heroIntroConfig';
 import styles from './Hero.module.css';
 
+// Three.js ładuje się dopiero po stronie klienta i nie blokuje pierwszego renderu.
+const HeroStar = dynamic(() => import('./HeroStar').then((m) => m.HeroStar), { ssr: false });
 
 interface HeroProps {
   dict: {
     hero: {
+      greeting: string;
       intro: string;
+      name_first: string;
+      name_last: string;
       cta_projects: string;
       [key: string]: unknown;
     };
@@ -18,219 +26,312 @@ interface HeroProps {
   scrollLabel?: string;
 }
 
+/**
+ * Intro startuje tylko przy wejściu na stronę (pełne ładowanie), gdy inline script w layoucie ustawił
+ * html[data-intro="running"] (bez przewinięcia, hasha, „wstecz”, reduced motion). Decyzję zapamiętujemy na
+ * czas życia strony; kolejne montowania (nawigacja kliencka, np. klik w logo) dostają stan końcowy od razu.
+ * Strict Mode montuje efekt dwa razy w tej samej turze, więc reset jest opóźniony i anulowany przy ponownym starcie.
+ */
+let entryEligible: boolean | null = null;
+let entryResetTimer: number | null = null;
+
+/** Maksymalny czas oczekiwania na gwiazdkę przed startem osi czasu (gdy np. wolna sieć). */
+const STAR_WAIT_MS = 2000;
+
+/**
+ * Pochylenie „Hey”: wjazd z pędem, prostowanie, odbicie od „ściany” i osiadanie w -15°.
+ * Czysta funkcja czasu (tau od startu wejścia), dzięki czemu oś czasu można przewijać.
+ */
+function heySkew(tau: number) {
+  const REST = -15;
+  const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
+  const prog = (t: number, start: number, dur: number) => Math.min(1, Math.max(0, (t - start) / dur));
+  if (tau < 0) return 0;
+  if (tau < 0.5) return 14 * Math.pow(1 - tau / 0.6, 3);
+  const s0 = 14 * Math.pow(1 - 0.5 / 0.6, 3);
+  if (tau < 0.75) return lerp(s0, REST, Math.pow(prog(tau, 0.5, 0.25), 2));
+  if (tau < 0.95) return lerp(REST, REST * 0.5, 1 - Math.pow(1 - prog(tau, 0.75, 0.2), 2));
+  return lerp(REST * 0.5, REST, Math.pow(prog(tau, 0.95, 0.25), 2));
+}
+
 export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
   const scrollLabel = propScrollLabel ?? dict.hero.cta_projects;
-  const pathname = usePathname();
-  const lang = pathname.split('/')[1] || 'pl';
   const heyRef = useRef<HTMLDivElement>(null);
   const nameContainerRef = useRef<HTMLDivElement>(null);
   const itsRef = useRef<HTMLSpanElement>(null);
   const firstNameRef = useRef<HTMLHeadingElement>(null);
   const lastNameRef = useRef<HTMLHeadingElement>(null);
-  const starRef = useRef<HTMLAnchorElement>(null);
   const portfolioRef = useRef<HTMLButtonElement>(null);
   const arrowRef = useRef<HTMLButtonElement>(null);
+
+  // Stan wspólny z gwiazdką ASCII (ładowaną asynchronicznie)
+  const starHandle = useRef<StarHandle | null>(null);
+  const clockT = useRef(0); // ostatni czas osi (s)
+  const finished = useRef(false); // oś doszła do końca (lub pominięta)
+  const loopAllowed = useRef(true); // false przy prefers-reduced-motion
+  const onStarReadyRef = useRef<(() => void) | null>(null);
+  const starSettled = useRef(false);
+
+  const handleStar = useCallback((h: StarHandle | null) => {
+    starHandle.current = h;
+    if (h) {
+      h.render(clockT.current);
+      if (finished.current && loopAllowed.current) h.startLoop(clockT.current);
+    }
+    // gwiazdka gotowa (albo niedostępna) -> można startować oś czasu
+    starSettled.current = true;
+    onStarReadyRef.current?.();
+  }, []);
 
   function scrollToTimeline() {
     document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   useEffect(() => {
-    if (!heyRef.current || !nameContainerRef.current || !itsRef.current || !firstNameRef.current || !lastNameRef.current || !starRef.current || !portfolioRef.current || !arrowRef.current) return;
+    if (
+      !heyRef.current ||
+      !nameContainerRef.current ||
+      !itsRef.current ||
+      !firstNameRef.current ||
+      !lastNameRef.current ||
+      !portfolioRef.current ||
+      !arrowRef.current
+    )
+      return;
 
-    // Split text into characters for "Jakub", "Pełka", and "It's"
-    // Using split-type. SplitType creates wrapper divs, and we'll animate the characters.
+    const hey = heyRef.current;
+    const nameContainer = nameContainerRef.current;
+    const portfolio = portfolioRef.current;
+    const arrow = arrowRef.current;
+    const root = document.documentElement;
+    const T = INTRO_TEXT_START;
+
+    if (entryResetTimer !== null) {
+      window.clearTimeout(entryResetTimer);
+      entryResetTimer = null;
+    }
+    if (entryEligible === null) entryEligible = root.dataset.intro === 'running';
+    const introEligible = entryEligible;
+    // znacznik dla CSS: JS działa, awaryjne odsłonięcie napisów (Hero.module.css) nie jest potrzebne
+    root.dataset.heroReady = '';
+    const leave = () => {
+      delete root.dataset.heroReady;
+      entryResetTimer = window.setTimeout(() => {
+        entryEligible = false;
+        entryResetTimer = null;
+      }, 0);
+    };
+
+    // Stan końcowy bez animacji: wszystko, czego inline script nie uznał za wejście na stronę
+    // (reduced motion, przewinięcie, hash, „wstecz”) oraz nawigacja kliencka
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const skipIntro = !introEligible;
+
+    loopAllowed.current = !reduced;
+
+    if (skipIntro) {
+      gsap.set(hey, { opacity: 1, xPercent: 0, skewX: -15, transformOrigin: 'bottom center' });
+      gsap.set(nameContainer, { opacity: 1 });
+      gsap.set([portfolio, arrow], { autoAlpha: 1 });
+      if (!reduced) arrow.classList.add(styles.bounce);
+      clockT.current = INTRO_DURATION;
+      finished.current = true;
+      root.dataset.intro = 'done';
+      // gwiazdka (jeśli już gotowa) rysuje stan końcowy; pętla tylko bez reduced motion
+      starHandle.current?.render(INTRO_DURATION);
+      if (!reduced) starHandle.current?.startLoop(INTRO_DURATION);
+      return () => {
+        starHandle.current?.stopLoop();
+        delete root.dataset.intro;
+        leave();
+      };
+    }
+
+    // Podział napisów na litery (SplitType) — bez zmian względem poprzedniej wersji
     const splitIts = new SplitType(itsRef.current, { types: 'chars' });
     const splitFirst = new SplitType(firstNameRef.current, { types: 'chars' });
     const splitLast = new SplitType(lastNameRef.current, { types: 'chars' });
-
-    // Jeśli user ma włączone prefers-reduced-motion lub wrócił na stronę i jest już poniżej Hero — pokaż końcowy stan bez animacji
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isScrolledPast = window.scrollY > window.innerHeight * 0.3;
-    if (isScrolledPast || prefersReducedMotion) {
-      gsap.set(heyRef.current, { opacity: 1, x: 0, y: 0, skewX: -15, transformOrigin: 'bottom center' });
-      gsap.set(nameContainerRef.current, { opacity: 1 });
-      gsap.set([...(splitIts.chars || []), ...(splitFirst.chars || []), ...(splitLast.chars || [])], { yPercent: 0, opacity: 1 });
-      gsap.set([starRef.current, portfolioRef.current, arrowRef.current], { opacity: 1 });
-      return () => { splitIts.revert(); splitFirst.revert(); splitLast.revert(); };
-    }
-
-    // Set initial state for 'Hey'
-    const heyRect = heyRef.current.getBoundingClientRect();
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
-    const elementCenterX = heyRect.left + heyRect.width / 2;
-    const elementCenterY = heyRect.top + heyRect.height / 2;
-
-    const distanceToCenterX = centerX - elementCenterX;
-    const distanceToCenterY = centerY - elementCenterY;
-
-    // Start perfectly in the center of the screen
-    gsap.set(heyRef.current, { 
-      opacity: 1, 
-      x: distanceToCenterX,
-      y: distanceToCenterY,
-      transformOrigin: "bottom center" // Kotwiczymy spód litery, żeby przy gwałtownym pochyleniu środek nie uciekał do tyłu
-    });
-
-    // Make the name container visible now that splitting is done
-    // and characters are ready to be pushed down
-    gsap.set(nameContainerRef.current, { opacity: 1 });
-
-    // Initially position the split characters down out of their clipping masks
-    // We add the .maskWrapper class dynamically to the parent lines or words
-    // However, splitType defaults creating `char` divs. We need to clip them.
-    // Instead of complex nesting, we rely on the line-height clipping them if overflow hidden, 
-    // or we just animate their y position and opacity for a sharp reveal.
-    const allChars = [
-      ...(splitIts.chars || []), 
-      ...(splitFirst.chars || []), 
-      ...(splitLast.chars || [])
-    ];
-    
-    // Extract the very last character of "Pełka" for unique animation
+    const charsIts = splitIts.chars || [];
+    const charsFirst = splitFirst.chars || [];
     const charsLast = splitLast.chars || [];
     const lastChar = charsLast.length > 0 ? charsLast[charsLast.length - 1] : null;
-    const allCharsButLast = [
-      ...(splitIts.chars || []), 
-      ...(splitFirst.chars || []), 
-      ...charsLast.slice(0, -1)
-    ];
+    const allChars = [...charsIts, ...charsFirst, ...charsLast];
+    const allCharsButLast = [...charsIts, ...charsFirst, ...charsLast.slice(0, -1)];
 
-    // Set all chars initially shifted down a bit more to clear paddings
-    gsap.set(allChars, { yPercent: 120, opacity: 0 });
-
-    // Set initial state for star, portfolio, and arrow (invisible)
-    gsap.set([starRef.current, portfolioRef.current, arrowRef.current], { opacity: 0 });
-
-    const tl = gsap.timeline({ delay: 1 }); // Wait 1 second at the absolute center
-
-    // 1. "Hey" moves UP to its current row
-    tl.to(heyRef.current, {
-      y: 0,
-      duration: .5,
-      ease: "power4.inOut",
-    });
-
-    // --- Velocity-driven horizontal slide with natural skew ---
-    const RESTING_SKEW = -15;
-    const SKEW_SENSITIVITY = 0.4;
-    const hey = heyRef.current;
-    let prevX: number | null = null;
-
-    const slideLabel = "slide";
-    tl.addLabel(slideLabel);
-
-    // Phase 1: Slide left with velocity-driven lean < (momentum)
-    tl.to(hey, {
-      x: 0,
-      duration: 0.6,
-      ease: "power3.out",
-      onStart: function () {
-        prevX = gsap.getProperty(hey, "x") as number;
-      },
-      onUpdate: function () {
-        const currentX = gsap.getProperty(hey, "x") as number;
-        if (prevX === null) { prevX = currentX; return; }
-
-        const dx = currentX - prevX;
-        prevX = currentX;
-
-        const progress = this.progress();
-        // Velocity lean: moving left → lean backward <
-        const velocitySkew = -dx * SKEW_SENSITIVITY;
-        // Only blend toward neutral (0), not resting angle — phases 2-5 handle the rest
-        const skew = velocitySkew * (1 - progress);
-
-        gsap.set(hey, { skewX: skew });
-      },
-    }, slideLabel);
-
-    // Phase 2: Decelerated → straightens up |  (already ~0 from onUpdate fading out)
-    // Phase 3: Inertia overshoot → leans right > (top swings past vertical)
-    tl.to(hey, {
-      skewX: RESTING_SKEW,
-      duration: 0.25,
-      ease: "power2.in",
-    }, `${slideLabel}+=0.50`);
-
-    // Phase 4: "y" corner hits the wall → rebound to halfway between wall lean and upright
-    tl.to(hey, {
-      skewX: RESTING_SKEW * 0.5,
-      duration: 0.2,
-      ease: "power2.out",
-    }, `${slideLabel}+=0.75`);
-
-    // Phase 5: Settles back onto the wall → final italic >
-    tl.to(hey, {
-      skewX: RESTING_SKEW,
-      duration: 0.25,
-      ease: "power2.in",
-    }, `${slideLabel}+=0.95`);
-
-    // 3. Chars slide up one by one (staggered) EXCEPT the last 'a'
-    tl.to(allCharsButLast, {
-      yPercent: 0,
-      opacity: 1,
-      duration: 0.6,
-      stagger: 0.04,
-      ease: "expo.out",
-    }, `${slideLabel}+=0.4`)
-    // Last character 'a' slides up slower
-    .to(lastChar, {
-      yPercent: 0,
-      opacity: 1,
-      duration: 1.5,
-      ease: "expo.out",
-    }, "<0.5")
-    // 4. Fade in star, portfolio, and arrow after main animation completes
-    .to([starRef.current, portfolioRef.current, arrowRef.current], {
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out",
-      stagger: 0.1,
-    }, `${slideLabel}+=2.0`); // Start after last 'a' finishes (~2s from slideLabel)
-
-    // Cleanup split on unmount
-    return () => {
+    const split = () => {
       splitIts.revert();
       splitFirst.revert();
       splitLast.revert();
+    };
+
+    // ---- oś czasu zgodna z prototypem (DUR = 6 s, napisy od T = 2,2 s) ----
+    root.dataset.intro = 'running';
+    finished.current = false;
+    clockT.current = 0;
+
+    gsap.set(hey, { opacity: 0, xPercent: 100, skewX: 0, transformOrigin: 'bottom center' });
+    gsap.set(nameContainer, { opacity: 1 });
+    gsap.set(allChars, { yPercent: 120, opacity: 0 });
+    gsap.set([portfolio, arrow], { autoAlpha: 0 });
+
+    const clock = { t: 0 };
+    const skew = { tau: 0 };
+    const tl = gsap.timeline({
+      paused: true,
+      onComplete: () => {
+        finished.current = true;
+        starHandle.current?.startLoop(INTRO_DURATION);
+        ScrollTrigger.refresh();
+      },
+    });
+
+    // zegar osi: steruje gwiazdką (gwiazdka rysuje klatkę dla t)
+    tl.to(
+      clock,
+      {
+        t: INTRO_DURATION,
+        duration: INTRO_DURATION,
+        ease: 'none',
+        onUpdate: () => {
+          clockT.current = clock.t;
+          starHandle.current?.render(clock.t, true);
+        },
+      },
+      0,
+    );
+
+    // interfejs strony (nagłówek) wchodzi razem z napisami — reguła CSS na html[data-intro]
+    tl.call(() => {
+      root.dataset.intro = 'done';
+    }, undefined, T);
+
+    // „Hey”: wjazd z prawej + pochylenie
+    tl.to(hey, { opacity: 1, duration: 0.2, ease: 'none' }, T)
+      .to(hey, { xPercent: 0, duration: 0.6, ease: 'power3.out' }, T)
+      .to(
+        skew,
+        {
+          tau: 1.2,
+          duration: 1.2,
+          ease: 'none',
+          onUpdate: () => {
+            gsap.set(hey, { skewX: heySkew(skew.tau) });
+          },
+        },
+        T,
+      );
+
+    // Litery: kolejno od dołu, ostatnie „a” wolniej
+    tl.fromTo(
+      allCharsButLast,
+      { yPercent: 120, opacity: 0 },
+      { yPercent: 0, opacity: 1, duration: 0.6, stagger: 0.04, ease: 'expo.out' },
+      T + 0.4,
+    );
+    if (lastChar) {
+      tl.fromTo(
+        lastChar,
+        { yPercent: 120, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1.5, ease: 'expo.out' },
+        T + 0.9,
+      );
+    }
+
+    // PORTFOLIO, strzałka, gwiazdka-link
+    tl.fromTo(portfolio, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.8, ease: 'power2.out' }, T + 0.1)
+      .fromTo(arrow, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.8, ease: 'power2.out' }, T + 0.2)
+      .call(() => arrow.classList.add(styles.bounce), undefined, T + 1.0);
+
+    // Odtwarzanie wstrzymane poza ekranem i w karcie w tle (wznawia od miejsca pauzy)
+    let started = false;
+    let inView = true;
+    let manual = false; // dev: ręczne przewijanie osi
+    const sync = () => {
+      if (manual || !started || finished.current) return;
+      tl.paused(!inView || document.visibilityState !== 'visible');
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        inView = entries[entries.length - 1].isIntersecting;
+        sync();
+      },
+      { threshold: 0 },
+    );
+    io.observe(hey.closest('section') ?? hey);
+    document.addEventListener('visibilitychange', sync);
+
+    const start = () => {
+      if (started) return;
+      started = true;
+      sync();
+    };
+    onStarReadyRef.current = start;
+    const waitTimer = window.setTimeout(start, STAR_WAIT_MS);
+    if (starSettled.current) start();
+
+    // Dev: przewijanie osi do wybranej chwili (zrzuty ekranu / testy)
+    if (process.env.NODE_ENV !== 'production') {
+      (window as unknown as { __heroIntro?: unknown }).__heroIntro = {
+        seek: (t: number) => {
+          manual = true;
+          tl.pause();
+          starHandle.current?.stopLoop();
+          tl.time(Math.min(t, INTRO_DURATION), false);
+          root.dataset.intro = t >= T ? 'done' : 'running';
+          clockT.current = t;
+          starHandle.current?.stopLoop(); // onComplete mogło ruszyć pętlę
+          starHandle.current?.render(t);
+        },
+      };
+    }
+
+    return () => {
+      window.clearTimeout(waitTimer);
+      onStarReadyRef.current = null;
+      io.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+      tl.kill();
+      starHandle.current?.stopLoop();
+      delete root.dataset.intro;
+      split();
+      leave();
     };
   }, []);
 
   return (
     <section className={styles.hero}>
-      {/* Empty placeholder — reserves layout space and gives PortfolioLanyard
-          (mounted once in page.tsx) a position reference via getBoundingClientRect().
-          The actual live card lives outside Hero's DOM entirely so it never
-          gets unmounted mid-flight; see PortfolioLanyard.tsx. */}
-      <div id="hero-lanyard-slot" className={styles.lanyardSlot} />
-      <a href={`/${lang}/playground`} className={styles.star} ref={starRef} title="?">*</a>
-      <div className={styles.content}>
-        <div className={styles.hey} ref={heyRef}>Hey</div>
-        <div className={styles.nameContainer} ref={nameContainerRef}>
-          <span className={`${styles.its} ${styles.maskWrapper}`}>
-            <span ref={itsRef}>{dict.hero.intro}</span>
-          </span>
-          <div className={styles.nameGroup}>
-            <div className={styles.maskWrapper}>
-              <h1 className={styles.firstName} ref={firstNameRef}>Jakub</h1>
+      {/* Paralaksa: gwiazdka jedzie wolniej niż napisy. Osobny wrapper, żeby nie dotykać elementów animowanych w intro. */}
+      <Parallax mode="fromTop" speed={0.45} mobileFactor={0.5} className={styles.starLayer} innerClassName={styles.starLayerInner}>
+        <HeroStar onReady={handleStar} />
+      </Parallax>
+      <div className={styles.stage}>
+        <div className={styles.stageBox}>
+          <div className={styles.content}>
+            <div className={styles.hey} ref={heyRef}>
+              {dict.hero.greeting}
             </div>
-            <div className={styles.maskWrapper}>
-              <h2 className={styles.lastName} ref={lastNameRef}>Pełka</h2>
+            <div className={styles.nameContainer} ref={nameContainerRef}>
+              <span className={`${styles.its} ${styles.maskWrapper}`}>
+                <span ref={itsRef} aria-label={dict.hero.intro}>{dict.hero.intro}</span>
+              </span>
+              <div className={styles.nameGroup}>
+                <div className={styles.maskWrapper}>
+                  <h1 className={styles.firstName} ref={firstNameRef} aria-label={dict.hero.name_first}>
+                    {dict.hero.name_first}
+                  </h1>
+                </div>
+                <div className={styles.maskWrapper}>
+                  <h2 className={styles.lastName} ref={lastNameRef} aria-label={dict.hero.name_last}>
+                    {dict.hero.name_last}
+                  </h2>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div className={styles.bottomTokens}>
-        <button
-          type="button"
-          className={styles.portfolio}
-          ref={portfolioRef}
-          onClick={scrollToTimeline}
-        >
+        <button type="button" className={styles.portfolio} ref={portfolioRef} onClick={scrollToTimeline}>
           {scrollLabel}
         </button>
         <button
@@ -240,17 +341,17 @@ export function Hero({ dict, scrollLabel: propScrollLabel }: HeroProps) {
           onClick={scrollToTimeline}
           aria-label={scrollLabel}
         >
-          <svg width="21" height="12" viewBox="0 0 21 12" fill="currentColor">
-            <rect x="0" y="0" width="3" height="3" />
-            <rect x="3" y="3" width="3" height="3" />
-            <rect x="6" y="6" width="3" height="3" />
-            <rect x="9" y="9" width="3" height="3" />
-            <rect x="12" y="6" width="3" height="3" />
-            <rect x="15" y="3" width="3" height="3" />
-            <rect x="18" y="0" width="3" height="3" />
+          <svg width="21" height="12" viewBox="0 0 21 12" aria-hidden="true" className={styles.arrowSvg}>
+            <path
+              d="M0 0h3v3H0z M3 3h3v3H3z M6 6h3v3H6z M9 9h3v3H9z M12 6h3v3h-3z M15 3h3v3h-3z M18 0h3v3h-3z"
+              fill="currentColor"
+            />
           </svg>
         </button>
       </div>
+      <noscript>
+        <style>{`.${styles.hey},.${styles.nameContainer},.${styles.portfolio},.${styles.arrowDown}{opacity:1!important;visibility:visible!important}`}</style>
+      </noscript>
     </section>
   );
 }

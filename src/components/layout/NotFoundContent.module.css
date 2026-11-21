@@ -9,7 +9,7 @@
 }
 
 .code {
-  font-family: var(--font-vt323);
+  font-family: var(--font-pixel);
   font-size: clamp(6rem, 22vw, 14rem);
   line-height: 0.85;
   color: var(--color-accent);

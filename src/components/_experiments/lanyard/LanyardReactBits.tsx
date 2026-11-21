@@ -143,14 +143,10 @@ interface LanyardProps {
   // Locale for the card's own on-canvas prompt text (front face when no
   // frontImage is supplied). Defaults to 'pl'.
   lang?: 'pl' | 'en';
-  // Fired on a plain tap/click (the same gesture that triggers the flip —
-  // see the onPointerUp handler in Band below), in addition to the flip
-  // itself. Lets a page-level orchestrator (PortfolioLanyard) hook into the
-  // click without this component knowing anything about flights/scrolling.
-  onFlipClick?: () => void;
 }
 
 function LanyardCanvas({
+  inView = true,
   position = [0, 0, 30],
   gravity = [0, -40, 0],
   fov = 20,
@@ -162,8 +158,7 @@ function LanyardCanvas({
   lanyardWidth = 1,
   dragCeilingFraction = null,
   lang = 'pl',
-  onFlipClick,
-}: LanyardProps) {
+}: LanyardProps & { inView?: boolean }) {
   const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
   useEffect(() => {
@@ -174,6 +169,9 @@ function LanyardCanvas({
 
   return (
     <Canvas
+      // Canvas zostaje zamontowany po pierwszym wejściu w kadr (żeby nie
+      // odtwarzać kontekstu WebGL i tekstur); poza kadrem tylko zatrzymujemy pętlę.
+      frameloop={inView ? 'always' : 'never'}
       camera={{ position, fov }}
       dpr={[1, isMobile ? 1.5 : 2]}
       gl={{ alpha: transparent }}
@@ -191,7 +189,6 @@ function LanyardCanvas({
             lanyardWidth={lanyardWidth}
             dragCeilingFraction={dragCeilingFraction}
             lang={lang}
-            onFlipClick={onFlipClick}
           />
         </Physics>
         <Environment blur={0.2}>
@@ -232,11 +229,15 @@ function LanyardCanvas({
 export default function Lanyard({ className, ...props }: LanyardProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
+  const [everActive, setEverActive] = useState(false);
 
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => setActive(entry.isIntersecting), {
+    const observer = new IntersectionObserver(([entry]) => {
+      setActive(entry.isIntersecting);
+      if (entry.isIntersecting) setEverActive(true);
+    }, {
       rootMargin: '200px',
     });
     observer.observe(el);
@@ -245,7 +246,7 @@ export default function Lanyard({ className, ...props }: LanyardProps) {
 
   return (
     <div ref={stageRef} className={className ? `${styles.stage} ${className}` : styles.stage}>
-      {active && <LanyardCanvas {...props} />}
+      {everActive && <LanyardCanvas {...props} inView={active} />}
     </div>
   );
 }
@@ -261,7 +262,6 @@ interface BandProps {
   lanyardWidth?: number;
   dragCeilingFraction?: number | null;
   lang?: 'pl' | 'en';
-  onFlipClick?: () => void;
 }
 
 type LanyardRigidBody = RapierRigidBody & {
@@ -279,7 +279,6 @@ function Band({
   lanyardWidth = 1,
   dragCeilingFraction = null,
   lang = 'pl',
-  onFlipClick,
 }: BandProps) {
   const band = useRef<THREE.Mesh<InstanceType<typeof MeshLineGeometry>, InstanceType<typeof MeshLineMaterial>>>(
     null!
@@ -326,6 +325,14 @@ function Band({
   // before, catching drag-release overshoot. One-way on purpose: re-disarming
   // it would let a hard throw escape off the top of the frame.
   const ceilingArmed = useRef(false);
+
+  // Rest detection thresholds (see useFrame): number of consecutive calm frames
+  // before the per-frame Rapier/band work is skipped, and the calm limits.
+  const REST_FRAMES = 20;
+  const REST_LIN = 0.02;
+  const REST_ANG = 0.02;
+  const REST_FACE_ERR = 0.01;
+  const restFrames = useRef(0);
 
   // Bistable "flip" mechanic. The card has two rest orientations: facing the
   // camera (front, Y-angle 0) and turned around (back, Y-angle π). A click
@@ -411,8 +418,8 @@ function Band({
     const NAME = 'Jakub Pełka';
     const ROLE = 'FULL-STACK & AI DEVELOPER';
     const FRONT_PROMPT = lang === 'en'
-      ? { title: 'CLICK ME', sub: '[ about me ↓ ]' }
-      : { title: 'KLIKNIJ MNIE', sub: '[ o mnie ↓ ]' };
+      ? { title: 'CLICK ME', sub: '[ flip card ]' }
+      : { title: 'KLIKNIJ MNIE', sub: '[ obróć kartę ]' };
 
     // The card.glb "card" mesh's true bounds, measured directly from its
     // POSITION accessor: width 0.7164, height 1.0000 (mesh units), rounded
@@ -722,6 +729,26 @@ function Band({
       curve.points[1].copy(getLerped(j2.current, j2Obj.current));
       curve.points[2].copy(getLerped(j1.current, j1Obj.current));
       fixedObj.current.getWorldPosition(curve.points[3]);
+      // Rest detection: once the card has been (nearly) motionless for a
+      // moment, stop touching Rapier (setAngvel(..., true) wakes the body every
+      // frame, so it could never fall asleep) and stop rebuilding the band
+      // geometry. Waking happens through the usual paths (click impulse, drag
+      // wakeUp), after which the thresholds below are exceeded again.
+      const lv = card.current.linvel();
+      const av = card.current.angvel();
+      const rq = card.current.rotation();
+      const restTheta = 2 * Math.atan2(rq.y, rq.w);
+      const restErr = Math.atan2(
+        Math.sin(targetFaceAngle.current - restTheta),
+        Math.cos(targetFaceAngle.current - restTheta)
+      );
+      const moving =
+        dragged !== false ||
+        Math.hypot(lv.x, lv.y, lv.z) > REST_LIN ||
+        Math.hypot(av.x, av.y, av.z) > REST_ANG ||
+        Math.abs(restErr) > REST_FACE_ERR;
+      restFrames.current = moving ? 0 : restFrames.current + 1;
+      if (restFrames.current > REST_FRAMES) return;
       band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
       // Steer the card's Y rotation toward the currently-selected face and
       // hold it there (front = 0, back = π). Reading the Y angle straight from
@@ -738,6 +765,20 @@ function Band({
       card.current.setAngvel({ x: ang.x, y: ang.y + faceErr * FACE_HOLD_K, z: ang.z }, true);
     }
   });
+
+  // Textury tworzone przez nas (canvas karty i pasek) nie należą do cache
+  // useGLTF/useTexture, więc zwalniamy je same przy odmontowaniu / zmianie.
+  useEffect(() => {
+    const own = cardMap === (materials.base.map as THREE.Texture) ? null : cardMap;
+    return () => {
+      own?.dispose();
+    };
+  }, [cardMap, materials.base.map]);
+  useEffect(() => {
+    return () => {
+      ownLanyardTexture?.dispose();
+    };
+  }, [ownLanyardTexture]);
 
   useEffect(() => {
     // A THREE.Texture is a plain mutable object, not React state — this rule
@@ -804,8 +845,6 @@ function Band({
                 err = Math.atan2(Math.sin(err), Math.cos(err));
                 const flipDir = Math.sign(err) || 1;
                 card.current.applyTorqueImpulse({ x: 0, y: flipDir * FLIP_IMPULSE, z: 0 }, true);
-
-                onFlipClick?.();
               }
             }}
             onPointerDown={(e: ThreeEvent<PointerEvent>) => {

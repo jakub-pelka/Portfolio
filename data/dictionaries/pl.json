@@ -1,9 +1,11 @@
 {
   "nav": {
-    "projects": "Projekty",
-    "about": "O mnie",
-    "contact": "Kontakt",
-    "role": "Full-stack & AI Developer"
+    "role": "Full-stack & AI Developer",
+    "contact_button": "[ KONTAKT → ]",
+    "all_projects": "[ ← WSZYSTKIE PROJEKTY ]",
+    "all_projects_aria": "Wszystkie projekty",
+    "home_aria": "Strona główna",
+    "lang_aria": "English"
   },
   "hero": {
     "greeting": "Hey",
@@ -13,59 +15,165 @@
     "cta_projects": "Zobacz co zrobiłem"
   },
   "projects": {
-    "title": "Projekty",
-    "view_facts": "Fakty",
-    "view_process": "Proces",
-    "read_more": "[ CZYTAJ WIĘCEJ ]"
+    "see_more": "[ ZOBACZ WIĘCEJ → ]",
+    "status": {
+      "in-progress": "[ W TOKU ]",
+      "completed": "[ UKOŃCZONY ]",
+      "archived": "[ ZARCHIWIZOWANY ]"
+    },
+    "project_count": "PROJEKT {n} Z {total}",
+    "toc": "SPIS",
+    "toc_aria": "Spis sekcji",
+    "outcome_label": "$ EFEKT",
+    "other_projects_aria": "Inne projekty",
+    "prev": "← POPRZEDNI",
+    "next": "NASTĘPNY →",
+    "process_types": {
+      "decision": "DECYZJA",
+      "insight": "WNIOSEK",
+      "problem": "PROBLEM",
+      "milestone": "KAMIEŃ MILOWY"
+    }
   },
   "theme": {
     "toggle_dark": "Ciemny",
     "toggle_light": "Jasny"
   },
-  "lang": {
-    "switch": "EN"
-  },
   "about": {
     "heading": "O mnie",
-    "p1": "Skończyłem studia na kierunku gospodarka cyfrowa w Katowicach — <b>coś pomiędzy IT, biznesem i zarządzaniem projektami</b>. W wolnym czasie buduję narzędzia, które rozwiązują realne problemy — moje albo kogoś, kogo znam. Dobry opis mojego podejścia to coś pokroju \"nie zatrzymuje mnie fakt, że muszę po drodze nauczyć się czegoś nowego - nawet jeśli tym czymś jest Rust\".",
+    "p1_before": "Skończyłem studia na kierunku gospodarka cyfrowa w Katowicach — ",
+    "p1_bold": "coś pomiędzy IT, biznesem i zarządzaniem projektami",
+    "p1_after": ". W wolnym czasie buduję narzędzia, które rozwiązują realne problemy — moje albo kogoś, kogo znam. Dobry opis mojego podejścia to coś pokroju \"nie zatrzymuje mnie fakt, że muszę po drodze nauczyć się czegoś nowego - nawet jeśli tym czymś jest Rust\".",
     "p2": "Otwarty na projekty freelance i oferty pracy — na Śląsku albo zdalnie."
   },
   "services": {
     "heading": "JAK MOGĘ POMÓC",
-    "intro": "Buduję strony, aplikacje webowe i automatyzacje AI dla firm i zespołów, które potrzebują czegoś więcej niż gotowego szablonu.",
     "items": [
       {
         "title": "STRONY & APLIKACJE",
-        "body": "Strona wizytówka, portfolio albo panel wewnętrzny firmy — zbudowany od zera, szybki i łatwy w utrzymaniu, bez zbędnego CMS-a."
+        "body": "Strona wizytówka, portfolio albo panel wewnętrzny firmy — zbudowany od zera, szybki i łatwy w utrzymaniu, bez zbędnego CMS-a.",
+        "example": {
+          "name": "PORTFOLIO",
+          "slug": "portfolio"
+        }
       },
       {
         "title": "AUTOMATYZACJE AI",
-        "body": "Integracje z Gemini/OpenAI, które zamieniają powtarzalną ręczną pracę — katalogowanie, opisywanie, wprowadzanie danych — w proces trwający sekundy."
+        "body": "Integracje z Gemini/OpenAI, które zamieniają powtarzalną ręczną pracę — katalogowanie, opisywanie, wprowadzanie danych — w proces trwający sekundy.",
+        "example": {
+          "name": "REKWIZYTOR",
+          "slug": "rekwizytor"
+        }
       },
       {
         "title": "PROTOTYP / MVP",
-        "body": "Masz pomysł i chcesz sprawdzić, czy działa, zanim zainwestujesz w duży zespół? Buduję działający prototyp, z którym można wyjść do pierwszych użytkowników."
+        "body": "Masz pomysł i chcesz sprawdzić, czy działa, zanim zainwestujesz w duży zespół? Buduję działający prototyp, z którym można wyjść do pierwszych użytkowników.",
+        "example": {
+          "name": "PRACO",
+          "slug": "praco"
+        }
       }
     ],
     "process_heading": "JAK WYGLĄDA WSPÓŁPRACA",
     "process": [
-      { "step": "01", "title": "ROZMOWA", "body": "Piszesz, rozmawiamy o problemie i celu." },
-      { "step": "02", "title": "WYCENA", "body": "Dostajesz zakres prac i wycenę — bez zobowiązań." },
-      { "step": "03", "title": "BUILD", "body": "Regularne update'y w trakcie budowy, nie cisza przez miesiąc." },
-      { "step": "04", "title": "PRZEKAZANIE", "body": "Kod, dostępy i dokumentacja — na własność, bez uzależnienia ode mnie." }
+      {
+        "step": "01",
+        "title": "ROZMOWA",
+        "body": "Piszesz, rozmawiamy o problemie i celu."
+      },
+      {
+        "step": "02",
+        "title": "WYCENA",
+        "body": "Dostajesz zakres prac i wycenę — bez zobowiązań."
+      },
+      {
+        "step": "03",
+        "title": "BUILD",
+        "body": "Regularne update'y w trakcie budowy, nie cisza przez miesiąc."
+      },
+      {
+        "step": "04",
+        "title": "PRZEKAZANIE",
+        "body": "Kod, dostępy i dokumentacja — na własność, bez uzależnienia ode mnie."
+      }
     ],
-    "pricing_note": "Wycena indywidualna — zależy od zakresu projektu. Napisz, to pierwszy krok."
+    "pricing_note": "Wycena indywidualna — zależy od zakresu projektu. Napisz, to pierwszy krok.",
+    "title_lead": "STRONY, APLIKACJE I",
+    "title_accent": "AUTOMATYZACJE AI",
+    "lead": "Dla firm i zespołów, którym nie wystarczy gotowy szablon.",
+    "example_prefix": "PRZYKŁAD:"
   },
   "footer": {
     "projects": "INDEKS PROJEKTÓW",
-    "social": "MEDIA SPOŁECZNOŚCIOWE",
-    "contact": "KONTAKT",
-    "mail_label": "EMAIL",
+    "social": "GDZIE INDZIEJ",
     "mail_body": "Cześć Kuba, piszę, bo ",
     "cv_download": "[ POBIERZ CV ]",
     "contact_cta_label": "[ WYCEŃ PROJEKT ]",
     "contact_cta_subject": "Wycena projektu",
-    "contact_cta_body": "Cześć Kuba,\n\nChciałbym zrobić: \n\nPodejrzewam, że przyda się / chciałbym wykorzystać: \n\nDzięki!"
+    "contact_cta_body": "Cześć Kuba,\n\nChciałbym zrobić: \n\nPodejrzewam, że przyda się / chciałbym wykorzystać: \n\nDzięki!",
+    "label": "[ KONTAKT ]",
+    "heading": "MASZ PROJEKT?",
+    "where_title": "GDZIE PRACUJĘ",
+    "where_text": "Katowice. Na Śląsku albo zdalnie. Otwarty na projekty freelance i oferty pracy.",
+    "copyright": "NAPISANE OD ZERA W NEXT.JS",
+    "copy_for_ai": "[ KOPIUJ STRONĘ DLA AI ]",
+    "copy_for_ai_done": "[ SKOPIOWANO ✓ ]",
+    "copy_for_ai_title": "Skopiuj dane portfolio dla AI",
+    "md_title": "Jakub Pełka — Portfolio",
+    "md_outcome": "EFEKT",
+    "md_stack": "Stos",
+    "md_github": "GitHub",
+    "md_live": "Wersja live",
+    "md_decisions": "Kluczowe decyzje i wnioski",
+    "md_narrative": "Pełny opis projektu",
+    "to_top": "[ DO GÓRY ↑ ]"
+  },
+  "skills": {
+    "label": "UMIEJĘTNOŚCI",
+    "title": "CZYM BUDUJĘ",
+    "lead": "Technologie, z którymi pracuję. Jak ich użyłem i dlaczego, opisuję w projektach.",
+    "groups": [
+      {
+        "title": "FRONTEND",
+        "tags": [
+          "TypeScript",
+          "Next.js",
+          "React",
+          "Vue 3",
+          "Framer Motion",
+          "GSAP",
+          "Three.js",
+          "Tailwind CSS",
+          "Vanilla CSS",
+          "MDX"
+        ]
+      },
+      {
+        "title": "BACKEND I DESKTOP",
+        "tags": [
+          "Node.js",
+          "Supabase",
+          "PostgreSQL",
+          "SQLite",
+          "Tauri",
+          "Rust",
+          "Python",
+          "PrestaShop / PHP",
+          "Docker",
+          "Vercel",
+          "Postman",
+          "SonarCloud"
+        ]
+      },
+      {
+        "title": "AI",
+        "tags": [
+          "Claude API",
+          "OpenAI API",
+          "Gemini Vision"
+        ]
+      }
+    ]
   },
   "not_found": {
     "code": "404",

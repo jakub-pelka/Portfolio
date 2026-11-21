@@ -2,25 +2,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Locale } from '@/i18n/config';
 import type { ProjectWithLocale, ProcessEntry } from '@/lib/types/project';
+import { Parallax } from '@/components/ui/Parallax';
 import styles from './ProjectTimeline.module.css';
-
-const TYPE_LABELS: Record<ProcessEntry['type'], string> = {
-  decision: 'DECISION',
-  problem: 'PROBLEM',
-  insight: 'INSIGHT',
-  milestone: 'MILESTONE',
-};
 
 function ProcessLog({
   entry,
   slug,
   lang,
   index,
+  typeLabels,
 }: {
   entry: ProcessEntry;
   slug: string;
   lang: Locale;
   index: number;
+  typeLabels: Record<string, string>;
 }) {
   const isRight = index % 2 === 0;
   const href = entry.anchor
@@ -32,7 +28,7 @@ function ProcessLog({
       <div className={styles.processLogDot} />
       <Link href={href} className={styles.processLogContent}>
         <span className={styles.processLogType} data-type={entry.type}>
-          [{TYPE_LABELS[entry.type]}]
+          [{typeLabels[entry.type] ?? entry.type.toUpperCase()}]
         </span>
         <span className={styles.processLogTitle}>{entry.title}</span>
         <span className={styles.processLogText}>{entry.content}</span>
@@ -41,14 +37,22 @@ function ProcessLog({
   );
 }
 
+export interface TimelineLabels {
+  see_more: string;
+  status: Record<string, string>;
+  process_types: Record<string, string>;
+}
+
 function ProjectEntry({
   project,
   lang,
   flip,
+  labels,
 }: {
   project: ProjectWithLocale;
   lang: Locale;
   flip: boolean;
+  labels: TimelineLabels;
 }) {
   const { meta, content } = project;
   const year = new Date(meta.date).getFullYear();
@@ -69,21 +73,21 @@ function ProjectEntry({
       <div className={styles.projectContent}>
         <span className={styles.year}>{year}</span>
         <span className={styles.status} data-status={meta.status}>
-          [ {meta.status.toUpperCase().replace('-', '_')} ]
+          {labels.status[meta.status] ?? meta.status}
         </span>
         <Link href={`/${lang}/projects/${meta.slug}`} className={styles.contentLink}>
           <h2 className={styles.projectTitle}>{content.title}</h2>
           <p className={styles.projectDescription}>{content.description}</p>
           {meta.tags.length > 0 && (
-            <ul className={styles.tags}>
+            <ul className="jp-web-tags">
               {meta.tags.slice(0, 5).map((tag) => (
-                <li key={tag} className={styles.tag}>{tag}</li>
+                <li key={tag} className="jp-web-tag">{tag}</li>
               ))}
             </ul>
           )}
         </Link>
         <Link href={`/${lang}/projects/${meta.slug}`} className={styles.moreLink}>
-          [ SEE MORE → ]
+          {labels.see_more}
         </Link>
       </div>
 
@@ -95,6 +99,8 @@ function ProjectEntry({
             alt={content.title}
             width={640}
             height={420}
+            // ≤767 px miniatura zajmuje szerokość kolumny (do 640 px), powyżej ~288–480 px
+            sizes="(max-width: 767px) 100vw, (max-width: 1100px) 45vw, 480px"
             className={styles.thumbnail}
           />
         </Link>
@@ -103,18 +109,29 @@ function ProjectEntry({
   );
 }
 
-export function ProjectTimeline({ lang, projects }: { lang: Locale; projects: ProjectWithLocale[] }) {
+export function ProjectTimeline({
+  lang,
+  projects,
+  labels,
+}: {
+  lang: Locale;
+  projects: ProjectWithLocale[];
+  labels: TimelineLabels;
+}) {
   return (
-    <section className={styles.timeline} id="timeline">
-      <div className={styles.axis} />
-      <div className={styles.inner}>
+    <section className={`jp-web-section ${styles.timeline}`} id="timeline">
+      {/* Oś: wolniejsza od treści (paralaksa). Przycięta do sekcji; linia jest dłuższa o zapas, więc przesunięcie nie odsłania przerw. */}
+      <Parallax distance={64} mobileFactor={0.5} className={styles.axisClip} innerClassName={styles.axis}>
+        {null}
+      </Parallax>
+      <div className={`jp-web-section__inner ${styles.inner}`}>
         {projects.map((project: ProjectWithLocale, projectIndex: number) => {
-          const entries = project.content.process.slice(0, 3);
+          const entries = project.content.process.slice(0, 1);
           const flip = projectIndex % 2 !== 0;
 
           return (
             <div key={project.meta.slug} className={styles.projectGroup}>
-              <ProjectEntry project={project} lang={lang} flip={flip} />
+              <ProjectEntry project={project} lang={lang} flip={flip} labels={labels} />
               {entries.map((entry: ProcessEntry, i: number) => (
                 <ProcessLog
                   key={`${project.meta.slug}-${entry.title}`}
@@ -122,6 +139,7 @@ export function ProjectTimeline({ lang, projects }: { lang: Locale; projects: Pr
                   slug={project.meta.slug}
                   lang={lang}
                   index={flip ? i + 1 : i}
+                  typeLabels={labels.process_types}
                 />
               ))}
             </div>

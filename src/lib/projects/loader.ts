@@ -5,7 +5,6 @@ import matter from 'gray-matter';
 import type { Locale } from '@/i18n/config';
 import type {
   ProjectMeta,
-  ProjectConfig,
   ProjectContent,
   ProjectWithLocale,
 } from '@/lib/types/project';
@@ -30,21 +29,19 @@ export async function getAllProjectSlugs(): Promise<string[]> {
 /**
  * Read and parse meta.json for a project
  */
+const SLUG_RE = /^[a-z0-9-]+$/;
+
+function assertSlug(slug: string): void {
+  if (!SLUG_RE.test(slug)) {
+    throw new Error(`Invalid project slug: ${slug}`);
+  }
+}
+
 async function getProjectMeta(slug: string): Promise<ProjectMeta> {
+  assertSlug(slug);
   const metaPath = path.join(PROJECTS_DIR, slug, 'meta.json');
   const metaContent = await fs.readFile(metaPath, 'utf-8');
   return JSON.parse(metaContent);
-}
-
-/**
- * Import and return config.ts for a project
- */
-async function getProjectConfig(slug: string): Promise<ProjectConfig> {
-  const configPath = path.join(PROJECTS_DIR, slug, 'config.ts');
-
-  // Dynamic import for TypeScript config file
-  const configModule = await import(`@/../content/projects/${slug}/config.ts`);
-  return configModule.projectConfig;
 }
 
 /**
@@ -54,6 +51,7 @@ async function getProjectContent(
   slug: string,
   locale: Locale
 ): Promise<ProjectContent> {
+  assertSlug(slug);
   const mdxPath = path.join(PROJECTS_DIR, slug, `${locale}.mdx`);
   const mdxContent = await fs.readFile(mdxPath, 'utf-8');
 
@@ -72,22 +70,20 @@ async function getProjectContent(
 /**
  * Get complete project data for a specific locale
  */
-export async function getProject(
+export const getProject = cache(async (
   slug: string,
   locale: Locale
-): Promise<ProjectWithLocale> {
-  const [meta, config, content] = await Promise.all([
+): Promise<ProjectWithLocale> => {
+  const [meta, content] = await Promise.all([
     getProjectMeta(slug),
-    getProjectConfig(slug),
     getProjectContent(slug, locale),
   ]);
 
   return {
     meta,
-    config,
     content,
   };
-}
+});
 
 /**
  * Get all projects for a specific locale
@@ -116,42 +112,3 @@ export const getAllProjects = cache(async (
     return new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime();
   });
 });
-
-/**
- * Get projects by status
- */
-export async function getProjectsByStatus(
-  locale: Locale,
-  status: ProjectMeta['status']
-): Promise<ProjectWithLocale[]> {
-  const allProjects = await getAllProjects(locale);
-  return allProjects.filter((project) => project.meta.status === status);
-}
-
-/**
- * Get projects by tag
- */
-export async function getProjectsByTag(
-  locale: Locale,
-  tag: string
-): Promise<ProjectWithLocale[]> {
-  const allProjects = await getAllProjects(locale);
-  return allProjects.filter((project) =>
-    project.meta.tags.includes(tag)
-  );
-}
-
-/**
- * Get all unique tags from all projects
- */
-export async function getAllTags(): Promise<string[]> {
-  const slugs = await getAllProjectSlugs();
-  const allTags = new Set<string>();
-
-  for (const slug of slugs) {
-    const meta = await getProjectMeta(slug);
-    meta.tags.forEach((tag) => allTags.add(tag));
-  }
-
-  return Array.from(allTags).sort();
-}

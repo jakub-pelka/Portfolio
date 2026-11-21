@@ -86,10 +86,10 @@ export interface Project {
 }
 
 /**
- * Project with single locale content (for rendering)
+ * Project with single locale content (for rendering).
+ * config.ts (ProjectConfig) nie jest ładowany: żaden komponent z niego dziś nie korzysta.
  */
 export interface ProjectWithLocale {
   meta: ProjectMeta;
-  config: ProjectConfig;
   content: ProjectContent;
 }

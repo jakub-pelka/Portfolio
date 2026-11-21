@@ -6,7 +6,7 @@ import { BoxGrid, ProcessBox } from './ProcessBox';
 import { TerminalCard } from './TerminalCard';
 import { ProcessCard } from './ProcessCard';
 import { OutcomeBanner } from './OutcomeBanner';
-import { SplitLayout, ContentLeft, ContentRight, ReadingFooter } from './LayoutBlocks';
+import { SplitLayout, ContentLeft, ContentRight } from './LayoutBlocks';
 import { FullwidthImage } from './FullwidthImage';
 import { Tag, TagList, MetaRow } from './Primitives';
 import { CompareBlock, CompareRow } from './CompareBlock';
@@ -22,7 +22,6 @@ export const globalMdxComponents: MDXComponents = {
   SplitLayout,
   ContentLeft,
   ContentRight,
-  ReadingFooter,
   FullwidthImage,
   Tag,
   TagList,

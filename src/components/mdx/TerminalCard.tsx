@@ -11,20 +11,16 @@ interface TerminalCardProps {
 }
 
 export function TerminalCard({ title, status, children, dense = false }: TerminalCardProps) {
+  const gap = dense ? 'var(--tweak-card-row-gap, 0.85rem)' : 'var(--space-1_5)';
   return (
-    <div className={dense ? `${styles.terminalCard} ${styles.dense}` : styles.terminalCard}>
-      <div className={styles.halftoneBg} />
-
-      <div
-        className={styles.terminalCardContent}
-        style={{ display: 'flex', flexDirection: 'column', gap: dense ? 'var(--tweak-card-row-gap, 0.85rem)' : '1.5rem' }}
-      >
+    <div className={`jp-web-card jp-web-card--term ${styles.terminalCard} ${dense ? styles.dense : ''}`.trim()}>
+      <div className={styles.terminalCardContent} style={{ gap }}>
         <div className={styles.terminalTitle}>
-          {status === 'active' && <span className={styles.terminalStatus}></span>}
+          {status === 'active' && <span className={styles.terminalStatus} aria-hidden="true"></span>}
           {title}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: dense ? 'var(--tweak-card-row-gap, 0.85rem)' : '1.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap }}>
           {children}
         </div>
       </div>

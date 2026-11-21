@@ -1,12 +1,14 @@
+import { sectionAnchorId } from '@/lib/projects/sections';
 import styles from './Editorial.module.css';
 
 export function SectionHeader({ num, title, id }: { num: string; title: string; id?: string }) {
   return (
-    <div className={styles.sectionHeader} data-snap-section id={id}>
-      <span className={styles.metaLabel} style={{ marginBottom: "0.5rem" }}>
-        [ {num} ]
-      </span>
-      <h2>{title}</h2>
-    </div>
+    <h2
+      className={`jp-web-section__label ${styles.sectionHeader}`}
+      data-snap-section
+      id={sectionAnchorId(num, id)}
+    >
+      <span aria-hidden="true">[ {num} ]</span> {title}
+    </h2>
   );
 }

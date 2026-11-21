@@ -70,6 +70,8 @@ export function ImageLightbox({
           alt={alt}
           width={width}
           height={height}
+          // kolumna treści: szerokość okna minus marginesy (≤767: 40 px, ≤1023: 96 px), max 900 px
+          sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 96px), 900px"
           className={className}
           style={style}
           data-frame={frame ? 'true' : 'false'}

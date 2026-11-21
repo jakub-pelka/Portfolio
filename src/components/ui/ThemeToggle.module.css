@@ -1,0 +1,33 @@
+/* Ikona motywu: wejście 200 ms ease (obrót + skala + opacity), bez animacji
+   przy prefers-reduced-motion. Zmiana key na elemencie odtwarza animację. */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: iconIn 200ms ease both;
+}
+
+.fromDark {
+  --icon-rotate-from: -90deg;
+}
+
+.fromLight {
+  --icon-rotate-from: 90deg;
+}
+
+@keyframes iconIn {
+  from {
+    opacity: 0;
+    transform: rotate(var(--icon-rotate-from, 90deg)) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon {
+    animation: none;
+  }
+}

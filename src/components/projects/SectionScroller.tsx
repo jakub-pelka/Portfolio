@@ -36,7 +36,7 @@ export function SectionScroller() {
 
       for (const section of sections) {
         // Use header height as reference for distance calculation
-        const sectionTop = section.offsetTop - headerHeight;
+        const sectionTop = section.getBoundingClientRect().top + scrollY - headerHeight;
         const dist = sectionTop - scrollY; // negative = scrolled past, positive = not yet reached
 
         if (Math.abs(dist) < SNAP_THRESHOLD && Math.abs(dist) > 12) {
@@ -57,6 +57,9 @@ export function SectionScroller() {
         }
       }
     };
+
+    // Snap disabled with reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     // Snap disabled on mobile — interferes with natural touch scrolling
     if (window.innerWidth < 768) return;
