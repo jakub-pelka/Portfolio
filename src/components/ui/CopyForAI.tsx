@@ -79,7 +79,7 @@ function buildMarkdown(projects: ProjectWithLocale[]): string {
   const lines: string[] = [
     '# Jakub Pełka — Portfolio',
     '',
-    'Full-stack developer & designer. Building systems that solve real problems.',
+    'Full-stack & AI Developer. Building systems that solve real problems.',
     '',
     '## About',
     '',

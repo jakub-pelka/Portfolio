@@ -66,5 +66,11 @@
     "contact_cta_label": "[ GET A QUOTE ]",
     "contact_cta_subject": "Project inquiry",
     "contact_cta_body": "Hi Jakub,\n\nI'd like to build: \n\nI suspect I'll need / would like to use: \n\nThanks!"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Page not found",
+    "description": "This address leads nowhere — it may have moved, or never existed.",
+    "cta_home": "HOME →"
   }
 }
